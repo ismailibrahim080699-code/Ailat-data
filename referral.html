@@ -5,412 +5,170 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Referral - AILAT DATA</title>
-
 <style>
 *{box-sizing:border-box}
-
-body{
- margin:0;
- font-family:Arial,sans-serif;
- background:#f5f3ff;
- color:#24134d;
-}
-
-header{
- background:linear-gradient(135deg,#4c1d95,#6d28d9,#7c3aed);
- color:white;
- padding:27px 20px 30px;
- text-align:center;
- border-radius:0 0 27px 27px;
- box-shadow:0 7px 20px #4c1d9525;
-}
-
-header h2{
- margin:0;
- font-size:24px;
- font-weight:900;
- letter-spacing:1px;
-}
-
-header p{
- margin:9px 0 0;
- font-size:13px;
- opacity:.9;
-}
-
-.container{
- padding:18px;
- max-width:520px;
- margin:auto;
-}
-
-.card{
- background:white;
- padding:23px 19px;
- border-radius:21px;
- margin-top:12px;
- box-shadow:0 6px 20px #0000000c;
- border:1px solid #eee8fa;
- text-align:center;
-}
-
-.card h2{
- color:#5b21b6;
- margin:5px 0 12px;
- font-size:21px;
-}
-
-.description{
- color:#777;
- font-size:13px;
- line-height:1.7;
-}
-
-.stats{
- background:linear-gradient(135deg,#ede9fe,#f5f0ff);
- padding:23px 15px;
- border-radius:17px;
- margin:23px 0;
- border:1px solid #e5dcff;
-}
-
-.stats h3{
- margin:0 0 12px;
- color:#5b21b6;
- font-size:15px;
-}
-
-.stats h1{
- margin:0;
- color:#5b21b6;
- font-size:43px;
- font-weight:900;
-}
-
-.stats p{
- margin:9px 0 0;
- color:#777;
- font-size:12px;
-}
-
-.code{
- background:#f6f2ff;
- padding:19px 12px;
- border:2px dashed #9b70ec;
- border-radius:13px;
- font-size:22px;
- font-weight:900;
- color:#5b21b6;
- margin:17px 0;
- word-break:break-all;
- letter-spacing:1px;
-}
-
-button{
- width:100%;
- border:0;
- padding:15px;
- border-radius:11px;
- font-size:14px;
- font-weight:bold;
- margin-top:11px;
- cursor:pointer;
- transition:.2s;
-}
-
-button:active{
- transform:scale(.97);
-}
-
-.copy-btn{
- background:linear-gradient(135deg,#6d28d9,#7c3aed);
- color:white;
- box-shadow:0 4px 12px #6d28d930;
-}
-
-.share-btn{
- background:#ede9fe;
- color:#5b21b6;
- border:1px solid #e2d8ff;
-}
-
-.message{
- font-size:12px;
- color:#16803c;
- margin-top:15px;
- min-height:18px;
- line-height:1.5;
-}
-
-.back{
- display:block;
- text-align:center;
- margin:25px 0;
- color:#5b21b6;
- text-decoration:none;
- font-weight:bold;
- font-size:14px;
-}
-
-.note{
- color:#888;
- font-size:12px;
- line-height:1.7;
- margin-top:20px;
-}
-
-@media(max-width:360px){
- .card{padding:20px 14px}
- .code{font-size:19px}
-}
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#f5f3ff,#e9e2ff);color:#24134d}
+header{background:linear-gradient(135deg,#7136d6,#43148d);color:white;padding:25px 20px 35px;border-radius:0 0 25px 25px}
+header a{color:white;text-decoration:none;font-size:14px}
+header h2{margin:25px 0 5px;font-size:25px}
+header p{margin:0;opacity:.85;font-size:14px}
+.container{max-width:500px;margin:22px auto;padding:0 16px 30px}
+.card{background:white;padding:22px;border-radius:18px;margin-bottom:17px;box-shadow:0 6px 22px rgba(55,25,100,.08)}
+.card h3{margin:0 0 12px;color:#49218b}
+.code{background:#f2edff;padding:16px;border:1px dashed #8051d1;border-radius:10px;text-align:center;color:#5423a6;font-size:21px;font-weight:bold;overflow-wrap:anywhere}
+.link{background:#f7f4ff;padding:13px;border-radius:10px;font-size:13px;overflow-wrap:anywhere;color:#4d3477;line-height:1.6}
+button{width:100%;border:0;padding:14px;border-radius:10px;background:linear-gradient(135deg,#7136d6,#4b1e9e);color:white;font-size:15px;font-weight:bold;margin-top:12px;cursor:pointer}
+.secondary{background:#eee7ff;color:#5423a6}
+.count{font-size:38px;font-weight:bold;color:#6425c5;text-align:center}
+.small{text-align:center;color:#777;font-size:13px;margin-top:8px}
+#message{text-align:center;font-size:14px;margin:12px 0}
 </style>
 </head>
-
 <body>
-
 <header>
- <h2>AILAT DATA</h2>
- <p>My Referral Dashboard</p>
+<a href="dashboard.html">← Back to Dashboard</a>
+<h2>My Referral</h2>
+<p>Invite friends and grow with AILAT DATA.</p>
 </header>
 
 <div class="container">
+<div class="card">
+<h3>Your Referral Code</h3>
+<div class="code" id="referralCode">Loading...</div>
+<button class="secondary" id="copyCode">COPY REFERRAL CODE</button>
+</div>
 
- <div class="card">
+<div class="card">
+<h3>Your Referral Link</h3>
+<p class="small" style="text-align:left">Share this link with your friends. Your referral code will be filled automatically when they open registration.</p>
+<div class="link" id="referralLink">Preparing your link...</div>
+<button id="copyLink">COPY REFERRAL LINK</button>
+<button class="secondary" id="shareLink">SHARE REFERRAL LINK</button>
+</div>
 
-  <h2>Invite Your Friends 🎁</h2>
-
-  <p class="description">
-   Share your personal referral code with friends
-   and invite them to join AILAT DATA.
-  </p>
-
-  <div class="stats">
-   <h3>Total Referrals</h3>
-   <h1 id="totalReferrals">0</h1>
-   <p>People joined using your code</p>
-  </div>
-
-  <p class="description">
-   Your Personal Referral Code
-  </p>
-
-  <div class="code" id="refCode">
-   Loading...
-  </div>
-
-  <button class="copy-btn" id="copyBtn">
-   📋 Copy Referral Code
-  </button>
-
-  <button class="share-btn" id="shareBtn">
-   📤 Share Referral Code
-  </button>
-
-  <p class="message" id="message"></p>
-
-  <p class="note">
-   Your friends should enter this referral code
-   when creating their AILAT DATA account.
-  </p>
-
- </div>
-
- <a class="back" href="dashboard.html">
-  ← Back to Dashboard
- </a>
-
+<div class="card">
+<h3>Total Referrals</h3>
+<div class="count" id="referralCount">0</div>
+<div class="small">People registered using your referral code</div>
+</div>
+<div id="message"></div>
 </div>
 
 <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+import { getAuth,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
+import { getFirestore,doc,getDoc,setDoc,updateDoc,collection,query,where,getDocs,serverTimestamp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
 
-import { app } from "./firebase.js";
+const firebaseConfig = {
+ apiKey: "AIzaSyBv7ixj82ZWaSHyvv0dzg86MOUBae3pA94",
+ authDomain: "ailat-data.firebaseapp.com",
+ projectId: "ailat-data",
+ storageBucket: "ailat-data.firebasestorage.app",
+ messagingSenderId: "936036858829",
+ appId: "1:936036858829:web:c9b72589796524b378a284"
+};
 
-import {
- getAuth,
- onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
 
-import {
- getFirestore,
- doc,
- getDoc,
- setDoc,
- updateDoc,
- collection,
- query,
- where,
- getDocs
-} from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+const codeElement=document.getElementById("referralCode");
+const linkElement=document.getElementById("referralLink");
+const countElement=document.getElementById("referralCount");
+const message=document.getElementById("message");
+let referralLink="";
 
-const auth = getAuth(app);
-const db = getFirestore(app);
+function showMessage(text,color="green"){
+ message.style.color=color;
+ message.textContent=text;
+}
 
-let referralCode = "";
-
-const message = document.getElementById("message");
-const codeDisplay = document.getElementById("refCode");
-const totalDisplay = document.getElementById("totalReferrals");
-
-// LOAD REFERRAL INFORMATION
-
-onAuthStateChanged(auth, async (user) => {
-
- if (!user) {
-  window.location.href = "login.html";
+onAuthStateChanged(auth,async(user)=>{
+ if(!user){
+  window.location.href="login.html";
   return;
  }
-
- try {
-
-  message.innerText = "Loading referral information...";
-
-  const userRef = doc(db, "users", user.uid);
-  const userSnap = await getDoc(userRef);
-
-  if (!userSnap.exists()) {
-   throw new Error("User profile not found.");
+ try{
+  const userRef=doc(db,"users",user.uid);
+  const userSnap=await getDoc(userRef);
+  if(!userSnap.exists()){
+   showMessage("User profile not found.","red");
+   return;
   }
 
-  const userData = userSnap.data();
+  let referralCode=userSnap.data().referralCode;
 
-  // GET OR GENERATE REFERRAL CODE
+  if(!referralCode){
+   referralCode="AILAT"+user.uid.substring(0,8).toUpperCase();
+   await updateDoc(userRef,{referralCode:referralCode});
+  }
 
-  referralCode = userData.referralCode;
+  const codeRef=doc(db,"referralCodes",referralCode);
+  const codeSnap=await getDoc(codeRef);
 
-  if (!referralCode) {
-
-   referralCode =
-    "AILAT" + user.uid.substring(0,8).toUpperCase();
-
-   await updateDoc(userRef, {
-    referralCode: referralCode
+  if(!codeSnap.exists()){
+   await setDoc(codeRef,{
+    ownerUid:user.uid,
+    createdAt:serverTimestamp()
    });
-
   }
 
-  // ENSURE REFERRAL CODE EXISTS
+  codeElement.textContent=referralCode;
 
-  const codeRef = doc(db, "referralCodes", referralCode);
-  const codeSnap = await getDoc(codeRef);
+  referralLink="https://ismailibrahim080699-code.github.io/Ailat-data/register.html?ref="+encodeURIComponent(referralCode);
+  linkElement.textContent=referralLink;
 
-  if (!codeSnap.exists()) {
-
-   await setDoc(codeRef, {
-    ownerUid: user.uid
-   });
-
-  } else if (codeSnap.data().ownerUid !== user.uid) {
-
-   throw new Error("Referral code ownership could not be verified.");
-
-  }
-
-  codeDisplay.innerText = referralCode;
-
-  // COUNT REFERRALS
-
-  const referralsQuery = query(
-   collection(db, "referrals"),
-   where("ownerUid", "==", user.uid)
+  const referralsQuery=query(
+   collection(db,"referrals"),
+   where("ownerUid","==",user.uid)
   );
+  const referralsSnapshot=await getDocs(referralsQuery);
+  countElement.textContent=referralsSnapshot.size;
 
-  const referralsSnapshot = await getDocs(referralsQuery);
-
-  totalDisplay.innerText = referralsSnapshot.size;
-
-  message.innerText = "";
-
- } catch(error) {
-
-  console.error("Referral error:", error);
-
-  if (error.code === "permission-denied") {
-
-   message.innerText =
-    "Permission denied. Please check Firestore Rules.";
-
-  } else {
-
-   message.innerText =
-    error.message || "Unable to load referral information.";
-
-  }
-
+ }catch(error){
+  console.error(error);
+  showMessage("Unable to load referral information. Please try again.","red");
  }
-
 });
 
-// COPY REFERRAL CODE
-
-document.getElementById("copyBtn").addEventListener("click", async () => {
-
- if (!referralCode) {
-  message.innerText = "Referral code is not ready.";
-  return;
+document.getElementById("copyCode").addEventListener("click",async()=>{
+ const code=codeElement.textContent;
+ if(!code||code==="Loading...")return;
+ try{
+  await navigator.clipboard.writeText(code);
+  showMessage("Referral code copied!");
+ }catch(error){
+  showMessage("Could not copy code. Please copy it manually.","red");
  }
-
- try {
-
-  await navigator.clipboard.writeText(referralCode);
-
-  message.innerText =
-   "Referral code copied successfully!";
-
- } catch(error) {
-
-  message.innerText =
-   "Copy is unavailable in this browser.";
-
- }
-
 });
 
-// SHARE REFERRAL CODE
-
-document.getElementById("shareBtn").addEventListener("click", async () => {
-
- if (!referralCode) {
-  message.innerText = "Referral code is not ready.";
-  return;
+document.getElementById("copyLink").addEventListener("click",async()=>{
+ if(!referralLink)return;
+ try{
+  await navigator.clipboard.writeText(referralLink);
+  showMessage("Referral link copied successfully!");
+ }catch(error){
+  showMessage("Could not copy link. Please copy it manually.","red");
  }
+});
 
- const shareText =
-  "Join AILAT DATA today!\n\n" +
-  "Use my referral code: " + referralCode +
-  "\n\nEnter this code when registering.";
-
- try {
-
-  if (navigator.share) {
-
+document.getElementById("shareLink").addEventListener("click",async()=>{
+ if(!referralLink)return;
+ try{
+  if(navigator.share){
    await navigator.share({
-    title: "Join AILAT DATA",
-    text: shareText
+    title:"Join AILAT DATA",
+    text:"Register on AILAT DATA using my referral link:",
+    url:referralLink
    });
-
-  } else {
-
-   await navigator.clipboard.writeText(shareText);
-
-   message.innerText =
-    "Referral message copied successfully!";
-
+  }else{
+   await navigator.clipboard.writeText(referralLink);
+   showMessage("Referral link copied. You can share it now!");
   }
-
- } catch(error) {
-
-  if (error.name !== "AbortError") {
-
-   message.innerText =
-    "Unable to share. Please try again.";
-
-  }
-
+ }catch(error){
+  if(error.name!=="AbortError")showMessage("Unable to share link.","red");
  }
-
 });
-
 </script>
-
 </body>
 </html>
