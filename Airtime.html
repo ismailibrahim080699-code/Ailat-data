@@ -1,0 +1,108 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buy Airtime - AILAT DATA</title><style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f5f4fa;color:#29243c}
+.container{max-width:480px;margin:auto;min-height:100vh}
+header{background:white;padding:20px;display:flex;align-items:center;gap:15px}
+.back{font-size:26px;text-decoration:none;color:#6425c5}
+header h2{font-size:19px}
+.content{padding:22px 18px}
+.subtitle{font-size:13px;color:#888;margin-top:6px}
+.card{background:white;padding:20px;border-radius:16px;margin-top:20px;box-shadow:0 3px 15px #00000008}
+label{display:block;font-size:13px;font-weight:bold;margin:19px 0 9px}
+.networks{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.network{border:1px solid #e8e3f0;border-radius:10px;padding:13px 3px;text-align:center;font-size:12px;cursor:pointer;font-weight:bold}
+.network span{display:block;font-size:23px;margin-bottom:7px}
+.network.active{border:2px solid #6425c5;background:#f3ecff;color:#6425c5}
+input{width:100%;padding:15px;border:1px solid #e5e1ed;border-radius:10px;font-size:14px;outline:none}
+input:focus{border-color:#6425c5}
+.amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.amount{padding:14px 5px;border:1px solid #e8e3f0;border-radius:10px;text-align:center;font-weight:bold;cursor:pointer}
+.amount.active{background:#f3ecff;border:2px solid #6425c5;color:#6425c5}
+.total{background:#f3edff;padding:17px;border-radius:11px;margin-top:20px;display:flex;justify-content:space-between;align-items:center}
+.total strong{color:#6425c5;font-size:21px}
+button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;color:white;font-size:15px;font-weight:bold;margin-top:22px;cursor:pointer}
+.note{font-size:11px;color:#888;line-height:1.6;margin-top:14px}
+</style></head><body>
+<div class="container"><header>
+<a href="dashboard.html" class="back">‹</a>
+<h2>Buy Airtime</h2>
+</header><div class="content">
+<h2>Airtime Recharge</h2>
+<p class="subtitle">Recharge any Nigerian mobile network.</p><div class="card"><label>Select Network</label>
+
+<div class="networks">
+<div class="network active" onclick="chooseNetwork(this,'MTN')"><span>🟡</span>MTN</div>
+<div class="network" onclick="chooseNetwork(this,'Airtel')"><span>🔴</span>Airtel</div>
+<div class="network" onclick="chooseNetwork(this,'Glo')"><span>🟢</span>Glo</div>
+<div class="network" onclick="chooseNetwork(this,'9mobile')"><span>🟢</span>9mobile</div>
+</div><label>Phone Number</label>
+<input type="tel" id="phone" placeholder="Enter 11-digit phone number" maxlength="11">
+
+<label>Select Amount</label>
+
+<div class="amounts">
+<div class="amount" onclick="chooseAmount(this,100)">₦100</div>
+<div class="amount" onclick="chooseAmount(this,200)">₦200</div>
+<div class="amount" onclick="chooseAmount(this,500)">₦500</div>
+<div class="amount" onclick="chooseAmount(this,1000)">₦1,000</div>
+<div class="amount" onclick="chooseAmount(this,2000)">₦2,000</div>
+<div class="amount" onclick="chooseAmount(this,5000)">₦5,000</div>
+</div><label>Or Enter Amount</label>
+<input type="number" id="customAmount" placeholder="Enter amount (₦)" min="50" oninput="customValue()">
+
+<div class="total">
+<span>Total Amount</span>
+<strong id="total">₦0.00</strong>
+</div><button onclick="buyAirtime()">Continue</button>
+
+<p class="note">Check your phone number and amount before continuing. This is a demonstration page; real airtime delivery requires a connected VTU API.</p></div>
+</div>
+</div><script>
+let selectedNetwork="MTN";
+let selectedAmount=0;
+
+function chooseNetwork(element,network){
+selectedNetwork=network;
+document.querySelectorAll('.network').forEach(n=>n.classList.remove('active'));
+element.classList.add('active');
+}
+
+function chooseAmount(element,amount){
+selectedAmount=amount;
+document.getElementById('customAmount').value='';
+document.querySelectorAll('.amount').forEach(a=>a.classList.remove('active'));
+element.classList.add('active');
+updateTotal();
+}
+
+function customValue(){
+selectedAmount=Number(document.getElementById('customAmount').value);
+document.querySelectorAll('.amount').forEach(a=>a.classList.remove('active'));
+updateTotal();
+}
+
+function updateTotal(){
+document.getElementById('total').textContent='₦'+selectedAmount.toLocaleString('en-NG',{minimumFractionDigits:2});
+}
+
+function buyAirtime(){
+let phone=document.getElementById('phone').value.trim();
+
+if(!/^0[0-9]{10}$/.test(phone)){
+alert('Please enter a valid 11-digit Nigerian phone number.');
+return;
+}
+
+if(selectedAmount<50){
+alert('Please enter an amount of at least ₦50.');
+return;
+}
+
+alert('Your selection is ready!\nNetwork: '+selectedNetwork+'\nPhone: '+phone+'\nAmount: ₦'+selectedAmount.toLocaleString('en-NG')+'\n\nReal airtime purchase will be enabled after API integration.');
+}
+</script></body>
+</html>

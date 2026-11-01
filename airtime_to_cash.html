@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Airtime to Cash - AILAT DATA</title><style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f5f3ff;
+ color:#24134d;
+}
+header{
+ background:#5b21b6;
+ color:white;
+ padding:22px 18px;
+ border-radius:0 0 22px 22px;
+}
+header h2{margin:0}
+header p{font-size:13px;margin-bottom:0}
+.container{padding:18px}
+.card{
+ background:white;
+ padding:20px;
+ border-radius:16px;
+ margin-bottom:17px;
+ box-shadow:0 3px 12px #0000000d;
+}
+label{
+ display:block;
+ margin:15px 0 7px;
+ font-weight:bold;
+ font-size:14px;
+}
+input,select{
+ width:100%;
+ padding:14px;
+ border:1px solid #ddd;
+ border-radius:9px;
+ font-size:15px;
+ background:white;
+}
+button{
+ width:100%;
+ padding:15px;
+ margin-top:20px;
+ background:#6d28d9;
+ color:white;
+ border:0;
+ border-radius:10px;
+ font-size:16px;
+ font-weight:bold;
+}
+.result{
+ background:#f1eafe;
+ padding:15px;
+ border-radius:10px;
+ margin-top:15px;
+}
+.result h2{color:#6d28d9;margin:8px 0}
+.note{
+ font-size:12px;
+ color:#777;
+ line-height:1.6;
+}
+a{
+ display:block;
+ text-align:center;
+ color:#6d28d9;
+ text-decoration:none;
+ margin:20px;
+}
+</style></head><body><header>
+<h2>AILAT DATA</h2>
+<p>Airtime to Cash</p>
+</header><div class="container"><div class="card">
+<h3>Convert Airtime to Cash</h3>
+<p>Enter your airtime details below.</p><form onsubmit="submitRequest(event)"><label>Select Network</label>
+<select id="network" required>
+
+<option value="">Choose Network</option>
+<option>MTN</option>
+<option>Airtel</option>
+<option>Glo</option>
+<option>9mobile</option>
+</select><label>Phone Number</label>
+<input type="tel" id="phone" placeholder="Enter phone number" maxlength="11" required>
+
+<label>Airtime Amount (₦)</label>
+<input type="number" id="amount" placeholder="Enter amount" min="100" required oninput="calculate()">
+
+<div class="result">
+<p>Estimated Cash Value (Demo)</p>
+<h2 id="cash">₦0.00</h2>
+<p class="note">This is an illustrative estimate using a demo 80% rate. Actual rates may differ.</p>
+</div><button type="submit">Submit Request</button>
+
+</form>
+</div><div class="card">
+<h3>Important Information</h3>
+<p class="note">
+This page is currently a demonstration only. It does not receive airtime or send money.
+Real conversion requires a verified service provider, backend integration and confirmed transaction rates.
+</p>
+</div><a href="dashboard.html">← Back to Dashboard</a>
+
+</div><script>
+function calculate(){
+ const amount = Number(document.getElementById("amount").value);
+ const cash = amount * 0.80;
+ document.getElementById("cash").innerText =
+ "₦" + cash.toLocaleString("en-NG",{
+ minimumFractionDigits:2,
+ maximumFractionDigits:2
+ });
+}
+
+function submitRequest(event){
+ event.preventDefault();
+
+ const network = document.getElementById("network").value;
+ const phone = document.getElementById("phone").value;
+ const amount = Number(document.getElementById("amount").value);
+
+ if(phone.length !== 11){
+  alert("Please enter a valid 11-digit phone number.");
+  return;
+ }
+
+ if(amount < 100){
+  alert("Minimum demo amount is ₦100.");
+  return;
+ }
+
+ alert("Demo only: Your request has not been sent. Real airtime conversion is not yet connected.");
+}
+</script></body>
+</html>

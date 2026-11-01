@@ -1,0 +1,335 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register - AILAT DATA</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f5f3ff;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ min-height:100vh;
+ padding:20px 0;
+ color:#24134d;
+}
+
+.container{
+ width:90%;
+ max-width:400px;
+ background:white;
+ padding:25px 22px;
+ border-radius:18px;
+ box-shadow:0 4px 15px #00000010;
+}
+
+.logo{
+ text-align:center;
+ color:#5b21b6;
+ font-size:27px;
+ font-weight:bold;
+}
+
+.subtitle{
+ text-align:center;
+ color:#888;
+ margin-bottom:22px;
+}
+
+label{
+ display:block;
+ margin:14px 0 7px;
+ font-weight:bold;
+ font-size:14px;
+}
+
+input{
+ width:100%;
+ padding:14px;
+ border:1px solid #ddd;
+ border-radius:9px;
+ font-size:15px;
+}
+
+input:focus{
+ outline:none;
+ border-color:#7c3aed;
+ box-shadow:0 0 0 3px #7c3aed15;
+}
+
+button{
+ width:100%;
+ padding:15px;
+ background:#6d28d9;
+ color:white;
+ border:0;
+ border-radius:10px;
+ font-size:16px;
+ font-weight:bold;
+ margin-top:22px;
+ cursor:pointer;
+}
+
+button:disabled{
+ opacity:0.6;
+ cursor:not-allowed;
+}
+
+.links{
+ text-align:center;
+ margin-top:20px;
+ font-size:14px;
+}
+
+a{
+ color:#6d28d9;
+ text-decoration:none;
+}
+
+.note{
+ font-size:12px;
+ color:#888;
+ text-align:center;
+ margin-top:20px;
+ line-height:1.5;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">AILAT DATA</div>
+<p class="subtitle">Create Your Account</p>
+
+<form id="registerForm">
+
+<label>Full Name</label>
+<input type="text" id="name"
+placeholder="Enter your full name" required>
+
+<label>Email Address</label>
+<input type="email" id="email"
+placeholder="Enter your email" required>
+
+<label>Phone Number</label>
+<input type="tel" id="phone"
+placeholder="Enter phone number"
+maxlength="11" required>
+
+<label>Password</label>
+<input type="password" id="password"
+placeholder="Create password"
+minlength="8" required>
+
+<label>Confirm Password</label>
+<input type="password" id="confirmPassword"
+placeholder="Confirm password"
+minlength="8" required>
+
+<label>Referral Code (Optional)</label>
+<input type="text" id="referralCode"
+placeholder="Enter referral code (if any)">
+
+<button type="submit" id="registerBtn">
+Create Account
+</button>
+
+</form>
+
+<div class="links">
+Already have an account?
+<a href="login.html">Login Now</a>
+</div>
+
+<p class="note">
+Your password is securely handled by Firebase Authentication.
+</p>
+
+</div>
+
+<script type="module">
+
+import { app } from "./firebase.js";
+
+import {
+ getAuth,
+ createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
+
+import {
+ getFirestore,
+ doc,
+ setDoc,
+ getDoc,
+ serverTimestamp
+} from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const form = document.getElementById("registerForm");
+const button = document.getElementById("registerBtn");
+
+// REGISTRATION
+
+form.addEventListener("submit", async function(event){
+
+ event.preventDefault();
+
+ const name = document.getElementById("name").value.trim();
+ const email = document.getElementById("email").value.trim();
+ const phone = document.getElementById("phone").value.trim();
+ const password = document.getElementById("password").value;
+ const confirmPassword = document.getElementById("confirmPassword").value;
+ const referralCode = document.getElementById("referralCode").value.trim().toUpperCase();
+
+ if(name.length < 2){
+  alert("Please enter your full name.");
+  return;
+ }
+
+ if(phone.length !== 11 || !/^\d{11}$/.test(phone)){
+  alert("Please enter a valid 11-digit phone number.");
+  return;
+ }
+
+ if(password.length < 8){
+  alert("Password must contain at least 8 characters.");
+  return;
+ }
+
+ if(password !== confirmPassword){
+  alert("Passwords do not match.");
+  return;
+ }
+
+ button.disabled = true;
+ button.textContent = "Creating Account...";
+
+ try{
+
+  // CHECK REFERRAL CODE BEFORE ACCOUNT CREATION
+
+  let referrerUid = null;
+
+  if(referralCode !== ""){
+
+   const referralSnap = await getDoc(
+    doc(db, "referralCodes", referralCode)
+   );
+
+   if(!referralSnap.exists()){
+    throw new Error("Invalid Referral Code!");
+   }
+
+   referrerUid = referralSnap.data().ownerUid;
+
+   if(!referrerUid){
+    throw new Error("This Referral Code is not valid.");
+   }
+
+  }
+
+  // CREATE ACCOUNT
+
+  const result = await createUserWithEmailAndPassword(
+   auth,
+   email,
+   password
+  );
+
+  const uid = result.user.uid;
+
+  // GENERATE PERSONAL REFERRAL CODE
+
+  const myReferralCode =
+   "AILAT" + uid.substring(0,8).toUpperCase();
+
+  // SAVE USER INFORMATION
+
+  await setDoc(doc(db, "users", uid), {
+
+   name: name,
+   email: email,
+   phone: phone,
+   referralCode: myReferralCode,
+   referredBy: referralCode || "",
+   createdAt: serverTimestamp()
+
+  });
+
+  // SAVE PERSONAL REFERRAL CODE
+
+  await setDoc(doc(db, "referralCodes", myReferralCode), {
+
+   ownerUid: uid
+
+  });
+
+  // SAVE REFERRAL RECORD
+
+  if(referralCode !== "" && referrerUid){
+
+   if(referrerUid === uid){
+    throw new Error("You cannot use your own referral code.");
+   }
+
+   await setDoc(doc(db, "referrals", uid), {
+
+    referralCode: referralCode,
+    ownerUid: referrerUid,
+    newUserUid: uid,
+    joinedAt: serverTimestamp()
+
+   });
+
+  }
+
+  alert("Account created successfully!");
+
+  window.location.href = "login.html";
+
+ }catch(error){
+
+  console.error("Registration error:", error);
+
+  if(error.code === "auth/email-already-in-use"){
+
+   alert("This email is already registered.");
+
+  }else if(error.code === "auth/weak-password"){
+
+   alert("Password is too weak.");
+
+  }else if(error.code === "auth/invalid-email"){
+
+   alert("Invalid email address.");
+
+  }else{
+
+   alert("Registration failed: " + error.message);
+
+  }
+
+ }finally{
+
+  button.disabled = false;
+  button.textContent = "Create Account";
+
+ }
+
+});
+
+</script>
+
+</body>
+</html>

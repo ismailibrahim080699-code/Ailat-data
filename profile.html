@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile - AILAT DATA</title><style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f5f3ff;
+ color:#24134d;
+}
+header{
+ background:#5b21b6;
+ color:white;
+ padding:25px 20px;
+ border-radius:0 0 22px 22px;
+}
+header h2{margin:0}
+.container{
+ padding:20px;
+ max-width:450px;
+ margin:auto;
+}
+.profile-card{
+ background:white;
+ padding:22px;
+ border-radius:16px;
+ box-shadow:0 4px 12px #00000010;
+}
+.avatar{
+ width:75px;
+ height:75px;
+ border-radius:50%;
+ background:#ede9fe;
+ color:#6d28d9;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:35px;
+ margin:auto;
+}
+.profile-title{
+ text-align:center;
+ margin:12px 0 25px;
+}
+.info{
+ padding:13px 0;
+ border-bottom:1px solid #eee;
+}
+.info:last-child{border:0}
+.label{
+ font-size:12px;
+ color:#888;
+ margin-bottom:6px;
+}
+.value{
+ font-size:15px;
+ font-weight:bold;
+ overflow-wrap:anywhere;
+}
+button{
+ width:100%;
+ padding:14px;
+ border:0;
+ border-radius:10px;
+ background:#6d28d9;
+ color:white;
+ font-size:15px;
+ font-weight:bold;
+ margin-top:18px;
+}
+.back{
+ background:#eee;
+ color:#5b21b6;
+}
+</style></head><body><header>
+<h2>AILAT DATA</h2>
+<p>My Profile</p>
+</header><div class="container"><div class="profile-card"><div class="avatar">👤</div><div class="profile-title">
+<h3>My Account</h3>
+<p>Personal Information</p>
+</div><div class="info">
+<div class="label">Full Name</div>
+<div class="value" id="name">Loading...</div>
+</div><div class="info">
+<div class="label">Email Address</div>
+<div class="value" id="email">Loading...</div>
+</div><div class="info">
+<div class="label">Phone Number</div>
+<div class="value" id="phone">Loading...</div>
+</div><div class="info">
+<div class="label">Referral Code</div>
+<div class="value" id="referral">Not provided</div>
+</div><button class="back" onclick="location.href='dashboard.html'">
+Back to Dashboard
+</button><button id="logoutBtn">
+Logout
+</button></div>
+</div><script type="module">
+
+import { app } from "./firebase.js";
+
+import {
+ getAuth,
+ onAuthStateChanged,
+ signOut
+} from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
+
+import {
+ getFirestore,
+ doc,
+ getDoc
+} from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async (user) => {
+
+ if (!user) {
+  window.location.href = "login.html";
+  return;
+ }
+
+ try {
+
+  const userRef = doc(db, "users", user.uid);
+  const userSnap = await getDoc(userRef);
+
+  if (userSnap.exists()) {
+
+   const data = userSnap.data();
+
+   document.getElementById("name").textContent =
+    data.name || "Not available";
+
+   document.getElementById("email").textContent =
+    data.email || user.email || "Not available";
+
+   document.getElementById("phone").textContent =
+    data.phone || "Not provided";
+
+   document.getElementById("referral").textContent =
+    data.referralCode || "Not provided";
+
+  } else {
+   alert("Profile information not found.");
+  }
+
+ } catch(error) {
+  console.error(error);
+  alert("Unable to load profile information.");
+ }
+
+});
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+
+ try {
+  await signOut(auth);
+  window.location.href = "login.html";
+ } catch(error) {
+  alert("Logout failed.");
+ }
+
+});
+
+</script></body>
+</html>

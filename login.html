@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - AILAT DATA</title><style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f5f3ff;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ min-height:100vh;
+ color:#24134d;
+}
+.container{
+ width:90%;
+ max-width:400px;
+ background:white;
+ padding:28px 22px;
+ border-radius:18px;
+ box-shadow:0 4px 15px #00000010;
+}
+.logo{
+ text-align:center;
+ color:#5b21b6;
+ font-size:27px;
+ font-weight:bold;
+}
+.subtitle{
+ text-align:center;
+ color:#888;
+ margin-bottom:25px;
+}
+label{
+ display:block;
+ margin:15px 0 7px;
+ font-weight:bold;
+ font-size:14px;
+}
+input{
+ width:100%;
+ padding:14px;
+ border:1px solid #ddd;
+ border-radius:9px;
+ font-size:15px;
+}
+button{
+ width:100%;
+ padding:15px;
+ background:#6d28d9;
+ color:white;
+ border:0;
+ border-radius:10px;
+ font-size:16px;
+ font-weight:bold;
+ margin-top:22px;
+}
+button:disabled{
+ opacity:0.6;
+}
+.links{
+ text-align:center;
+ margin-top:20px;
+ font-size:14px;
+}
+a{
+ color:#6d28d9;
+ text-decoration:none;
+}
+.note{
+ font-size:12px;
+ color:#888;
+ text-align:center;
+ margin-top:20px;
+}
+</style></head><body><div class="container"><div class="logo">AILAT DATA</div>
+<p class="subtitle">Welcome Back!</p><form id="loginForm"><label>Email Address</label>
+<input type="email" id="email" placeholder="Enter your email" required>
+
+<label>Password</label>
+<input type="password" id="password" placeholder="Enter your password" required>
+
+<button type="submit" id="loginBtn">Login</button>
+
+</form><div class="links">
+Don't have an account?
+<a href="register.html">Register Now</a>
+</div><p class="note">AILAT DATA © 2026</p></div><script type="module">
+
+import { app } from "./firebase.js";
+
+import {
+ getAuth,
+ signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
+
+const auth = getAuth(app);
+
+const form = document.getElementById("loginForm");
+const button = document.getElementById("loginBtn");
+
+form.addEventListener("submit", async function(event){
+
+ event.preventDefault();
+
+ const email = document.getElementById("email").value.trim();
+ const password = document.getElementById("password").value;
+
+ button.disabled = true;
+ button.textContent = "Logging in...";
+
+ try {
+
+  await signInWithEmailAndPassword(auth, email, password);
+
+  alert("Login successful!");
+
+  window.location.href = "dashboard.html";
+
+ } catch(error) {
+
+  console.error(error);
+
+  if(error.code === "auth/invalid-credential"){
+   alert("Incorrect email or password.");
+  } else if(error.code === "auth/invalid-email"){
+   alert("Invalid email address.");
+  } else if(error.code === "auth/too-many-requests"){
+   alert("Too many attempts. Please try again later.");
+  } else {
+   alert("Login failed: " + error.message);
+  }
+
+ } finally {
+
+  button.disabled = false;
+  button.textContent = "Login";
+
+ }
+
+});
+
+</script></body>
+</html>
