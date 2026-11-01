@@ -7,390 +7,125 @@
 <title>AILAT DATA Dashboard</title>
 
 <style>
-*{
- box-sizing:border-box;
-}
-
-body{
- margin:0;
- font-family:Arial,sans-serif;
- background:#f5f3ff;
- color:#24134d;
-}
-
-/* HEADER */
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f3ff;color:#24134d}
 
 header{
  background:linear-gradient(135deg,#4c1d95,#6d28d9,#7c3aed);
- color:white;
- padding:23px 18px 32px;
+ color:white;padding:23px 18px 32px;
  border-radius:0 0 28px 28px;
  box-shadow:0 8px 25px #4c1d9525;
- position:relative;
- overflow:hidden;
+ position:relative;overflow:hidden;
 }
-
 header:before{
- content:"";
- position:absolute;
- width:180px;
- height:180px;
- border-radius:50%;
- background:#ffffff10;
- right:-55px;
- top:-75px;
+ content:"";position:absolute;width:180px;height:180px;
+ border-radius:50%;background:#ffffff10;right:-55px;top:-75px;
 }
-
 header:after{
- content:"";
- position:absolute;
- width:110px;
- height:110px;
- border-radius:50%;
- background:#ffffff0c;
- right:75px;
- bottom:-75px;
+ content:"";position:absolute;width:110px;height:110px;
+ border-radius:50%;background:#ffffff0c;right:75px;bottom:-75px;
 }
-
-.topbar{
- display:flex;
- align-items:center;
- justify-content:flex-start;
- gap:15px;
- position:relative;
- z-index:1;
-}
-
+.topbar{display:flex;align-items:center;justify-content:flex-start;gap:15px;position:relative;z-index:1}
 .profile-button{
- width:52px;
- height:52px;
- border:2px solid #ffffffcc;
- border-radius:50%;
- background:#ede9fe;
- color:#5b21b6;
- font-size:25px;
- display:flex;
- align-items:center;
- justify-content:center;
- cursor:pointer;
- overflow:hidden;
- padding:0;
- flex-shrink:0;
+ width:52px;height:52px;border:2px solid #ffffffcc;
+ border-radius:50%;background:#ede9fe;color:#5b21b6;
+ font-size:25px;display:flex;align-items:center;justify-content:center;
+ cursor:pointer;overflow:hidden;padding:0;flex-shrink:0;
  box-shadow:0 4px 12px #0002;
 }
+.profile-button img{width:100%;height:100%;object-fit:cover;display:none}
+.brand{font-size:23px;font-weight:900;letter-spacing:1px}
+header p{margin:13px 0 0;font-size:13px;opacity:.95;position:relative;z-index:1}
+header p:last-child{font-size:12px;opacity:.8}
 
-.profile-button img{
- width:100%;
- height:100%;
- object-fit:cover;
- display:none;
-}
-
-.brand{
- font-size:23px;
- font-weight:900;
- letter-spacing:1px;
-}
-
-header p{
- margin:13px 0 0;
- font-size:13px;
- opacity:.95;
- position:relative;
- z-index:1;
-}
-
-header p:last-child{
- font-size:12px;
- opacity:.8;
-}
-
-/* MAIN CONTAINER */
-
-.container{
- padding:20px 17px;
- max-width:650px;
- margin:auto;
-}
-
-/* WALLET */
+.container{padding:20px 17px;max-width:650px;margin:auto}
 
 .wallet{
  background:linear-gradient(135deg,#ffffff,#f7f3ff);
- padding:23px;
- border-radius:21px;
- margin-top:-4px;
- box-shadow:0 7px 22px #4c1d9512;
- border:1px solid #eee7ff;
- position:relative;
- overflow:hidden;
+ padding:23px;border-radius:21px;margin-top:-4px;
+ box-shadow:0 7px 22px #4c1d9512;border:1px solid #eee7ff;
+ position:relative;overflow:hidden;
 }
-
 .wallet:after{
- content:"";
- position:absolute;
- width:115px;
- height:115px;
- border-radius:50%;
- background:#ede9fe;
- right:-38px;
- top:-45px;
- opacity:.65;
+ content:"";position:absolute;width:115px;height:115px;
+ border-radius:50%;background:#ede9fe;right:-38px;top:-45px;opacity:.65;
 }
-
-.wallet p{
- color:#777;
- margin:0;
- font-size:13px;
- font-weight:600;
- position:relative;
- z-index:1;
-}
-
-.balance{
- font-size:31px;
- font-weight:900;
- margin:12px 0 17px;
- color:#5b21b6;
- letter-spacing:.3px;
- position:relative;
- z-index:1;
-}
-
+.wallet p{color:#777;margin:0;font-size:13px;font-weight:600;position:relative;z-index:1}
+.balance{font-size:31px;font-weight:900;margin:12px 0 17px;color:#5b21b6;letter-spacing:.3px;position:relative;z-index:1}
 .wallet button{
  background:linear-gradient(135deg,#6d28d9,#7c3aed);
- color:white;
- border:0;
- padding:12px 20px;
- border-radius:11px;
- font-weight:bold;
- font-size:13px;
- cursor:pointer;
- box-shadow:0 5px 12px #6d28d933;
- transition:.2s;
- position:relative;
- z-index:1;
+ color:white;border:0;padding:12px 20px;border-radius:11px;
+ font-weight:bold;font-size:13px;cursor:pointer;
+ box-shadow:0 5px 12px #6d28d933;transition:.2s;position:relative;z-index:1;
 }
+.wallet button:active{transform:scale(.96)}
 
-.wallet button:active{
- transform:scale(.96);
-}
+h3{margin:28px 0 16px;font-size:17px;font-weight:800;color:#35146c}
 
-/* SECTION TITLE */
-
-h3{
- margin:28px 0 16px;
- font-size:17px;
- font-weight:800;
- color:#35146c;
-}
-
-/* SERVICES */
-
-.services{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:13px;
-}
-
+.services{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
 .service{
  background:linear-gradient(145deg,#ffffff,#fbfaff);
- border-radius:18px;
- padding:19px 5px 17px;
- text-align:center;
- text-decoration:none;
- color:#24134d;
- box-shadow:0 5px 15px #0000000a;
- border:1px solid #eee9fb;
- transition:transform .2s,box-shadow .2s;
- min-height:105px;
- display:flex;
- flex-direction:column;
- align-items:center;
- justify-content:center;
+ border-radius:18px;padding:19px 5px 17px;text-align:center;
+ text-decoration:none;color:#24134d;box-shadow:0 5px 15px #0000000a;
+ border:1px solid #eee9fb;transition:transform .2s,box-shadow .2s;
+ min-height:105px;display:flex;flex-direction:column;
+ align-items:center;justify-content:center;
 }
+.service:active{transform:scale(.95);box-shadow:0 2px 7px #00000010}
+.icon{font-size:29px;margin-bottom:11px;filter:drop-shadow(0 3px 3px #00000012)}
+.service p{font-size:11.5px;font-weight:800;margin:0;line-height:1.4}
 
-.service:active{
- transform:scale(.95);
- box-shadow:0 2px 7px #00000010;
-}
-
-.icon{
- font-size:29px;
- margin-bottom:11px;
- filter:drop-shadow(0 3px 3px #00000012);
-}
-
-.service p{
- font-size:11.5px;
- font-weight:800;
- margin:0;
- line-height:1.4;
-}
-
-/* FOOTER */
-
-footer{
- text-align:center;
- color:#999;
- font-size:12px;
- padding:28px 10px;
- line-height:1.8;
-}
-
-/* ACCOUNT MENU */
+footer{text-align:center;color:#999;font-size:12px;padding:28px 10px;line-height:1.8}
 
 .menu-overlay{
- position:fixed;
- inset:0;
- background:#160b2e99;
- backdrop-filter:blur(3px);
- z-index:10;
- display:none;
+ position:fixed;inset:0;background:#160b2e99;
+ backdrop-filter:blur(3px);z-index:10;display:none;
 }
-
-.menu-overlay.show{
- display:block;
-}
-
+.menu-overlay.show{display:block}
 .account-menu{
- position:fixed;
- top:0;
- left:0;
- width:285px;
- max-width:85%;
- height:100%;
- background:linear-gradient(180deg,#ffffff,#faf8ff);
- z-index:11;
- padding:22px 18px;
- transform:translateX(-110%);
- transition:transform .28s ease;
- box-shadow:5px 0 25px #0003;
- overflow-y:auto;
+ position:fixed;top:0;left:0;width:285px;max-width:85%;height:100%;
+ background:linear-gradient(180deg,#ffffff,#faf8ff);z-index:11;
+ padding:22px 18px;transform:translateX(-110%);
+ transition:transform .28s ease;box-shadow:5px 0 25px #0003;overflow-y:auto;
 }
-
-.account-menu.open{
- transform:translateX(0);
-}
-
-.menu-profile{
- text-align:center;
- padding:38px 0 23px;
- border-bottom:1px solid #eee8fa;
-}
-
+.account-menu.open{transform:translateX(0)}
+.menu-profile{text-align:center;padding:38px 0 23px;border-bottom:1px solid #eee8fa}
 .menu-avatar{
- width:88px;
- height:88px;
- margin:auto;
- border-radius:50%;
- background:linear-gradient(135deg,#ede9fe,#ddd0ff);
- color:#5b21b6;
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:42px;
- overflow:hidden;
- border:3px solid white;
- box-shadow:0 5px 15px #5b21b625;
+ width:88px;height:88px;margin:auto;border-radius:50%;
+ background:linear-gradient(135deg,#ede9fe,#ddd0ff);color:#5b21b6;
+ display:flex;align-items:center;justify-content:center;font-size:42px;
+ overflow:hidden;border:3px solid white;box-shadow:0 5px 15px #5b21b625;
 }
-
-.menu-avatar img{
- width:100%;
- height:100%;
- object-fit:cover;
- display:none;
-}
-
-.menu-profile h3{
- margin:14px 0 5px;
- font-size:18px;
-}
-
+.menu-avatar img{width:100%;height:100%;object-fit:cover;display:none}
+.menu-profile h3{margin:14px 0 5px;font-size:18px}
 .change-photo{
- border:0;
- background:#ede9fe;
- color:#5b21b6;
- padding:11px 15px;
- border-radius:10px;
- margin-top:10px;
- font-weight:bold;
- font-size:12px;
+ border:0;background:#ede9fe;color:#5b21b6;padding:11px 15px;
+ border-radius:10px;margin-top:10px;font-weight:bold;font-size:12px;
 }
-
-.remove-photo{
- border:0;
- background:white;
- color:#dc2626;
- padding:10px;
- margin-top:5px;
- font-size:12px;
-}
-
-.menu-links{
- padding-top:10px;
-}
-
+.remove-photo{border:0;background:white;color:#dc2626;padding:10px;margin-top:5px;font-size:12px}
+.menu-links{padding-top:10px}
 .menu-links a{
- display:block;
- padding:15px 11px;
- color:#4c1d95;
- text-decoration:none;
- border-bottom:1px solid #eeeaf5;
- font-size:13px;
- font-weight:600;
- border-radius:9px;
- transition:.2s;
+ display:block;padding:15px 11px;color:#4c1d95;text-decoration:none;
+ border-bottom:1px solid #eeeaf5;font-size:13px;font-weight:600;border-radius:9px;transition:.2s;
 }
-
-.menu-links a:active{
- background:#f0eaff;
-}
-
+.menu-links a:active{background:#f0eaff}
 .close-menu{
- position:absolute;
- top:15px;
- right:15px;
- border:0;
- background:#f3f0ff;
- color:#5b21b6;
- padding:9px 12px;
- border-radius:9px;
- font-size:17px;
+ position:absolute;top:15px;right:15px;border:0;background:#f3f0ff;
+ color:#5b21b6;padding:9px 12px;border-radius:9px;font-size:17px;
 }
-
 .logout{
- display:block;
- width:100%;
- padding:14px;
- margin-top:22px;
- background:linear-gradient(135deg,#dc2626,#ef4444);
- color:white;
- border:0;
- border-radius:11px;
- font-size:14px;
- font-weight:bold;
+ display:block;width:100%;padding:14px;margin-top:22px;
+ background:linear-gradient(135deg,#dc2626,#ef4444);color:white;
+ border:0;border-radius:11px;font-size:14px;font-weight:bold;
  box-shadow:0 4px 12px #dc262625;
 }
 
-/* SMALL SCREENS */
-
 @media(max-width:360px){
- .services{
-  gap:9px;
- }
- .service{
-  padding:15px 3px;
- }
- .service p{
-  font-size:10.5px;
- }
- .brand{
-  font-size:20px;
- }
- .balance{
-  font-size:28px;
- }
+ .services{gap:9px}
+ .service{padding:15px 3px}
+ .service p{font-size:10.5px}
+ .brand{font-size:20px}
+ .balance{font-size:28px}
 }
 </style>
 </head>
@@ -399,76 +134,40 @@ footer{
 
 <header>
  <div class="topbar">
-
   <button class="profile-button" onclick="openAccountMenu()">
    <span id="defaultIcon">👤</span>
    <img id="topPhoto" alt="Profile">
   </button>
-
   <div class="brand">AILAT DATA</div>
-
  </div>
-
  <p id="welcome">Welcome to your dashboard</p>
  <p>Fast, Easy and Reliable Services</p>
 </header>
 
 <div class="container">
-
  <div class="wallet">
   <p>My Wallet Balance</p>
   <div class="balance">₦0.00</div>
-  <button onclick="alert('Wallet funding is not available yet.')">
-   + Fund Wallet
-  </button>
+  <button onclick="alert('Wallet funding is not available yet.')">+ Fund Wallet</button>
  </div>
 
  <h3>Our Services</h3>
 
  <div class="services">
+  <a class="service" href="data.html"><div class="icon">📶</div><p>Buy Data</p></a>
+  <a class="service" href="airtime.html"><div class="icon">📱</div><p>Buy Airtime</p></a>
+  <a class="service" href="airtime_to_cash.html"><div class="icon">💸</div><p>Airtime to Cash</p></a>
+  <a class="service" href="electricity.html"><div class="icon">💡</div><p>Electricity</p></a>
+  <a class="service" href="tv.html"><div class="icon">📺</div><p>TV Subscription</p></a>
+  <a class="service" href="exam_result.html"><div class="icon">🎓</div><p>Exam PIN</p></a>
+  <a class="service" href="referral.html"><div class="icon">🎁</div><p>Referral</p></a>
 
-  <a class="service" href="data.html">
-   <div class="icon">📶</div>
-   <p>Buy Data</p>
-  </a>
-
-  <a class="service" href="airtime.html">
-   <div class="icon">📱</div>
-   <p>Buy Airtime</p>
-  </a>
-
-  <a class="service" href="airtime_to_cash.html">
-   <div class="icon">💸</div>
-   <p>Airtime to Cash</p>
-  </a>
-
-  <a class="service" href="electricity.html">
-   <div class="icon">💡</div>
-   <p>Electricity</p>
-  </a>
-
-  <a class="service" href="tv.html">
-   <div class="icon">📺</div>
-   <p>TV Subscription</p>
-  </a>
-
-  <a class="service" href="exam_result.html">
-   <div class="icon">🎓</div>
-   <p>Exam PIN</p>
-  </a>
-
-  <a class="service" href="referral.html">
-   <div class="icon">🎁</div>
-   <p>Referral</p>
-  </a>
-
-  <a class="service" href="transaction.html">
+  <!-- Corrected Transaction History filename -->
+  <a class="service" href="transaction_history.html">
    <div class="icon">📋</div>
    <p>Transactions</p>
   </a>
-
  </div>
-
 </div>
 
 <footer>
@@ -476,57 +175,32 @@ footer{
  All Rights Reserved
 </footer>
 
-<!-- ACCOUNT MENU -->
-
-<div class="menu-overlay" id="menuOverlay"
- onclick="closeAccountMenu()"></div>
+<div class="menu-overlay" id="menuOverlay" onclick="closeAccountMenu()"></div>
 
 <div class="account-menu" id="accountMenu">
-
- <button class="close-menu"
- onclick="closeAccountMenu()">✕</button>
+ <button class="close-menu" onclick="closeAccountMenu()">✕</button>
 
  <div class="menu-profile">
-
   <div class="menu-avatar">
    <span id="menuDefaultIcon">👤</span>
    <img id="menuPhoto" alt="Profile">
   </div>
-
   <h3 id="menuName">My Account</h3>
-
-  <button class="change-photo"
-  onclick="document.getElementById('photoInput').click()">
-   📷 Change Profile Photo
-  </button>
-
-  <input type="file" id="photoInput"
-  accept="image/*" hidden>
-
+  <button class="change-photo" onclick="document.getElementById('photoInput').click()">📷 Change Profile Photo</button>
+  <input type="file" id="photoInput" accept="image/*" hidden>
   <br>
-
-  <button class="remove-photo" id="removePhoto">
-   Remove Photo
-  </button>
-
+  <button class="remove-photo" id="removePhoto">Remove Photo</button>
  </div>
 
  <div class="menu-links">
-
   <a href="profile.html">👤 My Profile</a>
-
   <a href="referral.html">🎁 My Referral</a>
-
-  <a href="transaction.html">📋 Transaction History</a>
-
+  <!-- Corrected Transaction History filename -->
+  <a href="transaction_history.html">📋 Transaction History</a>
   <a href="dashboard.html">🏠 Dashboard</a>
-
  </div>
 
- <button class="logout" id="logoutBtn">
-  Logout
- </button>
-
+ <button class="logout" id="logoutBtn">Logout</button>
 </div>
 
 <script type="module">
@@ -556,59 +230,36 @@ onAuthStateChanged(auth, async (user) => {
  }
 
  try {
-
   const userRef = doc(db, "users", user.uid);
   const userSnap = await getDoc(userRef);
 
   if (userSnap.exists()) {
-
    const userData = userSnap.data();
    const name = userData.name || "User";
 
-   document.getElementById("welcome").textContent =
-    "Welcome, " + name;
-
+   document.getElementById("welcome").textContent = "Welcome, " + name;
    document.getElementById("menuName").textContent = name;
-
   }
 
   loadSavedPhoto(user.uid);
 
  } catch(error) {
-
   console.error("Profile error:", error);
-
-  document.getElementById("welcome").textContent =
-   "Welcome to your dashboard";
-
+  document.getElementById("welcome").textContent = "Welcome to your dashboard";
  }
-
 });
 
-// OPEN MENU
-
 window.openAccountMenu = function(){
-
  document.getElementById("accountMenu").classList.add("open");
-
  document.getElementById("menuOverlay").classList.add("show");
-
 };
-
-// CLOSE MENU
 
 window.closeAccountMenu = function(){
-
  document.getElementById("accountMenu").classList.remove("open");
-
  document.getElementById("menuOverlay").classList.remove("show");
-
 };
 
-// DISPLAY PHOTO
-
 function displayPhoto(photo){
-
  document.getElementById("topPhoto").src = photo;
  document.getElementById("topPhoto").style.display = "block";
  document.getElementById("defaultIcon").style.display = "none";
@@ -616,27 +267,18 @@ function displayPhoto(photo){
  document.getElementById("menuPhoto").src = photo;
  document.getElementById("menuPhoto").style.display = "block";
  document.getElementById("menuDefaultIcon").style.display = "none";
-
 }
 
-// LOAD SAVED PHOTO
-
 function loadSavedPhoto(uid){
-
  const savedPhoto = localStorage.getItem("ailatPhoto_" + uid);
-
  if(savedPhoto){
   displayPhoto(savedPhoto);
  }
-
 }
-
-// SELECT PHOTO
 
 document.getElementById("photoInput").addEventListener("change", function(event){
 
  const file = event.target.files[0];
-
  if(!file) return;
 
  if(!file.type.startsWith("image/")){
@@ -652,11 +294,9 @@ document.getElementById("photoInput").addEventListener("change", function(event)
  const reader = new FileReader();
 
  reader.onload = function(e){
-
   const image = new Image();
 
   image.onload = function(){
-
    const canvas = document.createElement("canvas");
    const maxSize = 400;
 
@@ -678,36 +318,24 @@ document.getElementById("photoInput").addEventListener("change", function(event)
    context.drawImage(image, 0, 0, width, height);
 
    const photo = canvas.toDataURL("image/jpeg", 0.75);
-
    const user = auth.currentUser;
 
    if(user){
-
     try{
-
      localStorage.setItem("ailatPhoto_" + user.uid, photo);
      displayPhoto(photo);
      alert("Profile photo updated!");
-
     }catch(error){
-
      alert("Unable to save this photo on your device.");
-
     }
-
    }
-
   };
 
   image.src = e.target.result;
-
  };
 
  reader.readAsDataURL(file);
-
 });
-
-// REMOVE PHOTO
 
 document.getElementById("removePhoto").addEventListener("click", function(){
 
@@ -724,24 +352,16 @@ document.getElementById("removePhoto").addEventListener("click", function(){
  document.getElementById("menuDefaultIcon").style.display = "block";
 
  alert("Profile photo removed.");
-
 });
-
-// LOGOUT
 
 document.getElementById("logoutBtn").addEventListener("click", async function(){
 
  try{
-
   await signOut(auth);
   window.location.href = "login.html";
-
  }catch(error){
-
   alert("Logout failed. Please try again.");
-
  }
-
 });
 
 </script>
