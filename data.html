@@ -1,8 +1,11 @@
-<!DOCTYPE html><html lang="en">
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Buy Data - AILAT DATA</title><style>
+<title>Buy Data - AILAT DATA</title>
+<style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#f5f4fa;color:#29243c}
 .container{max-width:480px;margin:auto;min-height:100vh;padding-bottom:35px}
@@ -23,25 +26,33 @@ select:focus,input:focus{border-color:#6425c5}
 .price-box strong{color:#6425c5;font-size:20px}
 button{width:100%;padding:16px;border:none;border-radius:11px;background:#6425c5;color:white;font-weight:bold;font-size:15px;margin-top:22px;cursor:pointer}
 .note{font-size:11px;color:#888;line-height:1.6;margin-top:14px}
-</style></head><body>
-<div class="container"><header>
+</style>
+</head>
+<body>
+<div class="container">
+<header>
 <a href="dashboard.html" class="back">‹</a>
 <h2>Buy Data</h2>
-</header><div class="content">
-<h2>Purchase Data Bundle</h2>
-<p class="subtitle">Choose your network and preferred data plan.</p><div class="card"><label>Select Network</label>
+</header>
 
+<div class="content">
+<h2>Purchase Data Bundle</h2>
+<p class="subtitle">Choose your network and preferred data plan.</p>
+
+<div class="card">
+<label>Select Network</label>
 <div class="networks">
 <div class="network active" onclick="chooseNetwork(this,'MTN')"><span>🟡</span>MTN</div>
 <div class="network" onclick="chooseNetwork(this,'Airtel')"><span>🔴</span>Airtel</div>
 <div class="network" onclick="chooseNetwork(this,'Glo')"><span>🟢</span>Glo</div>
 <div class="network" onclick="chooseNetwork(this,'9mobile')"><span>🟢</span>9mobile</div>
-</div><label>Phone Number</label>
+</div>
+
+<label>Phone Number</label>
 <input type="tel" id="phone" placeholder="Enter phone number" maxlength="11">
 
 <label>Select Data Plan</label>
 <select id="plan" onchange="updatePrice()">
-
 <option value="">Choose data bundle</option>
 <option value="500">500MB - ₦500</option>
 <option value="1000">1GB - ₦1,000</option>
@@ -49,40 +60,57 @@ button{width:100%;padding:16px;border:none;border-radius:11px;background:#6425c5
 <option value="2500">3GB - ₦2,500</option>
 <option value="3500">5GB - ₦3,500</option>
 <option value="6000">10GB - ₦6,000</option>
-</select><div class="price-box">
+</select>
+
+<div class="price-box">
 <span>Total Amount</span>
 <strong id="price">₦0.00</strong>
-</div><button onclick="buyData()">Continue</button>
-
-<p class="note">Please confirm your phone number and selected data plan before continuing. Prices shown are demonstration prices and must be verified before live sales.</p></div>
 </div>
-</div><script>
+
+<button onclick="continuePurchase()">Continue</button>
+
+<p class="note">Please confirm your phone number and selected data plan before continuing. Prices are demonstration prices and must be verified before live sales.</p>
+</div>
+</div>
+</div>
+
+<script>
 let selectedNetwork = "MTN";
 
 function chooseNetwork(element,network){
-selectedNetwork=network;
+selectedNetwork = network;
 document.querySelectorAll('.network').forEach(n=>n.classList.remove('active'));
 element.classList.add('active');
 }
 
 function updatePrice(){
-let amount=document.getElementById('plan').value;
-document.getElementById('price').textContent=amount?'₦'+Number(amount).toLocaleString('en-NG')+'.00':'₦0.00';
+let amount = document.getElementById('plan').value;
+document.getElementById('price').textContent =
+amount ? '₦'+Number(amount).toLocaleString('en-NG')+'.00' : '₦0.00';
 }
 
-function buyData(){
-let phone=document.getElementById('phone').value.trim();
-let plan=document.getElementById('plan').value;
+function continuePurchase(){
+let phone = document.getElementById('phone').value.trim();
+let plan = document.getElementById('plan').value;
 
 if(!/^0[0-9]{10}$/.test(phone)){
 alert('Please enter a valid 11-digit Nigerian phone number.');
 return;
 }
+
 if(!plan){
 alert('Please select a data plan.');
 return;
 }
-alert('Your selection is ready!\nNetwork: '+selectedNetwork+'\nPhone: '+phone+'\nAmount: ₦'+Number(plan).toLocaleString('en-NG')+'\n\nLive purchase will be enabled after API integration.');
+
+let params = new URLSearchParams({
+network:selectedNetwork,
+phone:phone,
+plan:plan
+});
+
+window.location.href = 'order_summary.html?' + params.toString();
 }
-</script></body>
+</script>
+</body>
 </html>
