@@ -8,97 +8,88 @@
 
 <style>
 *{box-sizing:border-box}
-
 body{
  margin:0;
  font-family:Arial,sans-serif;
- background:#f5f3ff;
+ background:linear-gradient(135deg,#f5f3ff,#e9e2ff);
+ min-height:100vh;
  display:flex;
  justify-content:center;
  align-items:center;
- min-height:100vh;
- padding:20px 0;
- color:#24134d;
+ padding:20px;
 }
-
 .container{
- width:90%;
- max-width:400px;
  background:white;
- padding:25px 22px;
- border-radius:18px;
- box-shadow:0 4px 15px #00000010;
+ width:100%;
+ max-width:430px;
+ padding:28px 22px;
+ border-radius:20px;
+ box-shadow:0 10px 35px rgba(45,20,100,.13);
 }
-
 .logo{
  text-align:center;
- color:#5b21b6;
  font-size:27px;
  font-weight:bold;
+ color:#6425c5;
+ margin-bottom:5px;
 }
-
 .subtitle{
  text-align:center;
- color:#888;
+ color:#777;
+ margin-bottom:24px;
+}
+h2{
+ text-align:center;
+ color:#28134d;
  margin-bottom:22px;
 }
-
 label{
  display:block;
- margin:14px 0 7px;
  font-weight:bold;
+ color:#35205a;
+ margin:13px 0 7px;
  font-size:14px;
 }
-
 input{
  width:100%;
  padding:14px;
  border:1px solid #ddd;
- border-radius:9px;
+ border-radius:10px;
+ outline:none;
  font-size:15px;
 }
-
 input:focus{
- outline:none;
- border-color:#7c3aed;
- box-shadow:0 0 0 3px #7c3aed15;
+ border-color:#7136d6;
+ box-shadow:0 0 0 2px #eee5ff;
 }
-
 button{
  width:100%;
  padding:15px;
- background:#6d28d9;
- color:white;
  border:0;
- border-radius:10px;
+ border-radius:11px;
+ background:linear-gradient(135deg,#7136d6,#4b1e9e);
+ color:white;
  font-size:16px;
  font-weight:bold;
- margin-top:22px;
+ margin-top:23px;
  cursor:pointer;
 }
-
-button:disabled{
- opacity:0.6;
- cursor:not-allowed;
-}
-
-.links{
+button:disabled{opacity:.6}
+.footer{
  text-align:center;
  margin-top:20px;
+ color:#666;
  font-size:14px;
 }
-
-a{
- color:#6d28d9;
+.footer a{
+ color:#6425c5;
+ font-weight:bold;
  text-decoration:none;
 }
-
-.note{
- font-size:12px;
- color:#888;
+#message{
  text-align:center;
- margin-top:20px;
- line-height:1.5;
+ font-size:14px;
+ margin-top:15px;
 }
 </style>
 </head>
@@ -108,57 +99,46 @@ a{
 <div class="container">
 
 <div class="logo">AILAT DATA</div>
-<p class="subtitle">Create Your Account</p>
+<div class="subtitle">Welcome! Create your account</div>
+
+<h2>Create Account</h2>
 
 <form id="registerForm">
 
 <label>Full Name</label>
-<input type="text" id="name"
-placeholder="Enter your full name" required>
+<input type="text" id="fullName" placeholder="Enter your full name" required>
 
 <label>Email Address</label>
-<input type="email" id="email"
-placeholder="Enter your email" required>
+<input type="email" id="email" placeholder="Enter your email" required>
 
 <label>Phone Number</label>
-<input type="tel" id="phone"
-placeholder="Enter phone number"
-maxlength="11" required>
+<input type="tel" id="phone" placeholder="Enter 11 digit phone number" maxlength="11" required>
 
 <label>Password</label>
-<input type="password" id="password"
-placeholder="Create password"
-minlength="8" required>
+<input type="password" id="password" placeholder="Create password (minimum 8)" minlength="8" required>
 
 <label>Confirm Password</label>
-<input type="password" id="confirmPassword"
-placeholder="Confirm password"
-minlength="8" required>
+<input type="password" id="confirmPassword" placeholder="Confirm password" required>
 
 <label>Referral Code (Optional)</label>
-<input type="text" id="referralCode"
-placeholder="Enter referral code (if any)">
+<input type="text" id="referralCode" placeholder="Enter referral code">
 
-<button type="submit" id="registerBtn">
-Create Account
-</button>
+<button type="submit" id="registerBtn">CREATE ACCOUNT</button>
 
 </form>
 
-<div class="links">
-Already have an account?
-<a href="login.html">Login Now</a>
-</div>
+<div id="message"></div>
 
-<p class="note">
-Your password is securely handled by Firebase Authentication.
-</p>
+<div class="footer">
+Already have an account?
+<a href="login.html">Login</a>
+</div>
 
 </div>
 
 <script type="module">
 
-import { app } from "./firebase.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
 
 import {
  getAuth,
@@ -168,61 +148,77 @@ import {
 import {
  getFirestore,
  doc,
- setDoc,
  getDoc,
+ setDoc,
  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
 
+const firebaseConfig = {
+ apiKey: "AIzaSyBv7ixj82ZWaSHyvv0dzg86MOUBae3pA94",
+ authDomain: "ailat-data.firebaseapp.com",
+ projectId: "ailat-data",
+ storageBucket: "ailat-data.firebasestorage.app",
+ messagingSenderId: "936036858829",
+ appId: "1:936036858829:web:c9b72589796524b378a284"
+};
+
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
 const form = document.getElementById("registerForm");
-const button = document.getElementById("registerBtn");
+const referralInput = document.getElementById("referralCode");
+const registerBtn = document.getElementById("registerBtn");
+const message = document.getElementById("message");
 
-// REGISTRATION
+// Automatically fill referral code from URL
+const urlParams = new URLSearchParams(window.location.search);
+const urlReferralCode = (urlParams.get("ref") || "").trim().toUpperCase();
 
-form.addEventListener("submit", async function(event){
+if(urlReferralCode){
+ referralInput.value = urlReferralCode;
+}
 
- event.preventDefault();
+form.addEventListener("submit", async (e) => {
 
- const name = document.getElementById("name").value.trim();
+ e.preventDefault();
+
+ const fullName = document.getElementById("fullName").value.trim();
  const email = document.getElementById("email").value.trim();
  const phone = document.getElementById("phone").value.trim();
  const password = document.getElementById("password").value;
  const confirmPassword = document.getElementById("confirmPassword").value;
- const referralCode = document.getElementById("referralCode").value.trim().toUpperCase();
-
- if(name.length < 2){
-  alert("Please enter your full name.");
-  return;
- }
+ const referralCode = referralInput.value.trim().toUpperCase();
 
  if(phone.length !== 11 || !/^\d{11}$/.test(phone)){
-  alert("Please enter a valid 11-digit phone number.");
+  message.style.color = "red";
+  message.textContent = "Enter a valid 11 digit phone number.";
   return;
  }
 
  if(password.length < 8){
-  alert("Password must contain at least 8 characters.");
+  message.style.color = "red";
+  message.textContent = "Password must be at least 8 characters.";
   return;
  }
 
  if(password !== confirmPassword){
-  alert("Passwords do not match.");
+  message.style.color = "red";
+  message.textContent = "Passwords do not match.";
   return;
  }
 
- button.disabled = true;
- button.textContent = "Creating Account...";
+ registerBtn.disabled = true;
+ registerBtn.textContent = "PLEASE WAIT...";
+ message.style.color = "#6425c5";
+ message.textContent = "Creating your account...";
 
- try{
+ try {
 
-  // CHECK REFERRAL CODE BEFORE ACCOUNT CREATION
-
+  // Check referral code before creating account
   let referrerUid = null;
 
   if(referralCode !== ""){
-
    const referralSnap = await getDoc(
     doc(db, "referralCodes", referralCode)
    );
@@ -232,99 +228,72 @@ form.addEventListener("submit", async function(event){
    }
 
    referrerUid = referralSnap.data().ownerUid;
-
-   if(!referrerUid){
-    throw new Error("This Referral Code is not valid.");
-   }
-
   }
 
-  // CREATE ACCOUNT
-
-  const result = await createUserWithEmailAndPassword(
+  // Create account
+  const userCredential = await createUserWithEmailAndPassword(
    auth,
    email,
    password
   );
 
-  const uid = result.user.uid;
-
-  // GENERATE PERSONAL REFERRAL CODE
+  const user = userCredential.user;
 
   const myReferralCode =
-   "AILAT" + uid.substring(0,8).toUpperCase();
+   "AILAT" + user.uid.substring(0,8).toUpperCase();
 
-  // SAVE USER INFORMATION
-
-  await setDoc(doc(db, "users", uid), {
-
-   name: name,
+  // Save user information
+  await setDoc(doc(db, "users", user.uid), {
+   name: fullName,
    email: email,
    phone: phone,
    referralCode: myReferralCode,
-   referredBy: referralCode || "",
+   referredBy: referrerUid || null,
    createdAt: serverTimestamp()
-
   });
 
-  // SAVE PERSONAL REFERRAL CODE
-
+  // Save personal referral code
   await setDoc(doc(db, "referralCodes", myReferralCode), {
-
-   ownerUid: uid
-
+   ownerUid: user.uid,
+   createdAt: serverTimestamp()
   });
 
-  // SAVE REFERRAL RECORD
-
-  if(referralCode !== "" && referrerUid){
-
-   if(referrerUid === uid){
-    throw new Error("You cannot use your own referral code.");
-   }
-
-   await setDoc(doc(db, "referrals", uid), {
-
+  // Save referral record
+  if(referrerUid){
+   await setDoc(doc(db, "referrals", user.uid), {
     referralCode: referralCode,
     ownerUid: referrerUid,
-    newUserUid: uid,
+    newUserUid: user.uid,
     joinedAt: serverTimestamp()
-
    });
-
   }
+
+  message.style.color = "green";
+  message.textContent = "Registration successful!";
 
   alert("Account created successfully!");
 
-  window.location.href = "login.html";
+  window.location.href = "dashboard.html";
 
- }catch(error){
+ } catch(error) {
 
-  console.error("Registration error:", error);
+  console.error(error);
+
+  message.style.color = "red";
 
   if(error.code === "auth/email-already-in-use"){
-
-   alert("This email is already registered.");
-
+   message.textContent = "This email is already registered.";
   }else if(error.code === "auth/weak-password"){
-
-   alert("Password is too weak.");
-
+   message.textContent = "Please choose a stronger password.";
   }else if(error.code === "auth/invalid-email"){
-
-   alert("Invalid email address.");
-
+   message.textContent = "Invalid email address.";
   }else{
-
-   alert("Registration failed: " + error.message);
-
+   message.textContent = error.message || "Registration failed. Please try again.";
   }
 
- }finally{
-
-  button.disabled = false;
-  button.textContent = "Create Account";
-
+ } finally {
+  registerBtn.disabled = false;
+  registerBtn.textContent = "CREATE ACCOUNT";
  }
 
 });
