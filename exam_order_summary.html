@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Order Summary - AILAT DATA</title>
+
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{
+ margin:0;
+ padding:20px;
+ background:#f5f3ff;
+ color:#29243c
+}
+.container{
+ max-width:480px;
+ margin:35px auto;
+ background:white;
+ padding:25px;
+ border-radius:20px;
+ box-shadow:0 8px 25px #00000012
+}
+h2{text-align:center;color:#5425a8}
+.subtitle{text-align:center;color:#888;font-size:14px}
+.details{
+ background:#f5f0ff;
+ padding:16px;
+ border-radius:14px;
+ margin:25px 0
+}
+.item{
+ display:flex;
+ justify-content:space-between;
+ gap:12px;
+ padding:14px 0;
+ border-bottom:1px solid #e4dcf5;
+ font-size:14px
+}
+.item:last-child{border:0}
+.item strong{text-align:right}
+button{
+ width:100%;
+ padding:15px;
+ border:0;
+ border-radius:12px;
+ background:linear-gradient(135deg,#702bd1,#4520a0);
+ color:white;
+ font-size:16px;
+ font-weight:bold;
+ margin-top:12px
+}
+.back{background:#eee8fa;color:#4520a0}
+.notice{
+ background:#fff5dc;
+ color:#795600;
+ padding:12px;
+ border-radius:10px;
+ font-size:13px;
+ line-height:1.6
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h2>Exam Order Summary</h2>
+<p class="subtitle">Please review your examination details</p>
+
+<div class="details">
+<div class="item">
+<span>Examination</span>
+<strong id="exam">-</strong>
+</div>
+
+<div class="item">
+<span>PIN Quantity</span>
+<strong id="quantity">-</strong>
+</div>
+
+<div class="item">
+<span>Total Amount</span>
+<strong id="amount">-</strong>
+</div>
+</div>
+
+<div class="notice">
+Demo only. Real examination PIN purchase, payment and delivery are not yet available.
+</div>
+
+<button onclick="confirmDetails()">Confirm Details</button>
+<button class="back" onclick="history.back()">Go Back and Edit</button>
+
+</div>
+
+<script>
+const params=new URLSearchParams(location.search);
+
+const exam=params.get("exam");
+const quantity=Number(params.get("quantity"));
+const amount=Number(params.get("amount"));
+
+const prices={
+ WAEC:3500,
+ NECO:1200,
+ NABTEB:1500,
+ JAMB:1000
+};
+
+const valid=
+ Object.prototype.hasOwnProperty.call(prices,exam) &&
+ [1,2,3,5].includes(quantity) &&
+ amount===prices[exam]*quantity;
+
+if(valid){
+ document.getElementById("exam").textContent=exam;
+ document.getElementById("quantity").textContent=
+ quantity+" PIN(s)";
+ document.getElementById("amount").textContent=
+ "₦"+amount.toLocaleString("en-NG")+".00";
+}else{
+ document.querySelector(".details").innerHTML=
+ "<p>Invalid order details. Please go back and try again.</p>";
+}
+
+function confirmDetails(){
+ if(!valid){
+  alert("Invalid order details.");
+  return;
+ }
+ alert("Demo only: Real examination PIN purchase and delivery are not yet available.");
+}
+</script>
+
+</div>
+</body>
+</html>
