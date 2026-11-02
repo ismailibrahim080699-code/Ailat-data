@@ -51,7 +51,10 @@ header p:last-child{font-size:12px;opacity:.8}
  border-radius:50%;background:#ede9fe;right:-38px;top:-45px;opacity:.65;
 }
 .wallet p{color:#777;margin:0;font-size:13px;font-weight:600;position:relative;z-index:1}
-.balance{font-size:31px;font-weight:900;margin:12px 0 17px;color:#5b21b6;letter-spacing:.3px;position:relative;z-index:1}
+.balance{
+ font-size:31px;font-weight:900;margin:12px 0 17px;
+ color:#5b21b6;letter-spacing:.3px;position:relative;z-index:1;
+}
 .wallet button{
  background:linear-gradient(135deg,#6d28d9,#7c3aed);
  color:white;border:0;padding:12px 20px;border-radius:11px;
@@ -147,7 +150,7 @@ footer{text-align:center;color:#999;font-size:12px;padding:28px 10px;line-height
 <div class="container">
  <div class="wallet">
   <p>My Wallet Balance</p>
-  <div class="balance">₦0.00</div>
+  <div class="balance" id="walletBalance">₦0.00</div>
   <button onclick="alert('Wallet funding is not available yet.')">+ Fund Wallet</button>
  </div>
 
@@ -216,6 +219,21 @@ import {
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+function showWalletBalance(value){
+
+ const amount = Number(value);
+
+ const safeAmount = Number.isFinite(amount) && amount >= 0
+  ? amount
+  : 0;
+
+ document.getElementById("walletBalance").textContent =
+  "₦" + safeAmount.toLocaleString("en-NG", {
+   minimumFractionDigits: 2,
+   maximumFractionDigits: 2
+  });
+}
+
 onAuthStateChanged(auth, async (user) => {
 
  if (!user) {
@@ -224,6 +242,7 @@ onAuthStateChanged(auth, async (user) => {
  }
 
  try {
+
   await user.reload();
 
   if (!user.emailVerified) {
@@ -237,19 +256,33 @@ onAuthStateChanged(auth, async (user) => {
   const userSnap = await getDoc(userRef);
 
   if (userSnap.exists()) {
+
    const userData = userSnap.data();
+
    const name = userData.name || "User";
 
-   document.getElementById("welcome").textContent = "Welcome, " + name;
+   document.getElementById("welcome").textContent =
+    "Welcome, " + name;
+
    document.getElementById("menuName").textContent = name;
+
+   // Karanta ainihin kudin Wallet daga Firebase
+   showWalletBalance(userData.walletBalance ?? 0);
+
+  } else {
+
+   showWalletBalance(0);
+
   }
 
   loadSavedPhoto(user.uid);
 
  } catch(error) {
-  console.error("Dashboard security error:", error);
-  await signOut(auth);
-  window.location.href = "login.html";
+
+  console.error("Dashboard error:", error);
+
+  alert("Unable to load your account details. Please refresh and try again.");
+
  }
 });
 
@@ -264,6 +297,7 @@ window.closeAccountMenu = function(){
 };
 
 function displayPhoto(photo){
+
  document.getElementById("topPhoto").src = photo;
  document.getElementById("topPhoto").style.display = "block";
  document.getElementById("defaultIcon").style.display = "none";
@@ -271,18 +305,23 @@ function displayPhoto(photo){
  document.getElementById("menuPhoto").src = photo;
  document.getElementById("menuPhoto").style.display = "block";
  document.getElementById("menuDefaultIcon").style.display = "none";
+
 }
 
 function loadSavedPhoto(uid){
+
  const savedPhoto = localStorage.getItem("ailatPhoto_" + uid);
+
  if(savedPhoto){
   displayPhoto(savedPhoto);
  }
+
 }
 
 document.getElementById("photoInput").addEventListener("change", function(event){
 
  const file = event.target.files[0];
+
  if(!file) return;
 
  if(!file.type.startsWith("image/")){
@@ -298,9 +337,11 @@ document.getElementById("photoInput").addEventListener("change", function(event)
  const reader = new FileReader();
 
  reader.onload = function(e){
+
   const image = new Image();
 
   image.onload = function(){
+
    const canvas = document.createElement("canvas");
    const maxSize = 400;
 
@@ -325,20 +366,29 @@ document.getElementById("photoInput").addEventListener("change", function(event)
    const user = auth.currentUser;
 
    if(user){
+
     try{
+
      localStorage.setItem("ailatPhoto_" + user.uid, photo);
      displayPhoto(photo);
      alert("Profile photo updated!");
+
     }catch(error){
+
      alert("Unable to save this photo on your device.");
+
     }
+
    }
+
   };
 
   image.src = e.target.result;
+
  };
 
  reader.readAsDataURL(file);
+
 });
 
 document.getElementById("removePhoto").addEventListener("click", function(){
@@ -356,20 +406,26 @@ document.getElementById("removePhoto").addEventListener("click", function(){
  document.getElementById("menuDefaultIcon").style.display = "block";
 
  alert("Profile photo removed.");
+
 });
 
 document.getElementById("logoutBtn").addEventListener("click", async function(){
 
  try{
+
   await signOut(auth);
   window.location.href = "login.html";
+
  }catch(error){
+
   alert("Logout failed. Please try again.");
+
  }
+
 });
 
 </script>
 
 </body>
-                                                                                    </html>
-                                                                                    
+ </html>
+ 
