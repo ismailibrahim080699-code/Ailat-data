@@ -104,6 +104,20 @@ input:focus{
  opacity:0.6;
 }
 
+.resend-button{
+ width:100%;
+ padding:12px;
+ background:#ede9fe;
+ color:#5b21b6;
+ border:1px solid #ddd6fe;
+ border-radius:10px;
+ font-size:14px;
+ font-weight:bold;
+ margin-top:12px;
+ cursor:pointer;
+ display:none;
+}
+
 .links{
  text-align:center;
  margin-top:20px;
@@ -166,6 +180,10 @@ a{
 Login
 </button>
 
+<button type="button" class="resend-button" id="resendBtn">
+Resend Verification Email
+</button>
+
 </form>
 
 <div class="links">
@@ -183,7 +201,9 @@ import { app } from "./firebase.js";
 
 import {
  getAuth,
- signInWithEmailAndPassword
+ signInWithEmailAndPassword,
+ sendEmailVerification,
+ signOut
 } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
 
 const auth = getAuth(app);
@@ -192,8 +212,12 @@ const form = document.getElementById("loginForm");
 const button = document.getElementById("loginBtn");
 const passwordInput = document.getElementById("password");
 const togglePassword = document.getElementById("togglePassword");
+const resendBtn = document.getElementById("resendBtn");
 
-// Show and hide password
+let verificationUser = null;
+
+// SHOW AND HIDE PASSWORD
+
 togglePassword.addEventListener("click", function(){
 
  if(passwordInput.type === "password"){
@@ -214,6 +238,8 @@ togglePassword.addEventListener("click", function(){
 
 });
 
+// LOGIN
+
 form.addEventListener("submit", async function(event){
 
  event.preventDefault();
@@ -222,11 +248,34 @@ form.addEventListener("submit", async function(event){
  const password = passwordInput.value;
 
  button.disabled = true;
- button.textContent = "Logging in...";
+ button.textContent = "Checking Account...";
+ resendBtn.style.display = "none";
 
  try {
 
-  await signInWithEmailAndPassword(auth, email, password);
+  const result = await signInWithEmailAndPassword(
+   auth,
+   email,
+   password
+  );
+
+  const user = result.user;
+
+  if(!user.emailVerified){
+
+   verificationUser = user;
+
+   await sendEmailVerification(user);
+   await signOut(auth);
+
+   alert(
+    "Your email is not verified yet. A verification link has been sent to your email. Please check your inbox or spam folder."
+   );
+
+   resendBtn.style.display = "block";
+
+   return;
+  }
 
   alert("Login successful!");
 
@@ -250,6 +299,65 @@ form.addEventListener("submit", async function(event){
 
   button.disabled = false;
   button.textContent = "Login";
+
+ }
+
+});
+
+// RESEND VERIFICATION EMAIL
+
+resendBtn.addEventListener("click", async function(){
+
+ const email = document.getElementById("email").value.trim();
+ const password = passwordInput.value;
+
+ resendBtn.disabled = true;
+ resendBtn.textContent = "Sending...";
+
+ try{
+
+  let user = verificationUser;
+
+  if(!user){
+
+   const result = await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+   );
+
+   user = result.user;
+  }
+
+  await user.reload();
+
+  if(user.emailVerified){
+
+   alert("Email already verified. You can now login.");
+   await signOut(auth);
+   resendBtn.style.display = "none";
+
+  }else{
+
+   await sendEmailVerification(user);
+
+   alert("Verification email sent successfully. Please check your inbox.");
+
+   await signOut(auth);
+  }
+
+  verificationUser = null;
+
+ }catch(error){
+
+  console.error(error);
+
+  alert("Could not send verification email: " + error.message);
+
+ }finally{
+
+  resendBtn.disabled = false;
+  resendBtn.textContent = "Resend Verification Email";
 
  }
 
