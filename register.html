@@ -214,8 +214,6 @@ aria-label="Show password"
 aria-pressed="false">👁️</button>
 </div>
 
-<!-- PASSWORD STRENGTH -->
-
 <div class="strength-section">
 
 <div class="strength-bars">
@@ -257,7 +255,7 @@ minlength="8" required>
 <button type="button"
 class="toggle-password"
 id="toggleConfirmPassword"
-aria-label="Show confirm password"
+aria-label="Show password"
 aria-pressed="false">👁️</button>
 </div>
 
@@ -288,7 +286,8 @@ import { app } from "./firebase.js";
 
 import {
  getAuth,
- createUserWithEmailAndPassword
+ createUserWithEmailAndPassword,
+ sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
 
 import {
@@ -376,11 +375,6 @@ function checkPasswordStrength(password){
   color = "#e99b16";
   bars = 3;
  }
- else{
-  strength = "Weak";
-  color = "#ef4444";
-  bars = 1;
- }
 
  const text = document.getElementById("strengthText");
 
@@ -414,8 +408,7 @@ document.getElementById("generatePassword")
  const characters =
  "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%&*";
 
- const randomValues =
- new Uint32Array(16);
+ const randomValues = new Uint32Array(16);
 
  crypto.getRandomValues(randomValues);
 
@@ -472,7 +465,6 @@ form.addEventListener("submit", async function(event){
  document.getElementById("phone").value.trim();
 
  const password = passwordInput.value;
-
  const confirmPassword = confirmInput.value;
 
  const referralCode =
@@ -543,6 +535,8 @@ form.addEventListener("submit", async function(event){
   const myReferralCode =
    "AILAT" + uid.substring(0,8).toUpperCase();
 
+  // SAVE USER INFORMATION
+
   await setDoc(doc(db, "users", uid), {
 
    name: name,
@@ -554,11 +548,15 @@ form.addEventListener("submit", async function(event){
 
   });
 
+  // SAVE PERSONAL REFERRAL CODE
+
   await setDoc(doc(db, "referralCodes", myReferralCode), {
 
    ownerUid: uid
 
   });
+
+  // SAVE REFERRAL INFORMATION
 
   if(referralCode !== "" && referrerUid){
 
@@ -573,7 +571,13 @@ form.addEventListener("submit", async function(event){
 
   }
 
-  alert("Account created successfully!");
+  // SEND EMAIL VERIFICATION
+
+  await sendEmailVerification(result.user);
+
+  alert(
+   "Account created successfully! A verification email has been sent to your email address. Please open your email and click Verify Email before logging in."
+  );
 
   window.location.href = "login.html";
 
@@ -592,6 +596,14 @@ form.addEventListener("submit", async function(event){
   }else if(error.code === "auth/invalid-email"){
 
    alert("Invalid email address.");
+
+  }else if(error.code === "auth/too-many-requests"){
+
+   alert("Too many attempts. Please try again later.");
+
+  }else if(error.code === "auth/operation-not-allowed"){
+
+   alert("Email verification is not available. Check Firebase Authentication settings.");
 
   }else{
 
