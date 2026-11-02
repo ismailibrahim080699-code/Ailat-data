@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en">
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,30 +9,56 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#f5f4fa;color:#29243c}
 .container{max-width:480px;margin:auto;min-height:100vh}
-header{background:white;padding:20px;display:flex;align-items:center;gap:15px}
-.back{font-size:26px;text-decoration:none;color:#6425c5}
+header{
+ background:linear-gradient(135deg,#4c1d95,#7c3aed);
+ color:white;padding:22px 20px;display:flex;
+ align-items:center;gap:15px;border-radius:0 0 20px 20px
+}
+.back{font-size:26px;text-decoration:none;color:white}
 header h2{font-size:19px}
 .content{padding:22px 18px}
 .subtitle{color:#888;font-size:13px;margin-top:6px}
-.card{background:white;padding:20px;border-radius:16px;margin-top:20px;box-shadow:0 3px 15px #00000008}
+.card{
+ background:white;padding:20px;border-radius:16px;
+ margin-top:20px;box-shadow:0 3px 15px #00000008
+}
 label{display:block;font-size:13px;font-weight:bold;margin:19px 0 9px}
-select,input{width:100%;padding:15px;border:1px solid #e5e1ed;border-radius:10px;background:white;font-size:14px;outline:none}
+select,input{
+ width:100%;padding:15px;border:1px solid #e5e1ed;
+ border-radius:10px;background:white;font-size:14px;outline:none
+}
 select:focus,input:focus{border-color:#6425c5}
-button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;color:white;font-size:15px;font-weight:bold;margin-top:22px;cursor:pointer}
+button{
+ width:100%;padding:16px;border:0;border-radius:11px;
+ background:#6425c5;color:white;font-size:15px;
+ font-weight:bold;margin-top:22px;cursor:pointer
+}
 .note{font-size:11px;color:#888;line-height:1.6;margin-top:14px}
-.icon{background:#f0e8ff;width:55px;height:55px;border-radius:15px;display:grid;place-items:center;font-size:27px;margin-bottom:12px}
+.icon{
+ background:#f0e8ff;width:55px;height:55px;
+ border-radius:15px;display:grid;place-items:center;
+ font-size:27px;margin-bottom:12px
+}
 </style>
 </head>
+
 <body>
-<div class="container"><header>
+<div class="container">
+
+<header>
 <a href="dashboard.html" class="back">‹</a>
 <h2>Electricity Payment</h2>
-</header><div class="content">
+</header>
+
+<div class="content">
 <div class="icon">💡</div>
 <h2>Pay Electricity Bill</h2>
-<p class="subtitle">Pay your electricity bill easily.</p><div class="card"><label>Select Electricity Provider</label>
-<select id="provider">
+<p class="subtitle">Enter your electricity details below.</p>
 
+<div class="card">
+
+<label>Select Electricity Provider</label>
+<select id="provider">
 <option value="">Choose electricity company</option>
 <option>IKEDC - Ikeja Electric</option>
 <option>EKEDC - Eko Electric</option>
@@ -43,36 +71,83 @@ button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;co
 <option>YEDC - Yola Electric</option>
 <option>ABA Electric</option>
 <option>AEPC - Abuja Electric</option>
-</select><label>Meter Type</label>
-<select id="meterType">
+</select>
 
+<label>Meter Type</label>
+<select id="meterType">
 <option value="">Select meter type</option>
 <option value="Prepaid">Prepaid</option>
 <option value="Postpaid">Postpaid</option>
-</select><label>Meter Number</label>
-<input type="text" id="meter" placeholder="Enter meter number" maxlength="20">
+</select>
+
+<label>Meter Number</label>
+<input
+ type="text"
+ id="meter"
+ placeholder="Enter meter number"
+ maxlength="20"
+ inputmode="numeric"
+>
 
 <label>Amount (₦)</label>
-<input type="number" id="amount" placeholder="Enter amount" min="100">
+<input
+ type="number"
+ id="amount"
+ placeholder="Enter amount"
+ min="100"
+ max="1000000"
+ step="1"
+>
 
 <button onclick="continuePayment()">Continue</button>
 
-<p class="note">Demo only: Meter verification and real electricity payment require a connected VTU API. Do not enter real payment details here.</p>
+<p class="note">
+Demo only: Meter verification and real electricity payment are not connected. Do not enter real payment details here.
+</p>
+
 </div>
 </div>
-</div><script>
+</div>
+
+<script>
 function continuePayment(){
-let provider=document.getElementById('provider').value;
-let type=document.getElementById('meterType').value;
-let meter=document.getElementById('meter').value.trim();
-let amount=Number(document.getElementById('amount').value);
 
-if(!provider){alert('Please select an electricity provider.');return;}
-if(!type){alert('Please select meter type.');return;}
-if(meter.length<6){alert('Please enter a valid meter number.');return;}
-if(amount<100){alert('Please enter an amount of at least ₦100.');return;}
+ const provider=document.getElementById('provider').value;
+ const type=document.getElementById('meterType').value;
+ const meter=document.getElementById('meter').value.trim();
+ const amount=Number(document.getElementById('amount').value);
 
-alert('Your selection is ready!\\nProvider: '+provider+'\\nMeter Type: '+type+'\\nMeter Number: '+meter+'\\nAmount: ₦'+amount.toLocaleString('en-NG')+'\\n\\nReal payment will be enabled after API integration.');
+ if(!provider){
+  alert('Please select an electricity provider.');
+  return;
+ }
+
+ if(!type){
+  alert('Please select meter type.');
+  return;
+ }
+
+ if(!/^[0-9]{6,20}$/.test(meter)){
+  alert('Please enter a valid meter number using 6 to 20 digits.');
+  return;
+ }
+
+ if(!Number.isSafeInteger(amount)||amount<100||amount>1000000){
+  alert('Please enter an amount between ₦100 and ₦1,000,000.');
+  return;
+ }
+
+ const params=new URLSearchParams({
+  provider:provider,
+  type:type,
+  meter:meter,
+  amount:String(amount)
+ });
+
+ window.location.href=
+ 'electricity_order_summary.html?'+params.toString();
 }
-</script></body>
+</script>
+
+</body>
 </html>
