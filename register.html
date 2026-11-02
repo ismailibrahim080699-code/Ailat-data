@@ -107,6 +107,56 @@ button:disabled{
  cursor:not-allowed;
 }
 
+.strength-section{
+ margin-top:12px;
+}
+
+.strength-bars{
+ display:flex;
+ gap:5px;
+ margin-bottom:8px;
+}
+
+.strength-bars span{
+ flex:1;
+ height:6px;
+ border-radius:10px;
+ background:#e5e1ed;
+}
+
+.strength-text{
+ font-size:13px;
+ font-weight:bold;
+ color:#888;
+}
+
+.password-tips{
+ background:#f5f3ff;
+ padding:12px;
+ border-radius:10px;
+ margin-top:12px;
+ font-size:12px;
+ line-height:1.7;
+ color:#5b4b76;
+}
+
+.password-tips strong{
+ color:#5b21b6;
+}
+
+.generate-btn{
+ background:#ede9fe;
+ color:#5b21b6;
+ border:1px solid #ddd6fe;
+ margin-top:10px;
+ padding:11px;
+ font-size:13px;
+}
+
+.generate-btn:hover{
+ background:#ddd6fe;
+}
+
 .links{
  text-align:center;
  margin-top:20px;
@@ -151,9 +201,10 @@ placeholder="Enter phone number"
 maxlength="11" required>
 
 <label>Password</label>
+
 <div class="password-box">
 <input type="password" id="password"
-placeholder="Create password"
+placeholder="Create a strong password"
 minlength="8" required>
 
 <button type="button"
@@ -163,7 +214,41 @@ aria-label="Show password"
 aria-pressed="false">👁️</button>
 </div>
 
+<!-- PASSWORD STRENGTH -->
+
+<div class="strength-section">
+
+<div class="strength-bars">
+<span id="bar1"></span>
+<span id="bar2"></span>
+<span id="bar3"></span>
+<span id="bar4"></span>
+</div>
+
+<div class="strength-text" id="strengthText">
+Password strength: Not entered
+</div>
+
+</div>
+
+<div class="password-tips">
+<strong>🔐 Create a Strong Password</strong><br>
+✓ At least 12 characters is recommended.<br>
+✓ Include uppercase letters (A-Z).<br>
+✓ Include lowercase letters (a-z).<br>
+✓ Include numbers (0-9).<br>
+✓ Include special symbols (!@#$%).<br>
+<strong>Tip:</strong> A long, unique password is harder to guess.
+</div>
+
+<button type="button"
+class="generate-btn"
+id="generatePassword">
+✨ Generate Strong Password
+</button>
+
 <label>Confirm Password</label>
+
 <div class="password-box">
 <input type="password" id="confirmPassword"
 placeholder="Confirm password"
@@ -221,11 +306,18 @@ const form = document.getElementById("registerForm");
 const button = document.getElementById("registerBtn");
 const referralInput = document.getElementById("referralCode");
 
+const passwordInput = document.getElementById("password");
+const confirmInput = document.getElementById("confirmPassword");
+
 // PASSWORD VISIBILITY
+
 function setupPasswordToggle(inputId, buttonId){
 
- const passwordInput = document.getElementById(inputId);
- const toggleButton = document.getElementById(buttonId);
+ const passwordInput =
+ document.getElementById(inputId);
+
+ const toggleButton =
+ document.getElementById(buttonId);
 
  toggleButton.addEventListener("click", function(){
 
@@ -252,25 +344,139 @@ function setupPasswordToggle(inputId, buttonId){
 setupPasswordToggle("password","togglePassword");
 setupPasswordToggle("confirmPassword","toggleConfirmPassword");
 
+// PASSWORD STRENGTH CHECKER
+
+function checkPasswordStrength(password){
+
+ let score = 0;
+
+ if(password.length >= 8) score++;
+ if(password.length >= 12) score++;
+ if(/[a-z]/.test(password)) score++;
+ if(/[A-Z]/.test(password)) score++;
+ if(/[0-9]/.test(password)) score++;
+ if(/[^A-Za-z0-9]/.test(password)) score++;
+
+ let strength = "Weak";
+ let color = "#ef4444";
+ let bars = 1;
+
+ if(password.length === 0){
+  strength = "Not entered";
+  color = "#888";
+  bars = 0;
+ }
+ else if(score >= 5 && password.length >= 12){
+  strength = "Strong";
+  color = "#16a34a";
+  bars = 4;
+ }
+ else if(score >= 3){
+  strength = "Medium";
+  color = "#e99b16";
+  bars = 3;
+ }
+ else{
+  strength = "Weak";
+  color = "#ef4444";
+  bars = 1;
+ }
+
+ const text = document.getElementById("strengthText");
+
+ text.textContent = "Password strength: " + strength;
+ text.style.color = color;
+
+ for(let i = 1; i <= 4; i++){
+
+  const bar = document.getElementById("bar" + i);
+
+  bar.style.background =
+   i <= bars ? color : "#e5e1ed";
+
+ }
+
+ return strength;
+
+}
+
+passwordInput.addEventListener("input", function(){
+
+ checkPasswordStrength(passwordInput.value);
+
+});
+
+// GENERATE STRONG PASSWORD
+
+document.getElementById("generatePassword")
+.addEventListener("click", function(){
+
+ const characters =
+ "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%&*";
+
+ const randomValues =
+ new Uint32Array(16);
+
+ crypto.getRandomValues(randomValues);
+
+ let generated = "";
+
+ for(let i = 0; i < randomValues.length; i++){
+
+  generated += characters[
+   randomValues[i] % characters.length
+  ];
+
+ }
+
+ passwordInput.value = generated;
+ confirmInput.value = generated;
+
+ passwordInput.type = "text";
+ confirmInput.type = "text";
+
+ document.getElementById("togglePassword").textContent = "🙈";
+ document.getElementById("toggleConfirmPassword").textContent = "🙈";
+
+ checkPasswordStrength(generated);
+
+ alert("Strong password generated! Keep it somewhere safe and private.");
+
+});
+
 // GET REFERRAL CODE FROM URL
-const urlParams = new URLSearchParams(window.location.search);
-const urlReferralCode = (urlParams.get("ref") || "").trim().toUpperCase();
+
+const urlParams =
+ new URLSearchParams(window.location.search);
+
+const urlReferralCode =
+ (urlParams.get("ref") || "").trim().toUpperCase();
 
 if(urlReferralCode){
  referralInput.value = urlReferralCode;
 }
 
 // REGISTRATION
+
 form.addEventListener("submit", async function(event){
 
  event.preventDefault();
 
- const name = document.getElementById("name").value.trim();
- const email = document.getElementById("email").value.trim();
- const phone = document.getElementById("phone").value.trim();
- const password = document.getElementById("password").value;
- const confirmPassword = document.getElementById("confirmPassword").value;
- const referralCode = referralInput.value.trim().toUpperCase();
+ const name =
+ document.getElementById("name").value.trim();
+
+ const email =
+ document.getElementById("email").value.trim();
+
+ const phone =
+ document.getElementById("phone").value.trim();
+
+ const password = passwordInput.value;
+
+ const confirmPassword = confirmInput.value;
+
+ const referralCode =
+ referralInput.value.trim().toUpperCase();
 
  if(name.length < 2){
   alert("Please enter your full name.");
@@ -284,6 +490,11 @@ form.addEventListener("submit", async function(event){
 
  if(password.length < 8){
   alert("Password must contain at least 8 characters.");
+  return;
+ }
+
+ if(checkPasswordStrength(password) !== "Strong"){
+  alert("Please create a STRONG password. Use at least 12 characters with uppercase, lowercase, numbers and symbols.");
   return;
  }
 
