@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TV Order Summary - AILAT DATA</title>
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{
+ margin:0;
+ background:#f5f3ff;
+ color:#24134d;
+ padding:20px;
+}
+.container{
+ max-width:480px;
+ margin:35px auto;
+ background:white;
+ padding:25px;
+ border-radius:20px;
+ box-shadow:0 8px 25px rgba(36,19,77,.10);
+}
+h2{text-align:center;color:#5425a8}
+.subtitle{text-align:center;color:#777;font-size:14px}
+.details{
+ background:#f5f0ff;
+ padding:16px;
+ border-radius:14px;
+ margin:25px 0;
+}
+.item{
+ display:flex;
+ justify-content:space-between;
+ gap:12px;
+ padding:13px 0;
+ border-bottom:1px solid #e4dcf5;
+ font-size:14px;
+}
+.item:last-child{border:0}
+.item strong{text-align:right;overflow-wrap:anywhere}
+button{
+ width:100%;
+ padding:15px;
+ border:0;
+ border-radius:12px;
+ background:linear-gradient(135deg,#702bd1,#4520a0);
+ color:white;
+ font-size:16px;
+ font-weight:bold;
+ margin-top:12px;
+}
+.back{background:#eee8fa;color:#4520a0}
+.notice{
+ background:#fff5dc;
+ color:#795600;
+ padding:12px;
+ border-radius:10px;
+ font-size:13px;
+ line-height:1.6;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>TV Order Summary</h2>
+<p class="subtitle">Please review your subscription details</p>
+
+<div class="details">
+<div class="item">
+<span>Provider</span>
+<strong id="provider">-</strong>
+</div>
+<div class="item">
+<span>Smartcard / IUC Number</span>
+<strong id="smartcard">-</strong>
+</div>
+<div class="item">
+<span>Package</span>
+<strong id="plan">-</strong>
+</div>
+<div class="item">
+<span>Total Amount</span>
+<strong id="amount">-</strong>
+</div>
+</div>
+
+<div class="notice">
+This is a demonstration only. Real TV subscription and payment are not yet available.
+</div>
+
+<button onclick="confirmDetails()">Confirm Details</button>
+<button class="back" onclick="history.back()">Go Back and Edit</button>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+
+const provider = params.get("provider") || "";
+const smartcard = params.get("smartcard") || "";
+const plan = Number(params.get("plan"));
+
+const packages = {
+ 3500:"Basic",
+ 5000:"Smart",
+ 7500:"Classic",
+ 10000:"Compact",
+ 15000:"Premium"
+};
+
+const providers = ["DStv","GOtv","Startimes"];
+
+const valid =
+ providers.includes(provider) &&
+ /^[0-9]{6,20}$/.test(smartcard) &&
+ Object.prototype.hasOwnProperty.call(packages,plan);
+
+if(valid){
+ document.getElementById("provider").textContent = provider;
+ document.getElementById("smartcard").textContent = smartcard;
+ document.getElementById("plan").textContent = packages[plan];
+ document.getElementById("amount").textContent =
+ "₦" + plan.toLocaleString("en-NG");
+}else{
+ document.querySelector(".details").innerHTML =
+ "<p>Invalid order details. Please go back and try again.</p>";
+}
+
+function confirmDetails(){
+ if(!valid){
+  alert("Invalid order details.");
+  return;
+ }
+ alert("Demo only: Real TV subscription and payment are not yet available.");
+}
+</script>
+
+</body>
+</html>
