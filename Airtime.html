@@ -1,8 +1,11 @@
-<!DOCTYPE html><html lang="en">
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Buy Airtime - AILAT DATA</title><style>
+<title>Buy Airtime - AILAT DATA</title>
+<style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#f5f4fa;color:#29243c}
 .container{max-width:480px;margin:auto;min-height:100vh}
@@ -26,20 +29,31 @@ input:focus{border-color:#6425c5}
 .total strong{color:#6425c5;font-size:21px}
 button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;color:white;font-size:15px;font-weight:bold;margin-top:22px;cursor:pointer}
 .note{font-size:11px;color:#888;line-height:1.6;margin-top:14px}
-</style></head><body>
-<div class="container"><header>
+</style>
+</head>
+<body>
+
+<div class="container">
+<header>
 <a href="dashboard.html" class="back">‹</a>
 <h2>Buy Airtime</h2>
-</header><div class="content">
+</header>
+
+<div class="content">
 <h2>Airtime Recharge</h2>
-<p class="subtitle">Recharge any Nigerian mobile network.</p><div class="card"><label>Select Network</label>
+<p class="subtitle">Recharge any Nigerian mobile network.</p>
+
+<div class="card">
+<label>Select Network</label>
 
 <div class="networks">
 <div class="network active" onclick="chooseNetwork(this,'MTN')"><span>🟡</span>MTN</div>
 <div class="network" onclick="chooseNetwork(this,'Airtel')"><span>🔴</span>Airtel</div>
 <div class="network" onclick="chooseNetwork(this,'Glo')"><span>🟢</span>Glo</div>
 <div class="network" onclick="chooseNetwork(this,'9mobile')"><span>🟢</span>9mobile</div>
-</div><label>Phone Number</label>
+</div>
+
+<label>Phone Number</label>
 <input type="tel" id="phone" placeholder="Enter 11-digit phone number" maxlength="11">
 
 <label>Select Amount</label>
@@ -51,17 +65,24 @@ button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;co
 <div class="amount" onclick="chooseAmount(this,1000)">₦1,000</div>
 <div class="amount" onclick="chooseAmount(this,2000)">₦2,000</div>
 <div class="amount" onclick="chooseAmount(this,5000)">₦5,000</div>
-</div><label>Or Enter Amount</label>
-<input type="number" id="customAmount" placeholder="Enter amount (₦)" min="50" oninput="customValue()">
+</div>
+
+<label>Or Enter Amount</label>
+<input type="number" id="customAmount" placeholder="Enter amount (₦)" min="50" step="1" oninput="customValue()">
 
 <div class="total">
 <span>Total Amount</span>
 <strong id="total">₦0.00</strong>
-</div><button onclick="buyAirtime()">Continue</button>
-
-<p class="note">Check your phone number and amount before continuing. This is a demonstration page; real airtime delivery requires a connected VTU API.</p></div>
 </div>
-</div><script>
+
+<button onclick="continuePurchase()">Continue</button>
+
+<p class="note">Please check your phone number and amount before continuing. This is a demonstration page; real airtime delivery requires a connected VTU API.</p>
+</div>
+</div>
+</div>
+
+<script>
 let selectedNetwork="MTN";
 let selectedAmount=0;
 
@@ -86,10 +107,11 @@ updateTotal();
 }
 
 function updateTotal(){
-document.getElementById('total').textContent='₦'+selectedAmount.toLocaleString('en-NG',{minimumFractionDigits:2});
+document.getElementById('total').textContent=
+'₦'+selectedAmount.toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 
-function buyAirtime(){
+function continuePurchase(){
 let phone=document.getElementById('phone').value.trim();
 
 if(!/^0[0-9]{10}$/.test(phone)){
@@ -97,12 +119,20 @@ alert('Please enter a valid 11-digit Nigerian phone number.');
 return;
 }
 
-if(selectedAmount<50){
-alert('Please enter an amount of at least ₦50.');
+if(!Number.isInteger(selectedAmount) || selectedAmount<50){
+alert('Please enter a whole amount of at least ₦50.');
 return;
 }
 
-alert('Your selection is ready!\nNetwork: '+selectedNetwork+'\nPhone: '+phone+'\nAmount: ₦'+selectedAmount.toLocaleString('en-NG')+'\n\nReal airtime purchase will be enabled after API integration.');
+let params=new URLSearchParams({
+network:selectedNetwork,
+phone:phone,
+amount:String(selectedAmount)
+});
+
+window.location.href='airtime_order_summary.html?'+params.toString();
 }
-</script></body>
+</script>
+
+</body>
 </html>
