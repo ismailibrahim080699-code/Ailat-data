@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Airtime Order Summary - AILAT DATA</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#f5f3ff;color:#29243c}
+.container{max-width:480px;margin:auto;min-height:100vh;padding-bottom:35px}
+header{background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;padding:25px 20px;border-radius:0 0 22px 22px}
+header a{color:white;text-decoration:none;font-size:24px}
+header h2{margin-top:15px;font-size:22px}
+.subtitle{color:#888;font-size:13px;margin-top:7px;line-height:1.6}
+header .subtitle{color:#eee}
+.content{padding:22px 18px}
+.card{background:white;padding:22px;border-radius:17px;margin-top:20px;box-shadow:0 4px 16px #00000009}
+.item{display:flex;justify-content:space-between;gap:12px;padding:17px 0;border-bottom:1px solid #eee;font-size:14px}
+.item span:first-child{color:#888}
+.item strong{text-align:right;overflow-wrap:anywhere}
+.total{display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding:17px;border-radius:12px;background:#f3edff}
+.total strong{color:#6425c5;font-size:21px}
+.notice{background:#fff8e7;color:#805600;padding:14px;border-radius:11px;margin-top:20px;font-size:12px;line-height:1.6}
+button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;color:white;font-size:15px;font-weight:bold;margin-top:20px}
+.cancel{display:block;text-align:center;margin-top:18px;color:#6425c5;text-decoration:none;font-size:14px}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+<a href="airtime.html">‹</a>
+<h2>Order Summary</h2>
+<p class="subtitle">Review your airtime recharge details</p>
+</header>
+
+<div class="content">
+<div class="card">
+<h3>Recharge Details</h3>
+<p class="subtitle">Please check that everything is correct.</p>
+
+<div class="item">
+<span>Network</span>
+<strong id="network">-</strong>
+</div>
+
+<div class="item">
+<span>Phone Number</span>
+<strong id="phone">-</strong>
+</div>
+
+<div class="total">
+<span>Total Amount</span>
+<strong id="amount">₦0.00</strong>
+</div>
+
+<div class="notice">
+<strong>Demo Notice:</strong> This is a recharge preview only. No money will be deducted and no airtime will be sent. Live payment and VTU integration are not yet enabled.
+</div>
+
+<button onclick="confirmOrder()">Confirm Details</button>
+
+<a href="airtime.html" class="cancel">← Go Back and Edit</a>
+</div>
+</div>
+</div>
+
+<script>
+const params=new URLSearchParams(window.location.search);
+
+const network=params.get('network')||'';
+const phone=params.get('phone')||'';
+const amount=params.get('amount')||'';
+
+const validNetworks=['MTN','Airtel','Glo','9mobile'];
+const numericAmount=Number(amount);
+
+if(
+ !validNetworks.includes(network) ||
+ !/^0[0-9]{10}$/.test(phone) ||
+ !Number.isSafeInteger(numericAmount) ||
+ numericAmount<50 ||
+ numericAmount>1000000
+){
+ document.querySelector('.card').innerHTML=
+ '<h3>Invalid Order Details</h3><p class="subtitle">Please go back and enter your network, phone number and amount again.</p><a class="cancel" href="airtime.html">← Back to Buy Airtime</a>';
+}else{
+ document.getElementById('network').textContent=network;
+ document.getElementById('phone').textContent=phone;
+ document.getElementById('amount').textContent=
+ '₦'+numericAmount.toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+function confirmOrder(){
+ alert('Your airtime details have been checked. Live payment and airtime delivery are not yet available.');
+}
+</script>
+
+</body>
+</html>
