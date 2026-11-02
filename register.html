@@ -498,6 +498,8 @@ form.addEventListener("submit", async function(event){
  button.disabled = true;
  button.textContent = "Creating Account...";
 
+ let createdUser = null;
+
  try{
 
   let referrerUid = null;
@@ -526,6 +528,8 @@ form.addEventListener("submit", async function(event){
    password
   );
 
+  createdUser = result.user;
+
   const uid = result.user.uid;
 
   if(referrerUid === uid){
@@ -535,13 +539,17 @@ form.addEventListener("submit", async function(event){
   const myReferralCode =
    "AILAT" + uid.substring(0,8).toUpperCase();
 
-  // SAVE USER INFORMATION
+  // SAVE USER INFORMATION AND INITIAL WALLET
 
   await setDoc(doc(db, "users", uid), {
 
    name: name,
    email: email,
    phone: phone,
+
+   // INITIAL WALLET BALANCE
+   walletBalance: 0,
+
    referralCode: myReferralCode,
    referredBy: referralCode || "",
    createdAt: serverTimestamp()
@@ -585,6 +593,14 @@ form.addEventListener("submit", async function(event){
 
   console.error("Registration error:", error);
 
+  if(createdUser){
+   try{
+    await auth.signOut();
+   }catch(signOutError){
+    console.error("Sign out error:", signOutError);
+   }
+  }
+
   if(error.code === "auth/email-already-in-use"){
 
    alert("This email is already registered.");
@@ -623,4 +639,5 @@ form.addEventListener("submit", async function(event){
 </script>
 
 </body>
-</html>
+ </html>
+ 
