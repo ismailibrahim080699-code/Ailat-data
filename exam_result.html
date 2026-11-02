@@ -1,35 +1,92 @@
-<!DOCTYPE html><html lang="en">
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Exam Result - AILAT DATA</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#f5f4fa;color:#29243c}
+body{background:#f5f3ff;color:#29243c}
 .container{max-width:480px;margin:auto;min-height:100vh}
-header{background:white;padding:20px;display:flex;align-items:center;gap:15px}
-.back{font-size:26px;text-decoration:none;color:#6425c5}
+header{
+ background:linear-gradient(135deg,#702bd1,#4520a0);
+ padding:22px;
+ display:flex;
+ align-items:center;
+ gap:15px;
+ color:white
+}
+.back{font-size:28px;text-decoration:none;color:white}
 header h2{font-size:19px}
 .content{padding:22px 18px}
 .subtitle{color:#888;font-size:13px;margin-top:6px}
-.card{background:white;padding:20px;border-radius:16px;margin-top:20px;box-shadow:0 3px 15px #00000008}
-.icon{width:55px;height:55px;background:#f0e8ff;border-radius:15px;display:grid;place-items:center;font-size:27px;margin-bottom:15px}
+.card{
+ background:white;
+ padding:20px;
+ border-radius:16px;
+ margin-top:20px;
+ box-shadow:0 5px 20px #0000000a
+}
+.icon{
+ width:58px;height:58px;
+ background:#f0e8ff;
+ border-radius:15px;
+ display:grid;
+ place-items:center;
+ font-size:28px;
+ margin-bottom:15px
+}
 label{display:block;font-size:13px;font-weight:bold;margin:19px 0 9px}
-select,input{width:100%;padding:15px;border:1px solid #e5e1ed;border-radius:10px;background:white;font-size:14px;outline:none}
-select:focus,input:focus{border-color:#6425c5}
-button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;color:white;font-size:15px;font-weight:bold;margin-top:22px;cursor:pointer}
+select{
+ width:100%;
+ padding:15px;
+ border:1px solid #e5e1ed;
+ border-radius:10px;
+ background:white;
+ font-size:14px;
+ outline:none
+}
+select:focus{border-color:#6425c5}
+.total{
+ background:#f3edff;
+ padding:17px;
+ border-radius:10px;
+ margin-top:22px;
+ display:flex;
+ justify-content:space-between
+}
+.total strong{color:#6425c5}
+button{
+ width:100%;
+ padding:16px;
+ border:0;
+ border-radius:11px;
+ background:linear-gradient(135deg,#702bd1,#4520a0);
+ color:white;
+ font-size:15px;
+ font-weight:bold;
+ margin-top:22px;
+ cursor:pointer
+}
 .note{font-size:11px;color:#888;line-height:1.6;margin-top:14px}
 </style>
 </head>
 <body>
+
 <div class="container">
 <header>
 <a href="dashboard.html" class="back">‹</a>
 <h2>Exam Result Checker</h2>
-</header><div class="content">
+</header>
+
+<div class="content">
 <div class="icon">🎓</div>
 <h2>Check Your Exam Result</h2>
-<p class="subtitle">Purchase an examination result checker PIN.</p><div class="card">
+<p class="subtitle">Select your examination and PIN quantity.</p>
+
+<div class="card">
+
 <label>Select Examination</label>
 <select id="exam">
 <option value="">Choose examination</option>
@@ -37,49 +94,71 @@ button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;co
 <option value="NECO">NECO</option>
 <option value="NABTEB">NABTEB</option>
 <option value="JAMB">JAMB</option>
-</select><label>Quantity</label>
-<select id="quantity">
+</select>
 
+<label>Quantity</label>
+<select id="quantity">
 <option value="1">1 PIN</option>
 <option value="2">2 PINs</option>
 <option value="3">3 PINs</option>
 <option value="5">5 PINs</option>
-</select><div style="background:#f3edff;padding:16px;border-radius:10px;margin-top:20px;display:flex;justify-content:space-between">
-<span>Total Amount</span>
-<strong id="total" style="color:#6425c5">₦0.00</strong>
-</div><button onclick="continueExam()">Continue</button>
+</select>
 
-<p class="note">Demo prices only. Actual PIN availability, prices and delivery require a verified VTU API.</p>
+<div class="total">
+<span>Total Amount</span>
+<strong id="total">₦0.00</strong>
+</div>
+
+<button onclick="continueExam()">Continue</button>
+
+<p class="note">
+Demo prices only. Real PIN availability, payment and delivery are not yet available.
+</p>
+
 </div>
 </div>
-</div><script>
+</div>
+
+<script>
 const prices={
-WAEC:3500,
-NECO:1200,
-NABTEB:1500,
-JAMB:1000
+ WAEC:3500,
+ NECO:1200,
+ NABTEB:1500,
+ JAMB:1000
 };
 
 function updateTotal(){
-let exam=document.getElementById('exam').value;
-let quantity=Number(document.getElementById('quantity').value);
-let total=exam?prices[exam]*quantity:0;
-document.getElementById('total').textContent='₦'+total.toLocaleString('en-NG')+'.00';
+ const exam=document.getElementById("exam").value;
+ const quantity=Number(document.getElementById("quantity").value);
+ const total=exam?prices[exam]*quantity:0;
+
+ document.getElementById("total").textContent=
+ "₦"+total.toLocaleString("en-NG")+".00";
 }
 
-document.getElementById('exam').addEventListener('change',updateTotal);
-document.getElementById('quantity').addEventListener('change',updateTotal);
+document.getElementById("exam").addEventListener("change",updateTotal);
+document.getElementById("quantity").addEventListener("change",updateTotal);
 
 function continueExam(){
-let exam=document.getElementById('exam').value;
-let quantity=document.getElementById('quantity').value;
+ const exam=document.getElementById("exam").value;
+ const quantity=Number(document.getElementById("quantity").value);
 
-if(!exam){
-alert('Please select an examination.');
-return;
-}
+ if(!exam){
+  alert("Please select an examination.");
+  return;
+ }
 
-alert('Your selection is ready!\\nExam: '+exam+'\\nQuantity: '+quantity+' PIN(s)\\n\\nReal PIN delivery will be enabled after API integration.');
+ const amount=prices[exam]*quantity;
+
+ const params=new URLSearchParams({
+  exam:exam,
+  quantity:quantity,
+  amount:amount
+ });
+
+ window.location.href="exam_order_summary.html?"+params.toString();
 }
-</script></body>
+</script>
+
+</body>
 </html>
