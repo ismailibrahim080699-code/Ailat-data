@@ -1,89 +1,166 @@
-<!DOCTYPE html><html lang="en">
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cable TV - AILAT DATA</title><style>
+<title>Cable TV - AILAT DATA</title>
+
+<style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#f5f4fa;color:#29243c}
 .container{max-width:480px;margin:auto;min-height:100vh}
-header{background:white;padding:20px;display:flex;align-items:center;gap:15px}
-.back{font-size:26px;text-decoration:none;color:#6425c5}
+header{
+ background:linear-gradient(135deg,#4c1d95,#7c3aed);
+ color:white;padding:22px 20px;display:flex;
+ align-items:center;gap:15px;border-radius:0 0 20px 20px
+}
+.back{font-size:26px;text-decoration:none;color:white}
 header h2{font-size:19px}
 .content{padding:22px 18px}
 .subtitle{color:#888;font-size:13px;margin-top:6px}
-.card{background:white;padding:20px;border-radius:16px;margin-top:20px;box-shadow:0 3px 15px #00000008}
+.card{
+ background:white;padding:20px;border-radius:16px;
+ margin-top:20px;box-shadow:0 3px 15px #00000008
+}
 label{display:block;font-size:13px;font-weight:bold;margin:19px 0 9px}
-select,input{width:100%;padding:15px;border:1px solid #e5e1ed;border-radius:10px;background:white;font-size:14px;outline:none}
-select:focus,input:focus{border-color:#6425c5}
 .providers{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.provider{border:1px solid #e8e3f0;padding:16px 5px;border-radius:11px;text-align:center;font-weight:bold;font-size:13px;cursor:pointer}
+.provider{
+ border:1px solid #e8e3f0;padding:16px 5px;
+ border-radius:11px;text-align:center;font-weight:bold;
+ font-size:13px;cursor:pointer
+}
 .provider span{display:block;font-size:23px;margin-bottom:8px}
-.provider.active{border:2px solid #6425c5;background:#f3ecff;color:#6425c5}
-.price{background:#f3edff;padding:17px;border-radius:11px;margin-top:20px;display:flex;justify-content:space-between;align-items:center}
+.provider.active{
+ border:2px solid #6425c5;background:#f3ecff;color:#6425c5
+}
+select,input{
+ width:100%;padding:15px;border:1px solid #e5e1ed;
+ border-radius:10px;background:white;font-size:14px;outline:none
+}
+select:focus,input:focus{border-color:#6425c5}
+.price{
+ background:#f3edff;padding:17px;border-radius:11px;
+ margin-top:20px;display:flex;justify-content:space-between;align-items:center
+}
 .price strong{color:#6425c5;font-size:20px}
-button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;color:white;font-size:15px;font-weight:bold;margin-top:22px;cursor:pointer}
+button{
+ width:100%;padding:16px;border:0;border-radius:11px;
+ background:#6425c5;color:white;font-size:15px;
+ font-weight:bold;margin-top:22px;cursor:pointer
+}
 .note{font-size:11px;color:#888;line-height:1.6;margin-top:14px}
-</style></head><body>
-<div class="container"><header>
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
 <a href="dashboard.html" class="back">‹</a>
 <h2>Cable TV Subscription</h2>
-</header><div class="content">
+</header>
+
+<div class="content">
 <h2>Pay Your TV Subscription</h2>
-<p class="subtitle">Renew your favourite TV package easily.</p><div class="card"><label>Select TV Provider</label>
+<p class="subtitle">Choose your TV provider and package.</p>
+
+<div class="card">
+
+<label>Select TV Provider</label>
 
 <div class="providers">
-<div class="provider active" onclick="chooseProvider(this,'DStv')"><span>📺</span>DStv</div>
-<div class="provider" onclick="chooseProvider(this,'GOtv')"><span>📡</span>GOtv</div>
-<div class="provider" onclick="chooseProvider(this,'Startimes')"><span>🛰️</span>Startimes</div>
-</div><label>Smartcard / IUC Number</label>
-<input type="text" id="smartcard" placeholder="Enter Smartcard or IUC number">
+<div class="provider active" onclick="chooseProvider(this,'DStv')">
+<span>📺</span>DStv
+</div>
+<div class="provider" onclick="chooseProvider(this,'GOtv')">
+<span>📡</span>GOtv
+</div>
+<div class="provider" onclick="chooseProvider(this,'Startimes')">
+<span>🛰️</span>Startimes
+</div>
+</div>
+
+<label>Smartcard / IUC Number</label>
+<input
+ type="text"
+ id="smartcard"
+ placeholder="Enter Smartcard or IUC number"
+ maxlength="20"
+ inputmode="numeric"
+>
 
 <label>Select Package</label>
 <select id="package" onchange="updatePrice()">
-
 <option value="">Choose subscription package</option>
 <option value="3500">Basic - ₦3,500</option>
 <option value="5000">Smart - ₦5,000</option>
 <option value="7500">Classic - ₦7,500</option>
 <option value="10000">Compact - ₦10,000</option>
 <option value="15000">Premium - ₦15,000</option>
-</select><div class="price">
+</select>
+
+<div class="price">
 <span>Total Amount</span>
 <strong id="total">₦0.00</strong>
-</div><button onclick="continueTV()">Continue</button>
-
-<p class="note">Demo packages and prices only. Actual packages differ by provider. Smartcard verification and real subscription require VTU API integration.</p></div>
 </div>
-</div><script>
+
+<button onclick="continueTV()">Continue</button>
+
+<p class="note">
+Demo packages and prices only. Actual packages differ by provider. No real subscription or payment is available yet.
+</p>
+
+</div>
+</div>
+</div>
+
+<script>
 let provider='DStv';
 
 function chooseProvider(element,name){
-provider=name;
-document.querySelectorAll('.provider').forEach(p=>p.classList.remove('active'));
-element.classList.add('active');
-document.getElementById('package').value='';
-updatePrice();
+ provider=name;
+
+ document.querySelectorAll('.provider').forEach(p=>{
+  p.classList.remove('active');
+ });
+
+ element.classList.add('active');
+ document.getElementById('package').value='';
+ updatePrice();
 }
 
 function updatePrice(){
-let amount=document.getElementById('package').value;
-document.getElementById('total').textContent=amount?'₦'+Number(amount).toLocaleString('en-NG')+'.00':'₦0.00';
+ const amount=document.getElementById('package').value;
+
+ document.getElementById('total').textContent=
+ amount?'₦'+Number(amount).toLocaleString('en-NG')+'.00':'₦0.00';
 }
 
 function continueTV(){
-let smartcard=document.getElementById('smartcard').value.trim();
-let plan=document.getElementById('package').value;
+ const smartcard=document.getElementById('smartcard').value.trim();
+ const plan=Number(document.getElementById('package').value);
 
-if(smartcard.length<6){
-alert('Please enter a valid Smartcard / IUC number.');
-return;
-}
-if(!plan){
-alert('Please select a subscription package.');
-return;
-}
+ if(!/^[0-9]{6,20}$/.test(smartcard)){
+  alert('Please enter a valid Smartcard / IUC number using 6 to 20 digits.');
+  return;
+ }
 
-alert('Your selection is ready!\\nProvider: '+provider+'\\nSmartcard: '+smartcard+'\\nAmount: ₦'+Number(plan).toLocaleString('en-NG')+'\\n\\nReal subscription will be enabled after API integration.');
+ if(!Number.isSafeInteger(plan)||plan<3500||plan>15000){
+  alert('Please select a valid subscription package.');
+  return;
+ }
+
+ const params=new URLSearchParams({
+  provider:provider,
+  smartcard:smartcard,
+  plan:String(plan)
+ });
+
+ window.location.href=
+ 'tv_order_summary.html?'+params.toString();
 }
-</script></body>
+</script>
+
+</body>
 </html>
