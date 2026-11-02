@@ -161,12 +161,7 @@ footer{text-align:center;color:#999;font-size:12px;padding:28px 10px;line-height
   <a class="service" href="tv.html"><div class="icon">📺</div><p>TV Subscription</p></a>
   <a class="service" href="exam_result.html"><div class="icon">🎓</div><p>Exam PIN</p></a>
   <a class="service" href="referral.html"><div class="icon">🎁</div><p>Referral</p></a>
-
-  <!-- Corrected Transaction History filename -->
-  <a class="service" href="transaction_history.html">
-   <div class="icon">📋</div>
-   <p>Transactions</p>
-  </a>
+  <a class="service" href="transaction.html"><div class="icon">📋</div><p>Transactions</p></a>
  </div>
 </div>
 
@@ -195,8 +190,7 @@ footer{text-align:center;color:#999;font-size:12px;padding:28px 10px;line-height
  <div class="menu-links">
   <a href="profile.html">👤 My Profile</a>
   <a href="referral.html">🎁 My Referral</a>
-  <!-- Corrected Transaction History filename -->
-  <a href="transaction_history.html">📋 Transaction History</a>
+  <a href="transaction.html">📋 Transaction History</a>
   <a href="dashboard.html">🏠 Dashboard</a>
  </div>
 
@@ -230,6 +224,15 @@ onAuthStateChanged(auth, async (user) => {
  }
 
  try {
+  await user.reload();
+
+  if (!user.emailVerified) {
+   await signOut(auth);
+   alert("Please verify your email before accessing your dashboard.");
+   window.location.href = "login.html";
+   return;
+  }
+
   const userRef = doc(db, "users", user.uid);
   const userSnap = await getDoc(userRef);
 
@@ -244,8 +247,9 @@ onAuthStateChanged(auth, async (user) => {
   loadSavedPhoto(user.uid);
 
  } catch(error) {
-  console.error("Profile error:", error);
-  document.getElementById("welcome").textContent = "Welcome to your dashboard";
+  console.error("Dashboard security error:", error);
+  await signOut(auth);
+  window.location.href = "login.html";
  }
 });
 
@@ -367,4 +371,5 @@ document.getElementById("logoutBtn").addEventListener("click", async function(){
 </script>
 
 </body>
-</html>
+                                                                                    </html>
+                                                                                    
