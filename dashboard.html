@@ -247,7 +247,8 @@ function showWalletBalance(value){
 
 async function loadWalletFromBackend(user){
 
- const token = await user.getIdToken();
+ const token = await user.getIdToken(true);
+console.log("AILAT TOKEN LENGTH:", token.length);
 
  const response = await fetch(BACKEND_URL, {
   method: "GET",
