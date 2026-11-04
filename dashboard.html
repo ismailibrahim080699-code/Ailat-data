@@ -232,10 +232,21 @@ async function loadWalletFromBackend(user){
   }
  });
 
- const result = await response.json();
+ const raw = await response.text();
+
+ let result;
+
+ try {
+  result = JSON.parse(raw);
+ } catch {
+  throw new Error("HTTP " + response.status + ": " + raw);
+ }
 
  if(!response.ok || !result.success){
-  throw new Error(result.error || "Backend connection failed");
+  throw new Error(
+   "HTTP " + response.status + ": " +
+   (result.error || "Backend connection failed")
+  );
  }
 
  showWalletBalance(result.wallet?.balance ?? 0);
@@ -275,7 +286,7 @@ onAuthStateChanged(auth, async (user) => {
  }catch(error){
   console.error("Dashboard error:", error);
   showWalletBalance(0);
-  alert("Unable to load your wallet from the backend. Please check your connection or contact support.");
+  alert("WALLET ERROR: " + (error.message || error));
  }
 });
 
