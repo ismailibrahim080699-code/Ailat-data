@@ -5,8 +5,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Transactions - AILAT DATA</title>
+
 <style>
-*{box-sizing:border-box;}
+*{box-sizing:border-box}
 body{
  margin:0;
  font-family:Arial,sans-serif;
@@ -20,8 +21,8 @@ header{
  border-radius:0 0 25px 25px;
  box-shadow:0 5px 18px #5b21b633;
 }
-header h2{margin:0;font-size:24px;}
-header p{margin:8px 0 0;font-size:14px;opacity:.9;}
+header h2{margin:0;font-size:24px}
+header p{margin:8px 0 0;font-size:14px;opacity:.9}
 .container{
  padding:20px 16px;
  max-width:550px;
@@ -34,35 +35,90 @@ header p{margin:8px 0 0;font-size:14px;opacity:.9;}
  margin-bottom:18px;
  box-shadow:0 4px 16px #00000009;
 }
-.card h3{margin:0;font-size:18px;}
-.empty{text-align:center;padding:45px 15px;}
-.empty-icon{
- width:75px;
- height:75px;
+.card h3{margin:0;font-size:18px}
+.top{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+}
+.refresh{
+ border:0;
+ background:#f3e8ff;
+ color:#6d28d9;
+ padding:10px 13px;
+ border-radius:10px;
+ font-weight:bold;
+}
+.message{
+ text-align:center;
+ padding:40px 12px;
+ color:#777;
+ line-height:1.6;
+}
+.message-icon{
+ width:70px;
+ height:70px;
  border-radius:50%;
  background:#f3e8ff;
  display:flex;
- justify-content:center;
  align-items:center;
- margin:0 auto 18px;
- font-size:35px;
+ justify-content:center;
+ margin:0 auto 15px;
+ font-size:32px;
 }
-.empty h3{color:#4c1d95;margin:0 0 10px;}
-.empty p{
+.message h3{color:#4c1d95;margin:0 0 8px}
+.transaction{
+ border:1px solid #eee7fa;
+ border-radius:13px;
+ padding:15px;
+ margin-top:13px;
+}
+.transaction-top{
+ display:flex;
+ justify-content:space-between;
+ gap:10px;
+ align-items:center;
+}
+.transaction-title{
+ font-weight:bold;
+ color:#4c1d95;
+ text-transform:capitalize;
+}
+.amount{
+ font-weight:bold;
+ color:#24134d;
+ white-space:nowrap;
+}
+.details{
  color:#888;
- font-size:14px;
- line-height:1.7;
- margin:0;
-}
-.info{
- background:#f5f3ff;
- border:1px solid #e9d5ff;
- padding:14px;
- border-radius:12px;
- margin-top:20px;
- color:#6b21a8;
  font-size:12px;
- line-height:1.6;
+ line-height:1.7;
+ margin-top:9px;
+ overflow-wrap:anywhere;
+}
+.status{
+ display:inline-block;
+ padding:5px 9px;
+ border-radius:20px;
+ font-size:11px;
+ font-weight:bold;
+ text-transform:capitalize;
+ margin-top:8px;
+ background:#f3f4f6;
+ color:#555;
+}
+.status.success,.status.completed{
+ background:#dcfce7;
+ color:#166534;
+}
+.status.pending{
+ background:#fef3c7;
+ color:#92400e;
+}
+.status.failed{
+ background:#fee2e2;
+ color:#991b1b;
 }
 .back{
  display:block;
@@ -75,33 +131,198 @@ header p{margin:8px 0 0;font-size:14px;opacity:.9;}
  font-weight:bold;
  margin-top:20px;
 }
-.back:active{opacity:.8;}
+.error{color:#b91c1c}
 </style>
 </head>
+
 <body>
 
 <header>
-<h2>AILAT DATA</h2>
-<p>Transaction History</p>
+ <h2>AILAT DATA</h2>
+ <p>Transaction History</p>
 </header>
 
 <div class="container">
-<div class="card">
-<h3>Recent Transactions</h3>
+ <div class="card">
+  <div class="top">
+   <h3>Recent Transactions</h3>
+   <button class="refresh" id="refreshBtn">Refresh</button>
+  </div>
 
-<div class="empty">
-<div class="empty-icon">📋</div>
-<h3>No Transactions Yet</h3>
-<p>You have not made any transactions yet. Your transaction history will appear here when real purchases become available.</p>
+  <div id="transactions">
+   <div class="message">
+    <div class="message-icon">⏳</div>
+    <h3>Loading...</h3>
+    <p>Please wait while we load your transactions.</p>
+   </div>
+  </div>
+ </div>
 
-<div class="info">
-<strong>Note:</strong> Real transaction records will be displayed after secure payment and VTU integration is completed.
-</div>
-</div>
+ <a href="dashboard.html" class="back">← Back to Dashboard</a>
 </div>
 
-<a href="dashboard.html" class="back">← Back to Dashboard</a>
-</div>
+<script type="module">
+import { app } from "./firebase.js";
+import { getAuth, onAuthStateChanged }
+from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
+
+const auth = getAuth(app);
+
+const BACKEND_URL =
+"https://bdogulpsybiggpgipdbt.supabase.co/functions/v1/ailat-backend";
+
+const SUPABASE_KEY =
+"sb_publishable_9wmzpjzVhnby_E3jogTjRw_c22XiDEC";
+
+const container = document.getElementById("transactions");
+const refreshBtn = document.getElementById("refreshBtn");
+
+function showMessage(icon,title,message,isError=false){
+ container.innerHTML = `
+  <div class="message">
+   <div class="message-icon">${icon}</div>
+   <h3 class="${isError ? "error" : ""}">${title}</h3>
+   <p>${message}</p>
+  </div>
+ `;
+}
+
+function safe(value){
+ return String(value ?? "")
+ .replaceAll("&","&amp;")
+ .replaceAll("<","&lt;")
+ .replaceAll(">","&gt;")
+ .replaceAll('"',"&quot;")
+ .replaceAll("'","&#039;");
+}
+
+function formatDate(value){
+ if(!value) return "Date unavailable";
+
+ const date = new Date(value);
+
+ if(Number.isNaN(date.getTime())) return "Date unavailable";
+
+ return date.toLocaleString("en-NG",{
+  dateStyle:"medium",
+  timeStyle:"short"
+ });
+}
+
+function formatAmount(value){
+ const amount = Number(value);
+
+ if(!Number.isFinite(amount)) return "₦0.00";
+
+ return "₦" + amount.toLocaleString("en-NG",{
+  minimumFractionDigits:2,
+  maximumFractionDigits:2
+ });
+}
+
+function renderTransactions(items){
+ if(!Array.isArray(items) || items.length === 0){
+  showMessage(
+   "📋",
+   "No Transactions Yet",
+   "You have not made any transactions yet. Your transaction history will appear here when transactions are recorded."
+  );
+  return;
+ }
+
+ container.innerHTML = items.map(item => {
+  const type = safe(item.type || "Transaction");
+  const status = safe(item.status || "unknown").toLowerCase();
+
+  return `
+   <div class="transaction">
+    <div class="transaction-top">
+     <div class="transaction-title">${type}</div>
+     <div class="amount">${formatAmount(item.amount)}</div>
+    </div>
+
+    <div class="details">
+     <div>Date: ${safe(formatDate(item.created_at))}</div>
+     <div>Description: ${safe(item.description || "Transaction")}</div>
+     ${item.reference ? `<div>Reference: ${safe(item.reference)}</div>` : ""}
+    </div>
+
+    <span class="status ${status}">${status}</span>
+   </div>
+  `;
+ }).join("");
+}
+
+async function loadTransactions(user){
+ try{
+  showMessage("⏳","Loading...","Please wait while we load your transactions.");
+
+  const token = await user.getIdToken(true);
+
+  const response = await fetch(
+   BACKEND_URL + "?action=transactions",
+   {
+    method:"GET",
+    headers:{
+     "apikey":SUPABASE_KEY,
+     "Authorization":"Bearer " + token
+    }
+   }
+  );
+
+  const result = await response.json();
+
+  if(!response.ok || result.success === false){
+   throw new Error(result.error || "Unable to load transactions.");
+  }
+
+  const transactions =
+   result.transactions ||
+   result.data ||
+   [];
+
+  renderTransactions(transactions);
+
+ }catch(error){
+  console.error("Transaction error:",error);
+
+  showMessage(
+   "⚠️",
+   "Unable to Load Transactions",
+   error.message || "Please check your internet connection and try again.",
+   true
+  );
+ }
+}
+
+let currentUser = null;
+
+onAuthStateChanged(auth, user => {
+ currentUser = user;
+
+ if(!user){
+  showMessage(
+   "🔒",
+   "Login Required",
+   "Please login to view your transaction history."
+  );
+
+  setTimeout(()=>{
+   window.location.href = "login.html";
+  },1500);
+
+  return;
+ }
+
+ loadTransactions(user);
+});
+
+refreshBtn.addEventListener("click",()=>{
+ if(currentUser){
+  loadTransactions(currentUser);
+ }
+});
+</script>
 
 </body>
 </html>
