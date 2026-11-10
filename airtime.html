@@ -71,13 +71,16 @@ button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;co
 <input type="number" id="customAmount" placeholder="Enter amount (₦)" min="50" step="1" oninput="customValue()">
 
 <div class="total">
-<span>Total Amount</span>
+<span>Requested Airtime Value</span>
 <strong id="total">₦0.00</strong>
 </div>
 
 <button onclick="continuePurchase()">Continue</button>
 
-<p class="note">Please check your phone number and amount before continuing. This is a demonstration page; real airtime delivery requires a connected VTU API.</p>
+<div class="note" style="background:#fff8e7;color:#805600;padding:13px;border-radius:10px;margin-top:15px">
+<strong>Supplier integration pending:</strong> The amount selected is the airtime value you are requesting, not a confirmed service fee or final charge. No payment will be taken and no airtime will be sent until an approved supplier and payment system are connected.
+</div>
+<p class="note">Please check your phone number and requested airtime value before continuing.</p>
 </div>
 </div>
 </div>
