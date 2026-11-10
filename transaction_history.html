@@ -171,6 +171,9 @@ const auth = getAuth(app);
 const BACKEND_URL =
 "https://bdogulpsybiggpgipdbt.supabase.co/functions/v1/ailat-backend";
 
+const ORDER_REQUESTS_URL =
+"https://bdogulpsybiggpgipdbt.supabase.co/functions/v1/ailat-order-requests";
+
 const SUPABASE_KEY =
 "sb_publishable_9wmzpjzVhnby_E3jogTjRw_c22XiDEC";
 
@@ -225,20 +228,25 @@ function renderTransactions(items){
   showMessage(
    "📋",
    "No Transactions Yet",
-   "You have not made any transactions yet. Your transaction history will appear here when transactions are recorded."
+   "Your data and airtime order requests, along with recorded transactions, will appear here."
   );
   return;
  }
 
  container.innerHTML = items.map(item => {
   const type = safe(item.type || "Transaction");
-  const status = safe(item.status || "unknown").toLowerCase();
+  const rawStatus = String(item.status || "unknown").toLowerCase();
+  const status = rawStatus === "received" ? "pending" : rawStatus;
+  const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
+  const amount = item.amount === null || item.amount === undefined || item.amount === ""
+   ? "—"
+   : formatAmount(item.amount);
 
   return `
    <div class="transaction">
     <div class="transaction-top">
      <div class="transaction-title">${type}</div>
-     <div class="amount">${formatAmount(item.amount)}</div>
+     <div class="amount">${amount}</div>
     </div>
 
     <div class="details">
@@ -247,7 +255,7 @@ function renderTransactions(items){
      ${item.reference ? `<div>Reference: ${safe(item.reference)}</div>` : ""}
     </div>
 
-    <span class="status ${status}">${status}</span>
+    <span class="status ${safe(status)}">${safe(statusLabel)}</span>
    </div>
   `;
  }).join("");
@@ -258,37 +266,51 @@ async function loadTransactions(user){
   showMessage("⏳","Loading...","Please wait while we load your transactions.");
 
   const token = await user.getIdToken(true);
+  const headers = {
+   "apikey":SUPABASE_KEY,
+   "Authorization":"Bearer " + token
+  };
 
-  const response = await fetch(
-   BACKEND_URL + "?action=transactions",
-   {
-    method:"GET",
-    headers:{
-     "apikey":SUPABASE_KEY,
-     "Authorization":"Bearer " + token
-    }
-   }
-  );
+  const [transactionResponse, requestResponse] = await Promise.all([
+   fetch(BACKEND_URL + "?action=transactions", { method:"GET", headers }),
+   fetch(ORDER_REQUESTS_URL, { method:"GET", headers })
+  ]);
 
-  const result = await response.json();
+  const [transactionResult, requestResult] = await Promise.all([
+   transactionResponse.json(),
+   requestResponse.json()
+  ]);
 
-  if(!response.ok || result.success === false){
-   throw new Error(result.error || "Unable to load transactions.");
+  if(!transactionResponse.ok || transactionResult.success === false){
+   throw new Error(transactionResult.error || "Unable to load recorded transactions.");
   }
 
-  const transactions =
-   result.transactions ||
-   result.data ||
-   [];
+  if(!requestResponse.ok || requestResult.success === false){
+   throw new Error(requestResult.error || "Unable to load order requests.");
+  }
 
-  renderTransactions(transactions);
+  const transactions = transactionResult.transactions || transactionResult.data || [];
+  const requests = (requestResult.order_requests || []).map(request => ({
+   type: String(request.service_key || "service") + " order request",
+   amount: request.requested_amount,
+   created_at: request.created_at,
+   description: "Request received. No payment was taken and no service has been delivered.",
+   reference: request.reference,
+   status: request.status || "received"
+  }));
+
+  const combined = [...transactions, ...requests].sort((a,b) =>
+   new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()
+  );
+
+  renderTransactions(combined);
 
  }catch(error){
   console.error("Transaction error:",error);
 
   showMessage(
    "⚠️",
-   "Unable to Load Transactions",
+   "Unable to Load History",
    error.message || "Please check your internet connection and try again.",
    true
   );
