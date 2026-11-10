@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4c1d95">
 <title>Order Summary - AILAT DATA</title>
 
 <style>
@@ -13,34 +14,48 @@
  padding:0;
  font-family:Arial,sans-serif;
 }
+
 body{
  background:#f5f3ff;
  color:#29243c;
 }
+
 .container{
  max-width:480px;
  margin:auto;
  min-height:100vh;
  padding-bottom:35px;
 }
+
 header{
  background:linear-gradient(135deg,#4c1d95,#7c3aed);
  color:white;
  padding:25px 20px;
  border-radius:0 0 22px 22px;
 }
+
 header a{
  color:white;
  text-decoration:none;
- font-size:24px;
+ font-size:26px;
 }
+
 header h2{
  margin-top:15px;
  font-size:22px;
 }
+
+.subtitle{
+ color:#888;
+ font-size:13px;
+ margin-top:7px;
+ line-height:1.5;
+}
+
 .content{
  padding:22px 18px;
 }
+
 .card{
  background:white;
  padding:22px;
@@ -48,11 +63,7 @@ header h2{
  margin-top:20px;
  box-shadow:0 4px 16px #00000009;
 }
-.subtitle{
- color:#888;
- font-size:13px;
- margin-top:7px;
-}
+
 .item{
  display:flex;
  justify-content:space-between;
@@ -61,26 +72,32 @@ header h2{
  border-bottom:1px solid #eee;
  font-size:14px;
 }
+
 .item span:first-child{
  color:#888;
 }
+
 .item strong{
  text-align:right;
  overflow-wrap:anywhere;
 }
+
 .total{
  display:flex;
  justify-content:space-between;
  align-items:center;
+ gap:10px;
  margin-top:22px;
  padding:17px;
  border-radius:12px;
  background:#f3edff;
 }
+
 .total strong{
  color:#6425c5;
  font-size:21px;
 }
+
 .notice{
  background:#fff8e7;
  color:#805600;
@@ -90,6 +107,7 @@ header h2{
  font-size:12px;
  line-height:1.6;
 }
+
 button{
  width:100%;
  padding:16px;
@@ -100,7 +118,9 @@ button{
  font-size:15px;
  font-weight:bold;
  margin-top:20px;
+ cursor:pointer;
 }
+
 .cancel{
  display:block;
  text-align:center;
@@ -109,10 +129,19 @@ button{
  text-decoration:none;
  font-size:14px;
 }
+
+.error{
+ color:#b42318;
+ background:#fff0ef;
+ padding:15px;
+ border-radius:10px;
+ line-height:1.6;
+}
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
 <header>
@@ -124,10 +153,13 @@ Review your data purchase details
 </header>
 
 <div class="content">
-<div class="card">
+
+<div class="card" id="orderCard">
 
 <h3>Purchase Details</h3>
-<p class="subtitle">Please check that everything is correct.</p>
+<p class="subtitle">
+Please check that everything is correct.
+</p>
 
 <div class="item">
 <span>Network</span>
@@ -150,55 +182,125 @@ Review your data purchase details
 </div>
 
 <div class="notice">
-<strong>Demo Notice:</strong> This is a purchase preview only. No money will be deducted and no data will be sent. Live payment and VTU integration are not yet enabled.
+<strong>Testing Mode:</strong>
+This is only an order preview. The displayed amount is a demonstration price, not a confirmed supplier price. No money will be deducted and no data will be delivered.
 </div>
 
-<button onclick="confirmOrder()">Confirm Details</button>
+<button id="confirmButton" onclick="confirmOrder()">
+Confirm Details
+</button>
 
-<a href="data.html" class="cancel">← Go Back and Edit</a>
+<a href="data.html" class="cancel">
+← Go Back and Edit
+</a>
 
 </div>
 </div>
 </div>
 
 <script>
+
 const params = new URLSearchParams(window.location.search);
 
-const network = params.get('network') || '';
-const phone = params.get('phone') || '';
-const plan = params.get('plan') || '';
+const network = params.get("network") || "";
+const phone = params.get("phone") || "";
+const plan = params.get("plan") || "";
 
 const plans = {
-'500':'500MB',
-'1000':'1GB',
-'1500':'2GB',
-'2500':'3GB',
-'3500':'5GB',
-'6000':'10GB'
+ "500mb":{
+  name:"500MB",
+  price:500
+ },
+ "1gb":{
+  name:"1GB",
+  price:1000
+ },
+ "2gb":{
+  name:"2GB",
+  price:1500
+ },
+ "3gb":{
+  name:"3GB",
+  price:2500
+ },
+ "5gb":{
+  name:"5GB",
+  price:3500
+ },
+ "10gb":{
+  name:"10GB",
+  price:6000
+ }
 };
 
-const validNetworks = ['MTN','Airtel','Glo','9mobile'];
+const validNetworks = [
+ "MTN",
+ "Airtel",
+ "Glo",
+ "9mobile"
+];
+
+const validPhone = /^0[0-9]{10}$/;
+
+const selectedPlan = plans[plan];
 
 if(
  !validNetworks.includes(network) ||
- !/^0[0-9]{10}$/.test(phone) ||
- !plans[plan]
+ !validPhone.test(phone) ||
+ !selectedPlan
 ){
- document.querySelector('.card').innerHTML =
- '<h3>Invalid Order Details</h3><p class="subtitle">Please go back and select your network, phone number and data plan again.</p><a class="cancel" href="data.html">← Back to Buy Data</a>';
+
+ document.getElementById("orderCard").innerHTML = `
+  <div class="error">
+   <h3>Invalid Order Details</h3>
+   <p class="subtitle">
+    Your order information is incomplete or incorrect.
+    Please return and select your network, phone number
+    and data plan again.
+   </p>
+  </div>
+
+  <a href="data.html" class="cancel">
+   ← Back to Buy Data
+  </a>
+ `;
+
 }else{
- document.getElementById('network').textContent = network;
- document.getElementById('phone').textContent = phone;
- document.getElementById('bundle').textContent = plans[plan];
- document.getElementById('amount').textContent =
- '₦' + Number(plan).toLocaleString('en-NG') + '.00';
+
+ document.getElementById("network").textContent = network;
+
+ document.getElementById("phone").textContent = phone;
+
+ document.getElementById("bundle").textContent =
+  selectedPlan.name;
+
+ document.getElementById("amount").textContent =
+  "₦" + selectedPlan.price.toLocaleString("en-NG") + ".00";
+
 }
 
 function confirmOrder(){
- alert('Your order details have been checked. Live payment and data delivery are not yet available.');
+
+ if(
+  !validNetworks.includes(network) ||
+  !validPhone.test(phone) ||
+  !selectedPlan
+ ){
+  alert("Invalid order details. Please try again.");
+  return;
+ }
+
+ alert(
+  "Your order details have been checked successfully.\n\n" +
+  "Network: " + network + "\n" +
+  "Phone: " + phone + "\n" +
+  "Bundle: " + selectedPlan.name + "\n\n" +
+  "Live payment and data delivery are not yet enabled."
+ );
+
 }
+
 </script>
 
 </body>
-  </html>
-  
+</html>
