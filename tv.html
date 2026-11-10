@@ -1,166 +1,40 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cable TV - AILAT DATA</title>
-
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#f5f4fa;color:#29243c}
-.container{max-width:480px;margin:auto;min-height:100vh}
-header{
- background:linear-gradient(135deg,#4c1d95,#7c3aed);
- color:white;padding:22px 20px;display:flex;
- align-items:center;gap:15px;border-radius:0 0 20px 20px
-}
-.back{font-size:26px;text-decoration:none;color:white}
-header h2{font-size:19px}
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{margin:0;background:#f5f3ff;color:#24134d}
+.container{max-width:480px;min-height:100vh;margin:auto}
+header{background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;padding:22px 20px;border-radius:0 0 20px 20px;display:flex;align-items:center;gap:15px}
+.back{color:white;text-decoration:none;font-size:27px}
+header h2{font-size:19px;margin:0}
 .content{padding:22px 18px}
-.subtitle{color:#888;font-size:13px;margin-top:6px}
-.card{
- background:white;padding:20px;border-radius:16px;
- margin-top:20px;box-shadow:0 3px 15px #00000008
-}
-label{display:block;font-size:13px;font-weight:bold;margin:19px 0 9px}
-.providers{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.provider{
- border:1px solid #e8e3f0;padding:16px 5px;
- border-radius:11px;text-align:center;font-weight:bold;
- font-size:13px;cursor:pointer
-}
-.provider span{display:block;font-size:23px;margin-bottom:8px}
-.provider.active{
- border:2px solid #6425c5;background:#f3ecff;color:#6425c5
-}
-select,input{
- width:100%;padding:15px;border:1px solid #e5e1ed;
- border-radius:10px;background:white;font-size:14px;outline:none
-}
-select:focus,input:focus{border-color:#6425c5}
-.price{
- background:#f3edff;padding:17px;border-radius:11px;
- margin-top:20px;display:flex;justify-content:space-between;align-items:center
-}
-.price strong{color:#6425c5;font-size:20px}
-button{
- width:100%;padding:16px;border:0;border-radius:11px;
- background:#6425c5;color:white;font-size:15px;
- font-weight:bold;margin-top:22px;cursor:pointer
-}
-.note{font-size:11px;color:#888;line-height:1.6;margin-top:14px}
+.card{background:white;border-radius:18px;padding:24px 20px;margin-top:20px;box-shadow:0 5px 20px #24134d10;text-align:center}
+.icon{font-size:48px;margin:8px 0 18px}
+h1{font-size:23px;margin:0 0 10px;color:#5425a8}
+.status{display:inline-block;background:#fff0c2;color:#795600;padding:7px 13px;border-radius:20px;font-size:12px;font-weight:bold;margin:8px 0 15px}
+p{font-size:14px;line-height:1.7;color:#686078}
+.notice{background:#fff7e5;color:#795600;padding:14px;border-radius:12px;font-size:13px;line-height:1.7;margin-top:18px;text-align:left}
+button{width:100%;padding:15px;border:0;border-radius:12px;background:linear-gradient(135deg,#702bd1,#4520a0);color:white;font-size:15px;font-weight:bold;margin-top:22px}
 </style>
 </head>
-
 <body>
 <div class="container">
-
-<header>
-<a href="dashboard.html" class="back">‹</a>
-<h2>Cable TV Subscription</h2>
-</header>
-
-<div class="content">
-<h2>Pay Your TV Subscription</h2>
-<p class="subtitle">Choose your TV provider and package.</p>
-
+<header><a href="dashboard.html" class="back" aria-label="Back to dashboard">‹</a><h2>Cable TV Subscription</h2></header>
+<main class="content">
 <div class="card">
-
-<label>Select TV Provider</label>
-
-<div class="providers">
-<div class="provider active" onclick="chooseProvider(this,'DStv')">
-<span>📺</span>DStv
+<div class="icon" aria-hidden="true">📺</div>
+<h1>TV Subscription</h1>
+<span class="status">COMING SOON</span>
+<p>DStv, GOtv and Startimes subscription services are not active yet.</p>
+<p>We are waiting for a verified service provider, confirmed package information and a secure payment connection before enabling this service.</p>
+<div class="notice"><strong>Important:</strong> Do not enter your Smartcard/IUC number or send money for a TV subscription through AILAT DATA at this time. No subscription request or payment can be processed yet.</div>
+<button type="button" onclick="location.href='dashboard.html'">Back to Dashboard</button>
 </div>
-<div class="provider" onclick="chooseProvider(this,'GOtv')">
-<span>📡</span>GOtv
+</main>
 </div>
-<div class="provider" onclick="chooseProvider(this,'Startimes')">
-<span>🛰️</span>Startimes
-</div>
-</div>
-
-<label>Smartcard / IUC Number</label>
-<input
- type="text"
- id="smartcard"
- placeholder="Enter Smartcard or IUC number"
- maxlength="20"
- inputmode="numeric"
->
-
-<label>Select Package</label>
-<select id="package" onchange="updatePrice()">
-<option value="">Choose subscription package</option>
-<option value="3500">Basic - ₦3,500</option>
-<option value="5000">Smart - ₦5,000</option>
-<option value="7500">Classic - ₦7,500</option>
-<option value="10000">Compact - ₦10,000</option>
-<option value="15000">Premium - ₦15,000</option>
-</select>
-
-<div class="price">
-<span>Total Amount</span>
-<strong id="total">₦0.00</strong>
-</div>
-
-<button onclick="continueTV()">Continue</button>
-
-<p class="note">
-Demo packages and prices only. Actual packages differ by provider. No real subscription or payment is available yet.
-</p>
-
-</div>
-</div>
-</div>
-
-<script>
-let provider='DStv';
-
-function chooseProvider(element,name){
- provider=name;
-
- document.querySelectorAll('.provider').forEach(p=>{
-  p.classList.remove('active');
- });
-
- element.classList.add('active');
- document.getElementById('package').value='';
- updatePrice();
-}
-
-function updatePrice(){
- const amount=document.getElementById('package').value;
-
- document.getElementById('total').textContent=
- amount?'₦'+Number(amount).toLocaleString('en-NG')+'.00':'₦0.00';
-}
-
-function continueTV(){
- const smartcard=document.getElementById('smartcard').value.trim();
- const plan=Number(document.getElementById('package').value);
-
- if(!/^[0-9]{6,20}$/.test(smartcard)){
-  alert('Please enter a valid Smartcard / IUC number using 6 to 20 digits.');
-  return;
- }
-
- if(!Number.isSafeInteger(plan)||plan<3500||plan>15000){
-  alert('Please select a valid subscription package.');
-  return;
- }
-
- const params=new URLSearchParams({
-  provider:provider,
-  smartcard:smartcard,
-  plan:String(plan)
- });
-
- window.location.href=
- 'tv_order_summary.html?'+params.toString();
-}
-</script>
-
 </body>
 </html>
