@@ -46,12 +46,6 @@ header:after{width:130px;height:130px;right:95px;bottom:-95px}
  display:block;font-size:9px;font-weight:500;
  letter-spacing:2px;margin-top:4px;opacity:.8;
 }
-.header-right{margin-left:auto}
-.menu-trigger{
- border:1px solid #ffffff50;background:#ffffff18;
- color:white;border-radius:12px;padding:10px 12px;
- font-size:20px;cursor:pointer;
-}
 .header-welcome{position:relative;z-index:1;margin-top:24px}
 .header-welcome h2{font-size:21px;margin:0 0 7px}
 .header-welcome p{font-size:12px;margin:0;opacity:.85}
@@ -80,6 +74,7 @@ header:after{width:130px;height:130px;right:95px;bottom:-95px}
  color:white;width:35px;height:35px;border-radius:10px;
  font-size:16px;cursor:pointer;
 }
+.wallet-icon:disabled{opacity:.5;cursor:wait}
 .balance{
  font-size:32px;font-weight:900;margin:17px 0 20px;
  letter-spacing:.3px;position:relative;z-index:1;
@@ -124,9 +119,7 @@ header:after{width:130px;height:130px;right:95px;bottom:-95px}
  display:flex;align-items:center;justify-content:center;
  color:#6d28d9;margin-bottom:10px;
 }
-.service .icon svg{
- width:25px;height:25px;stroke-width:2;
-}
+.service .icon svg{width:25px;height:25px;stroke-width:2}
 .service p{
  margin:0;font-size:11px;font-weight:800;line-height:1.4;
 }
@@ -212,20 +205,17 @@ footer{
 
 <header>
  <div class="topbar">
-  <button class="profile-button" onclick="openAccountMenu()">
+  <button class="profile-button" onclick="openAccountMenu()" aria-label="Open account menu">
    <i data-lucide="user-round" id="defaultIcon"></i>
    <img id="topPhoto" alt="Profile">
   </button>
+
   <div class="brand">
    AILAT DATA
    <small>SMART DIGITAL SERVICES</small>
   </div>
-  <div class="header-right">
-   <button class="menu-trigger" onclick="openAccountMenu()">
-    <i data-lucide="menu"></i>
-   </button>
-  </div>
  </div>
+
  <div class="header-welcome">
   <h2 id="welcome">Welcome to your dashboard</h2>
   <p>Fast, Easy and Reliable Services</p>
@@ -246,7 +236,9 @@ footer{
     </button>
    </div>
   </div>
+
   <div class="balance" id="walletBalance">Loading...</div>
+
   <div class="wallet-bottom">
    <small>Available Wallet Balance</small>
    <button class="fund-button" onclick="fundWallet()">
@@ -254,6 +246,7 @@ footer{
     Fund Wallet
    </button>
   </div>
+
   <div class="wallet-status" id="walletStatus">
    Connecting to wallet...
   </div>
@@ -321,7 +314,7 @@ footer{
  onclick="closeAccountMenu()"></div>
 
 <div class="account-menu" id="accountMenu">
- <button class="close-menu" onclick="closeAccountMenu()">
+ <button class="close-menu" onclick="closeAccountMenu()" aria-label="Close account menu">
   <i data-lucide="x"></i>
  </button>
 
@@ -330,6 +323,7 @@ footer{
    <i data-lucide="user-round" id="menuDefaultIcon"></i>
    <img id="menuPhoto" alt="Profile">
   </div>
+
   <h3 id="menuName">My Account</h3>
   <small>AILAT DATA Member</small><br>
 
