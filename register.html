@@ -8,173 +8,26 @@
 
 <style>
 *{box-sizing:border-box}
-
-body{
- margin:0;
- font-family:Arial,sans-serif;
- background:#f5f3ff;
- display:flex;
- justify-content:center;
- align-items:center;
- min-height:100vh;
- padding:20px 0;
- color:#24134d;
-}
-
-.container{
- width:90%;
- max-width:400px;
- background:white;
- padding:25px 22px;
- border-radius:18px;
- box-shadow:0 4px 15px #00000010;
-}
-
-.logo{
- text-align:center;
- color:#5b21b6;
- font-size:27px;
- font-weight:bold;
-}
-
-.subtitle{
- text-align:center;
- color:#888;
- margin-bottom:22px;
-}
-
-label{
- display:block;
- margin:14px 0 7px;
- font-weight:bold;
- font-size:14px;
-}
-
-input{
- width:100%;
- padding:14px;
- border:1px solid #ddd;
- border-radius:9px;
- font-size:15px;
-}
-
-input:focus{
- outline:none;
- border-color:#7c3aed;
- box-shadow:0 0 0 3px #7c3aed15;
-}
-
-.password-box{
- position:relative;
-}
-
-.password-box input{
- padding-right:55px;
-}
-
-.toggle-password{
- position:absolute;
- right:10px;
- top:50%;
- transform:translateY(-50%);
- width:38px;
- height:38px;
- padding:0;
- margin:0;
- background:transparent;
- color:#6d28d9;
- border:0;
- border-radius:5px;
- font-size:21px;
- cursor:pointer;
-}
-
-button{
- width:100%;
- padding:15px;
- background:#6d28d9;
- color:white;
- border:0;
- border-radius:10px;
- font-size:16px;
- font-weight:bold;
- margin-top:22px;
- cursor:pointer;
-}
-
-button:disabled{
- opacity:0.6;
- cursor:not-allowed;
-}
-
-.strength-section{
- margin-top:12px;
-}
-
-.strength-bars{
- display:flex;
- gap:5px;
- margin-bottom:8px;
-}
-
-.strength-bars span{
- flex:1;
- height:6px;
- border-radius:10px;
- background:#e5e1ed;
-}
-
-.strength-text{
- font-size:13px;
- font-weight:bold;
- color:#888;
-}
-
-.password-tips{
- background:#f5f3ff;
- padding:12px;
- border-radius:10px;
- margin-top:12px;
- font-size:12px;
- line-height:1.7;
- color:#5b4b76;
-}
-
-.password-tips strong{
- color:#5b21b6;
-}
-
-.generate-btn{
- background:#ede9fe;
- color:#5b21b6;
- border:1px solid #ddd6fe;
- margin-top:10px;
- padding:11px;
- font-size:13px;
-}
-
-.generate-btn:hover{
- background:#ddd6fe;
-}
-
-.links{
- text-align:center;
- margin-top:20px;
- font-size:14px;
-}
-
-a{
- color:#6d28d9;
- text-decoration:none;
-}
-
-.note{
- font-size:12px;
- color:#888;
- text-align:center;
- margin-top:20px;
- line-height:1.5;
-}
+body{margin:0;min-height:100vh;padding:32px 16px;display:flex;align-items:center;justify-content:center;font-family:Inter,Arial,sans-serif;color:#21133f;background:radial-gradient(circle at top left,#eee7ff 0,#f8f6ff 42%,#eee9fb 100%)}
+.container{width:100%;max-width:440px;background:rgba(255,255,255,.96);padding:34px 30px 28px;border:1px solid #fff;border-radius:24px;box-shadow:0 22px 65px rgba(55,25,100,.13)}
+.brand-mark{width:48px;height:48px;margin:0 auto 14px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,#7c3aed,#4c1d95);color:white;font-size:19px;font-weight:800;letter-spacing:-1px;box-shadow:0 8px 18px #6d28d933}
+.logo{text-align:center;color:#35136f;font-size:23px;font-weight:800;letter-spacing:1.2px}
+.subtitle{text-align:center;color:#817694;font-size:14px;margin:8px 0 26px}
+label{display:block;margin:16px 0 7px;font-size:13px;font-weight:700;color:#44345f}
+input{width:100%;padding:14px 15px;border:1px solid #e4deef;border-radius:11px;background:#fcfbff;font-size:14px;color:#24134d;transition:.2s}
+input::placeholder{color:#aaa1b9}
+input:focus{outline:none;border-color:#8b5cf6;background:white;box-shadow:0 0 0 4px #8b5cf618}
+.password-box{position:relative}
+.password-box input{padding-right:64px}
+.toggle-password{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:auto;padding:7px 9px;margin:0;background:transparent;color:#6d28d9;border:0;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer}
+.field-hint{font-size:11px;line-height:1.5;color:#9187a2;margin:7px 1px 0}
+button{width:100%;padding:15px;border:0;border-radius:11px;background:linear-gradient(110deg,#5b21b6,#7c3aed);color:white;font-size:14px;font-weight:700;letter-spacing:.2px;margin-top:23px;cursor:pointer;box-shadow:0 9px 20px #6d28d926;transition:transform .2s,box-shadow .2s}
+button:hover{transform:translateY(-1px);box-shadow:0 12px 24px #6d28d933}
+button:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.links{text-align:center;margin-top:22px;font-size:13px;color:#817694}
+a{color:#6d28d9;text-decoration:none;font-weight:700}
+.note{font-size:11px;color:#9b92aa;text-align:center;margin:18px 0 0;line-height:1.5}
+@media(max-width:420px){body{padding:18px 12px}.container{padding:28px 21px;border-radius:20px}}
 </style>
 </head>
 
@@ -182,8 +35,9 @@ a{
 
 <div class="container">
 
+<div class="brand-mark">A</div>
 <div class="logo">AILAT DATA</div>
-<p class="subtitle">Create Your Account</p>
+<p class="subtitle">Create your account and get started</p>
 
 <form id="registerForm">
 
@@ -211,39 +65,10 @@ minlength="8" required>
 class="toggle-password"
 id="togglePassword"
 aria-label="Show password"
-aria-pressed="false">👁️</button>
+aria-pressed="false">Show</button>
 </div>
 
-<div class="strength-section">
-
-<div class="strength-bars">
-<span id="bar1"></span>
-<span id="bar2"></span>
-<span id="bar3"></span>
-<span id="bar4"></span>
-</div>
-
-<div class="strength-text" id="strengthText">
-Password strength: Not entered
-</div>
-
-</div>
-
-<div class="password-tips">
-<strong>🔐 Create a Strong Password</strong><br>
-✓ At least 12 characters is recommended.<br>
-✓ Include uppercase letters (A-Z).<br>
-✓ Include lowercase letters (a-z).<br>
-✓ Include numbers (0-9).<br>
-✓ Include special symbols (!@#$%).<br>
-<strong>Tip:</strong> A long, unique password is harder to guess.
-</div>
-
-<button type="button"
-class="generate-btn"
-id="generatePassword">
-✨ Generate Strong Password
-</button>
+<p class="field-hint">Use at least 12 characters with a mix of letters, numbers and symbols.</p>
 
 <label>Confirm Password</label>
 
@@ -323,14 +148,14 @@ function setupPasswordToggle(inputId, buttonId){
   if(passwordInput.type === "password"){
 
    passwordInput.type = "text";
-   toggleButton.textContent = "🙈";
+   toggleButton.textContent = "Hide";
    toggleButton.setAttribute("aria-label","Hide password");
    toggleButton.setAttribute("aria-pressed","true");
 
   }else{
 
    passwordInput.type = "password";
-   toggleButton.textContent = "👁️";
+   toggleButton.textContent = "Show";
    toggleButton.setAttribute("aria-label","Show password");
    toggleButton.setAttribute("aria-pressed","false");
 
@@ -342,100 +167,6 @@ function setupPasswordToggle(inputId, buttonId){
 
 setupPasswordToggle("password","togglePassword");
 setupPasswordToggle("confirmPassword","toggleConfirmPassword");
-
-// PASSWORD STRENGTH CHECKER
-
-function checkPasswordStrength(password){
-
- let score = 0;
-
- if(password.length >= 8) score++;
- if(password.length >= 12) score++;
- if(/[a-z]/.test(password)) score++;
- if(/[A-Z]/.test(password)) score++;
- if(/[0-9]/.test(password)) score++;
- if(/[^A-Za-z0-9]/.test(password)) score++;
-
- let strength = "Weak";
- let color = "#ef4444";
- let bars = 1;
-
- if(password.length === 0){
-  strength = "Not entered";
-  color = "#888";
-  bars = 0;
- }
- else if(score >= 5 && password.length >= 12){
-  strength = "Strong";
-  color = "#16a34a";
-  bars = 4;
- }
- else if(score >= 3){
-  strength = "Medium";
-  color = "#e99b16";
-  bars = 3;
- }
-
- const text = document.getElementById("strengthText");
-
- text.textContent = "Password strength: " + strength;
- text.style.color = color;
-
- for(let i = 1; i <= 4; i++){
-
-  const bar = document.getElementById("bar" + i);
-
-  bar.style.background =
-   i <= bars ? color : "#e5e1ed";
-
- }
-
- return strength;
-
-}
-
-passwordInput.addEventListener("input", function(){
-
- checkPasswordStrength(passwordInput.value);
-
-});
-
-// GENERATE STRONG PASSWORD
-
-document.getElementById("generatePassword")
-.addEventListener("click", function(){
-
- const characters =
- "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%&*";
-
- const randomValues = new Uint32Array(16);
-
- crypto.getRandomValues(randomValues);
-
- let generated = "";
-
- for(let i = 0; i < randomValues.length; i++){
-
-  generated += characters[
-   randomValues[i] % characters.length
-  ];
-
- }
-
- passwordInput.value = generated;
- confirmInput.value = generated;
-
- passwordInput.type = "text";
- confirmInput.type = "text";
-
- document.getElementById("togglePassword").textContent = "🙈";
- document.getElementById("toggleConfirmPassword").textContent = "🙈";
-
- checkPasswordStrength(generated);
-
- alert("Strong password generated! Keep it somewhere safe and private.");
-
-});
 
 // GET REFERRAL CODE FROM URL
 
@@ -485,8 +216,8 @@ form.addEventListener("submit", async function(event){
   return;
  }
 
- if(checkPasswordStrength(password) !== "Strong"){
-  alert("Please create a STRONG password. Use at least 12 characters with uppercase, lowercase, numbers and symbols.");
+ if(password.length < 12 || !/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)){
+  alert("Use at least 12 characters with uppercase and lowercase letters, a number and a symbol.");
   return;
  }
 
