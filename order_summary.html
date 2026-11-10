@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,301 +5,134 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#4c1d95">
 <title>Order Summary - AILAT DATA</title>
-
 <style>
-*{
- box-sizing:border-box;
- margin:0;
- padding:0;
- font-family:Arial,sans-serif;
-}
-
-body{
- background:#f5f3ff;
- color:#29243c;
-}
-
-.container{
- max-width:480px;
- margin:auto;
- min-height:100vh;
- padding-bottom:35px;
-}
-
-header{
- background:linear-gradient(135deg,#4c1d95,#7c3aed);
- color:white;
- padding:25px 20px;
- border-radius:0 0 22px 22px;
-}
-
-header a{
- color:white;
- text-decoration:none;
- font-size:26px;
-}
-
-header h2{
- margin-top:15px;
- font-size:22px;
-}
-
-.subtitle{
- color:#888;
- font-size:13px;
- margin-top:7px;
- line-height:1.5;
-}
-
-.content{
- padding:22px 18px;
-}
-
-.card{
- background:white;
- padding:22px;
- border-radius:17px;
- margin-top:20px;
- box-shadow:0 4px 16px #00000009;
-}
-
-.item{
- display:flex;
- justify-content:space-between;
- gap:12px;
- padding:17px 0;
- border-bottom:1px solid #eee;
- font-size:14px;
-}
-
-.item span:first-child{
- color:#888;
-}
-
-.item strong{
- text-align:right;
- overflow-wrap:anywhere;
-}
-
-.total{
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:10px;
- margin-top:22px;
- padding:17px;
- border-radius:12px;
- background:#f3edff;
-}
-
-.total strong{
- color:#6425c5;
- font-size:21px;
-}
-
-.notice{
- background:#fff8e7;
- color:#805600;
- padding:14px;
- border-radius:11px;
- margin-top:20px;
- font-size:12px;
- line-height:1.6;
-}
-
-button{
- width:100%;
- padding:16px;
- border:0;
- border-radius:11px;
- background:#6425c5;
- color:white;
- font-size:15px;
- font-weight:bold;
- margin-top:20px;
- cursor:pointer;
-}
-
-.cancel{
- display:block;
- text-align:center;
- margin-top:18px;
- color:#6425c5;
- text-decoration:none;
- font-size:14px;
-}
-
-.error{
- color:#b42318;
- background:#fff0ef;
- padding:15px;
- border-radius:10px;
- line-height:1.6;
-}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#f5f3ff;color:#29243c}
+.container{max-width:480px;margin:auto;min-height:100vh;padding-bottom:35px}
+header{background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;padding:25px 20px;border-radius:0 0 22px 22px}
+header a{color:white;text-decoration:none;font-size:26px}
+header h2{margin-top:15px;font-size:22px}
+.subtitle{color:#888;font-size:13px;margin-top:7px;line-height:1.5}
+header .subtitle{color:#eee}
+.content{padding:22px 18px}
+.card{background:white;padding:22px;border-radius:17px;margin-top:20px;box-shadow:0 4px 16px #00000009}
+.item{display:flex;justify-content:space-between;gap:12px;padding:17px 0;border-bottom:1px solid #eee;font-size:14px}
+.item span:first-child{color:#888}
+.item strong{text-align:right;overflow-wrap:anywhere}
+.total{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:22px;padding:17px;border-radius:12px;background:#f3edff}
+.total strong{color:#6425c5;font-size:18px;text-align:right}
+.notice{background:#fff8e7;color:#805600;padding:14px;border-radius:11px;margin-top:20px;font-size:12px;line-height:1.6}
+button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;color:white;font-size:15px;font-weight:bold;margin-top:20px;cursor:pointer}
+button:disabled{opacity:.65;cursor:wait}
+.cancel{display:block;text-align:center;margin-top:18px;color:#6425c5;text-decoration:none;font-size:14px}
+.error{color:#b42318;background:#fff0ef;padding:15px;border-radius:10px;line-height:1.6}
+#requestStatus{font-size:13px;line-height:1.6;margin-top:15px;overflow-wrap:anywhere}
 </style>
 </head>
-
 <body>
-
 <div class="container">
-
 <header>
 <a href="data.html">‹</a>
 <h2>Order Summary</h2>
-<p class="subtitle" style="color:#eee">
-Review your data purchase details
-</p>
+<p class="subtitle">Review your data request details</p>
 </header>
-
 <div class="content">
-
 <div class="card" id="orderCard">
-
 <h3>Purchase Details</h3>
-<p class="subtitle">
-Please check that everything is correct.
-</p>
-
-<div class="item">
-<span>Network</span>
-<strong id="network">-</strong>
-</div>
-
-<div class="item">
-<span>Phone Number</span>
-<strong id="phone">-</strong>
-</div>
-
-<div class="item">
-<span>Data Bundle</span>
-<strong id="bundle">-</strong>
-</div>
-
-<div class="total">
-<span>Total Amount</span>
-<strong id="amount">₦0.00</strong>
-</div>
-
+<p class="subtitle">Please check that everything is correct.</p>
+<div class="item"><span>Network</span><strong id="network">-</strong></div>
+<div class="item"><span>Phone Number</span><strong id="phone">-</strong></div>
+<div class="item"><span>Data Bundle</span><strong id="bundle">-</strong></div>
+<div class="total"><span>Supplier Price</span><strong id="amount">Not available</strong></div>
 <div class="notice">
-<strong>Testing Mode:</strong>
-This is only an order preview. The displayed amount is a demonstration price, not a confirmed supplier price. No money will be deducted and no data will be delivered.
+<strong>Important:</strong> This step only records your request. Supplier pricing has not yet been confirmed. No payment will be taken, no wallet balance will be deducted, and no data will be delivered.
 </div>
-
-<button id="confirmButton" onclick="confirmOrder()">
-Confirm Details
-</button>
-
-<a href="data.html" class="cancel">
-← Go Back and Edit
-</a>
-
+<button id="confirmButton" type="button">Submit Order Request</button>
+<p id="requestStatus" role="status" aria-live="polite"></p>
+<a href="data.html" class="cancel">← Go Back and Edit</a>
 </div>
 </div>
 </div>
+<script type="module">
+import { app } from "./firebase.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
 
-<script>
-
+const SUPABASE_FUNCTION_URL = "https://bdogulpsybiggpgipdbt.supabase.co/functions/v1/ailat-order-requests";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_9wmzpjzVhnby_E3jogTjRw_c22XiDEC";
+const auth = getAuth(app);
 const params = new URLSearchParams(window.location.search);
-
 const network = params.get("network") || "";
 const phone = params.get("phone") || "";
 const plan = params.get("plan") || "";
-
 const plans = {
- "500mb":{
-  name:"500MB",
-  price:500
- },
- "1gb":{
-  name:"1GB",
-  price:1000
- },
- "2gb":{
-  name:"2GB",
-  price:1500
- },
- "3gb":{
-  name:"3GB",
-  price:2500
- },
- "5gb":{
-  name:"5GB",
-  price:3500
- },
- "10gb":{
-  name:"10GB",
-  price:6000
- }
+ "500mb":{name:"500MB"},
+ "1gb":{name:"1GB"},
+ "2gb":{name:"2GB"},
+ "3gb":{name:"3GB"},
+ "5gb":{name:"5GB"},
+ "10gb":{name:"10GB"}
 };
-
-const validNetworks = [
- "MTN",
- "Airtel",
- "Glo",
- "9mobile"
-];
-
-const validPhone = /^0[0-9]{10}$/;
-
+const validNetworks = ["MTN","Airtel","Glo","9mobile"];
+const validPhone = /^0[789][01]\d{8}$/;
 const selectedPlan = plans[plan];
+const button = document.getElementById("confirmButton");
+const statusBox = document.getElementById("requestStatus");
+let requestKey = crypto.randomUUID();
+let requestSaved = false;
 
-if(
- !validNetworks.includes(network) ||
- !validPhone.test(phone) ||
- !selectedPlan
-){
-
- document.getElementById("orderCard").innerHTML = `
-  <div class="error">
-   <h3>Invalid Order Details</h3>
-   <p class="subtitle">
-    Your order information is incomplete or incorrect.
-    Please return and select your network, phone number
-    and data plan again.
-   </p>
-  </div>
-
-  <a href="data.html" class="cancel">
-   ← Back to Buy Data
-  </a>
- `;
-
+if(!validNetworks.includes(network) || !validPhone.test(phone) || !selectedPlan){
+ document.getElementById("orderCard").innerHTML =
+  '<div class="error"><h3>Invalid Order Details</h3><p class="subtitle">Your order information is incomplete or incorrect. Please return and select your network, phone number and data plan again.</p></div><a href="data.html" class="cancel">← Back to Buy Data</a>';
 }else{
-
  document.getElementById("network").textContent = network;
-
  document.getElementById("phone").textContent = phone;
-
- document.getElementById("bundle").textContent =
-  selectedPlan.name;
-
- document.getElementById("amount").textContent =
-  "₦" + selectedPlan.price.toLocaleString("en-NG") + ".00";
-
+ document.getElementById("bundle").textContent = selectedPlan.name;
 }
 
-function confirmOrder(){
+function getSignedInUser(){
+ return new Promise((resolve,reject)=>{
+  const unsubscribe = onAuthStateChanged(auth, user=>{
+   unsubscribe();
+   if(!user){ reject(new Error("Please log in to submit an order request.")); return; }
+   resolve(user);
+  }, error=>{ unsubscribe(); reject(error); });
+ });
+}
 
- if(
-  !validNetworks.includes(network) ||
-  !validPhone.test(phone) ||
-  !selectedPlan
- ){
-  alert("Invalid order details. Please try again.");
-  return;
+button.addEventListener("click", async()=>{
+ if(requestSaved || !selectedPlan || !validNetworks.includes(network) || !validPhone.test(phone)) return;
+ button.disabled = true;
+ button.textContent = "Submitting request...";
+ statusBox.textContent = "Please wait while your request is securely recorded.";
+ try{
+  const user = await getSignedInUser();
+  await user.reload();
+  if(!user.emailVerified) throw new Error("Please verify your email before submitting an order request.");
+  const token = await user.getIdToken(true);
+  const response = await fetch(SUPABASE_FUNCTION_URL,{
+   method:"POST",
+   headers:{
+    "apikey":SUPABASE_PUBLISHABLE_KEY,
+    "Authorization":"Bearer " + token,
+    "Content-Type":"application/json"
+   },
+   body:JSON.stringify({
+    service_key:"data",
+    idempotency_key:requestKey,
+    customer_data:{network,phone,bundle:plan}
+   })
+  });
+  const result = await response.json().catch(()=>({}));
+  if(!response.ok || !result.success) throw new Error(result.error || "Could not save your request. Please try again.");
+  requestSaved = true;
+  button.textContent = "Request Recorded";
+  statusBox.textContent = "Your request has been recorded. Reference: " + result.order_request.reference + ". Status: " + result.order_request.status + ". No payment was taken and no data was delivered.";
+ }catch(error){
+  button.disabled = false;
+  button.textContent = "Try Again";
+  statusBox.textContent = error.message || "Something went wrong. Please try again.";
  }
-
- alert(
-  "Your order details have been checked successfully.\n\n" +
-  "Network: " + network + "\n" +
-  "Phone: " + phone + "\n" +
-  "Bundle: " + selectedPlan.name + "\n\n" +
-  "Live payment and data delivery are not yet enabled."
- );
-
-}
-
+});
 </script>
-
 </body>
 </html>
