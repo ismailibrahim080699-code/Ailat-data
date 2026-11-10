@@ -293,8 +293,8 @@ import {
 import {
  getFirestore,
  doc,
- setDoc,
  getDoc,
+ writeBatch,
  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
 
@@ -539,45 +539,36 @@ form.addEventListener("submit", async function(event){
   const myReferralCode =
    "AILAT" + uid.substring(0,8).toUpperCase();
 
-  // SAVE USER INFORMATION AND INITIAL WALLET
+  // SAVE THE USER, PERSONAL CODE AND REFERRAL AS ONE ATOMIC WRITE.
+  // This prevents a partial referral record if any write is rejected.
 
-  await setDoc(doc(db, "users", uid), {
+  const batch = writeBatch(db);
 
+  batch.set(doc(db, "users", uid), {
    name: name,
    email: email,
    phone: phone,
-
-   // INITIAL WALLET BALANCE
    walletBalance: 0,
-
    referralCode: myReferralCode,
    referredBy: referralCode || "",
    createdAt: serverTimestamp()
-
   });
 
-  // SAVE PERSONAL REFERRAL CODE
-
-  await setDoc(doc(db, "referralCodes", myReferralCode), {
-
-   ownerUid: uid
-
+  batch.set(doc(db, "referralCodes", myReferralCode), {
+   ownerUid: uid,
+   createdAt: serverTimestamp()
   });
-
-  // SAVE REFERRAL INFORMATION
 
   if(referralCode !== "" && referrerUid){
-
-   await setDoc(doc(db, "referrals", uid), {
-
+   batch.set(doc(db, "referrals", uid), {
     referralCode: referralCode,
     ownerUid: referrerUid,
     newUserUid: uid,
     joinedAt: serverTimestamp()
-
    });
-
   }
+
+  await batch.commit();
 
   // SEND EMAIL VERIFICATION
 
