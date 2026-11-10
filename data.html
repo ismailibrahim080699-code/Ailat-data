@@ -178,15 +178,7 @@ button{
  margin-top:14px;
 }
 
-.demo{
- background:#fff8e7;
- color:#805600;
- padding:12px;
- border-radius:10px;
- font-size:11px;
- line-height:1.6;
- margin-top:15px;
-}
+
 
 @media(max-width:360px){
  .networks{gap:6px}
@@ -297,11 +289,8 @@ Choose your network and preferred data plan.
 <strong id="price">Not available</strong>
 </div>
 
-<div class="demo">
-<strong>Testing mode:</strong>
-These are demonstration prices from the previous version.
-They are not confirmed supplier prices.
-No payment or data delivery will happen.
+<div class="demo" style="background:#fff8e7;color:#805600;padding:12px;border-radius:10px;font-size:12px;line-height:1.6;margin-top:15px">
+<strong>Supplier pricing pending:</strong> We will show the confirmed price when the official supplier API is connected. Submitting this request will not take payment or deliver data.
 </div>
 
 <button onclick="continuePurchase()">Continue</button>
@@ -319,12 +308,12 @@ Please check your phone number and selected data bundle before continuing.
 let selectedNetwork="MTN";
 
 const plans={
- "500mb":{name:"500MB",demoPrice:500},
- "1gb":{name:"1GB",demoPrice:1000},
- "2gb":{name:"2GB",demoPrice:1500},
- "3gb":{name:"3GB",demoPrice:2500},
- "5gb":{name:"5GB",demoPrice:3500},
- "10gb":{name:"10GB",demoPrice:6000}
+ "500mb":{name:"500MB"},
+ "1gb":{name:"1GB"},
+ "2gb":{name:"2GB"},
+ "3gb":{name:"3GB"},
+ "5gb":{name:"5GB"},
+ "10gb":{name:"10GB"}
 };
 
 function chooseNetwork(element,network){
@@ -350,8 +339,7 @@ function updatePrice(){
   return;
  }
 
- price.textContent=
-  "₦"+plans[plan].demoPrice.toLocaleString("en-NG")+".00";
+ price.textContent="Awaiting supplier price";
 }
 
 function continuePurchase(){
