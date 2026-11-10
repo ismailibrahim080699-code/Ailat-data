@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,112 +8,33 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#f5f4fa;color:#29243c}
 .container{max-width:480px;margin:auto;min-height:100vh}
-header{
- background:linear-gradient(135deg,#4c1d95,#7c3aed);
- color:white;padding:22px 20px;display:flex;
- align-items:center;gap:15px;border-radius:0 0 20px 20px
-}
+header{background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;padding:22px 20px;display:flex;align-items:center;gap:15px;border-radius:0 0 20px 20px}
 .back{font-size:26px;text-decoration:none;color:white}
 header h2{font-size:19px}
 .content{padding:22px 18px}
-.subtitle{color:#888;font-size:13px;margin-top:6px}
-.card{
- background:white;padding:20px;border-radius:16px;
- margin-top:20px;box-shadow:0 3px 15px #00000008
-}
-label{display:block;font-size:13px;font-weight:bold;margin:19px 0 9px}
-select,input{
- width:100%;padding:15px;border:1px solid #e5e1ed;
- border-radius:10px;background:white;font-size:14px;outline:none
-}
-select:focus,input:focus{border-color:#6425c5}
-button{
- width:100%;padding:16px;border:0;border-radius:11px;
- background:#6425c5;color:white;font-size:15px;
- font-weight:bold;margin-top:22px;cursor:pointer
-}
-.note{font-size:11px;color:#888;line-height:1.6;margin-top:14px}
-.icon{
- background:#f0e8ff;width:55px;height:55px;
- border-radius:15px;display:grid;place-items:center;
- font-size:27px;margin-bottom:12px
-}
+.subtitle{color:#888;font-size:13px;margin-top:6px;line-height:1.6}
+.card{background:white;padding:20px;border-radius:16px;margin-top:20px;box-shadow:0 3px 15px #00000008}
+.note{font-size:12px;color:#777;line-height:1.7;margin-top:14px}
+.icon{background:#f0e8ff;width:55px;height:55px;border-radius:15px;display:grid;place-items:center;font-size:27px;margin-bottom:12px}
+.status{color:#6425c5;font-size:22px;margin-top:12px}
 </style>
 </head>
-
 <body>
 <div class="container">
-
 <header>
 <a href="dashboard.html" class="back">‹</a>
 <h2>Electricity Payment</h2>
 </header>
-
 <div class="content">
 <div class="icon">💡</div>
-<h2>Electricity Payment</h2>
-<p class="subtitle">This service is not active yet.</p>
-
+<h2>Pay Electricity Bill</h2>
+<p class="subtitle">Electricity payment service status</p>
 <div class="card">
-<h3>Coming Soon</h3>
-<p class="note">Electricity provider verification, meter validation and secure payment are not connected yet. We will enable this service only after a verified provider API and payment process are ready.</p>
+<h3 class="status">Coming Soon</h3>
+<p class="note">Electricity provider verification, meter validation and secure payment are not connected yet. This service will be enabled only after a verified provider API and secure payment process are ready.</p>
 <p class="note"><strong>Important:</strong> Do not enter your meter number or send money to anyone claiming to process an AILAT DATA electricity payment.</p>
 </div>
-
-<!-- The payment form is intentionally unavailable until a verified provider is connected.
-<label>Select Electricity Provider</label>
-<select id="provider">
-<option value="">Choose electricity company</option>
-<option>IKEDC - Ikeja Electric</option>
-<option>EKEDC - Eko Electric</option>
-<option>KEDCO - Kano Electric</option>
-<option>JED - Jos Electric</option>
-<option>PHED - Port Harcourt Electric</option>
-<option>IBEDC - Ibadan Electric</option>
-<option>KAEDCO - Kaduna Electric</option>
-<option>BEDC - Benin Electric</option>
-<option>YEDC - Yola Electric</option>
-<option>ABA Electric</option>
-<option>AEPC - Abuja Electric</option>
-</select>
-
-<label>Meter Type</label>
-<select id="meterType">
-<option value="">Select meter type</option>
-<option value="Prepaid">Prepaid</option>
-<option value="Postpaid">Postpaid</option>
-</select>
-
-<label>Meter Number</label>
-<input
- type="text"
- id="meter"
- placeholder="Enter meter number"
- maxlength="20"
- inputmode="numeric"
->
-
-<label>Amount (₦)</label>
-<input
- type="number"
- id="amount"
- placeholder="Enter amount"
- min="100"
- max="1000000"
- step="1"
->
-
-<button onclick="continuePayment()">Continue</button>
-
-<p class="note">
-Demo only: Meter verification and real electricity payment are not connected. Do not enter real payment details here.
-</p>
-
 </div>
 </div>
-</div>
-
-
-
 </body>
 </html>
