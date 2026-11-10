@@ -52,11 +52,16 @@ button{
 
 <div class="content">
 <div class="icon">💡</div>
-<h2>Pay Electricity Bill</h2>
-<p class="subtitle">Enter your electricity details below.</p>
+<h2>Electricity Payment</h2>
+<p class="subtitle">This service is not active yet.</p>
 
 <div class="card">
+<h3>Coming Soon</h3>
+<p class="note">Electricity provider verification, meter validation and secure payment are not connected yet. We will enable this service only after a verified provider API and payment process are ready.</p>
+<p class="note"><strong>Important:</strong> Do not enter your meter number or send money to anyone claiming to process an AILAT DATA electricity payment.</p>
+</div>
 
+<!-- The payment form is intentionally unavailable until a verified provider is connected.
 <label>Select Electricity Provider</label>
 <select id="provider">
 <option value="">Choose electricity company</option>
@@ -109,45 +114,7 @@ Demo only: Meter verification and real electricity payment are not connected. Do
 </div>
 </div>
 
-<script>
-function continuePayment(){
 
- const provider=document.getElementById('provider').value;
- const type=document.getElementById('meterType').value;
- const meter=document.getElementById('meter').value.trim();
- const amount=Number(document.getElementById('amount').value);
-
- if(!provider){
-  alert('Please select an electricity provider.');
-  return;
- }
-
- if(!type){
-  alert('Please select meter type.');
-  return;
- }
-
- if(!/^[0-9]{6,20}$/.test(meter)){
-  alert('Please enter a valid meter number using 6 to 20 digits.');
-  return;
- }
-
- if(!Number.isSafeInteger(amount)||amount<100||amount>1000000){
-  alert('Please enter an amount between ₦100 and ₦1,000,000.');
-  return;
- }
-
- const params=new URLSearchParams({
-  provider:provider,
-  type:type,
-  meter:meter,
-  amount:String(amount)
- });
-
- window.location.href=
- 'electricity_order_summary.html?'+params.toString();
-}
-</script>
 
 </body>
 </html>
