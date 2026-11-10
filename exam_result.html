@@ -1,164 +1,40 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Exam Result - AILAT DATA</title>
+<title>Exam PIN - AILAT DATA</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#f5f3ff;color:#29243c}
-.container{max-width:480px;margin:auto;min-height:100vh}
-header{
- background:linear-gradient(135deg,#702bd1,#4520a0);
- padding:22px;
- display:flex;
- align-items:center;
- gap:15px;
- color:white
-}
-.back{font-size:28px;text-decoration:none;color:white}
-header h2{font-size:19px}
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{margin:0;background:#f5f3ff;color:#24134d}
+.container{max-width:480px;min-height:100vh;margin:auto}
+header{background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;padding:22px 20px;display:flex;align-items:center;gap:15px;border-radius:0 0 20px 20px}
+.back{color:white;text-decoration:none;font-size:27px}
+header h2{font-size:19px;margin:0}
 .content{padding:22px 18px}
-.subtitle{color:#888;font-size:13px;margin-top:6px}
-.card{
- background:white;
- padding:20px;
- border-radius:16px;
- margin-top:20px;
- box-shadow:0 5px 20px #0000000a
-}
-.icon{
- width:58px;height:58px;
- background:#f0e8ff;
- border-radius:15px;
- display:grid;
- place-items:center;
- font-size:28px;
- margin-bottom:15px
-}
-label{display:block;font-size:13px;font-weight:bold;margin:19px 0 9px}
-select{
- width:100%;
- padding:15px;
- border:1px solid #e5e1ed;
- border-radius:10px;
- background:white;
- font-size:14px;
- outline:none
-}
-select:focus{border-color:#6425c5}
-.total{
- background:#f3edff;
- padding:17px;
- border-radius:10px;
- margin-top:22px;
- display:flex;
- justify-content:space-between
-}
-.total strong{color:#6425c5}
-button{
- width:100%;
- padding:16px;
- border:0;
- border-radius:11px;
- background:linear-gradient(135deg,#702bd1,#4520a0);
- color:white;
- font-size:15px;
- font-weight:bold;
- margin-top:22px;
- cursor:pointer
-}
-.note{font-size:11px;color:#888;line-height:1.6;margin-top:14px}
+.card{background:white;border-radius:18px;padding:24px 20px;margin-top:20px;box-shadow:0 5px 20px #24134d10;text-align:center}
+.icon{font-size:48px;margin:8px 0 18px}
+h1{font-size:23px;margin:0 0 10px;color:#5425a8}
+.status{display:inline-block;background:#fff0c2;color:#795600;padding:7px 13px;border-radius:20px;font-size:12px;font-weight:bold;margin:8px 0 15px}
+p{font-size:14px;line-height:1.7;color:#686078}
+.notice{background:#fff7e5;color:#795600;padding:14px;border-radius:12px;font-size:13px;line-height:1.7;margin-top:18px;text-align:left}
+button{width:100%;padding:15px;border:0;border-radius:12px;background:linear-gradient(135deg,#702bd1,#4520a0);color:white;font-size:15px;font-weight:bold;margin-top:22px}
 </style>
 </head>
 <body>
-
 <div class="container">
-<header>
-<a href="dashboard.html" class="back">‹</a>
-<h2>Exam Result Checker</h2>
-</header>
-
-<div class="content">
-<div class="icon">🎓</div>
-<h2>Check Your Exam Result</h2>
-<p class="subtitle">Select your examination and PIN quantity.</p>
-
+<header><a href="dashboard.html" class="back" aria-label="Back to dashboard">‹</a><h2>Exam PIN / Result Checker</h2></header>
+<main class="content">
 <div class="card">
-
-<label>Select Examination</label>
-<select id="exam">
-<option value="">Choose examination</option>
-<option value="WAEC">WAEC</option>
-<option value="NECO">NECO</option>
-<option value="NABTEB">NABTEB</option>
-<option value="JAMB">JAMB</option>
-</select>
-
-<label>Quantity</label>
-<select id="quantity">
-<option value="1">1 PIN</option>
-<option value="2">2 PINs</option>
-<option value="3">3 PINs</option>
-<option value="5">5 PINs</option>
-</select>
-
-<div class="total">
-<span>Total Amount</span>
-<strong id="total">₦0.00</strong>
+<div class="icon" aria-hidden="true">🎓</div>
+<h1>Examination Services</h1>
+<span class="status">COMING SOON</span>
+<p>WAEC, NECO, NABTEB and JAMB PIN services are not active yet.</p>
+<p>We are waiting for a verified examination PIN provider, confirmed prices and a secure payment connection before enabling purchases.</p>
+<div class="notice"><strong>Important:</strong> Do not pay anyone or share examination details through this page. AILAT DATA cannot currently sell or deliver examination PINs or check results.</div>
+<button type="button" onclick="location.href='dashboard.html'">Back to Dashboard</button>
 </div>
-
-<button onclick="continueExam()">Continue</button>
-
-<p class="note">
-Demo prices only. Real PIN availability, payment and delivery are not yet available.
-</p>
-
+</main>
 </div>
-</div>
-</div>
-
-<script>
-const prices={
- WAEC:3500,
- NECO:1200,
- NABTEB:1500,
- JAMB:1000
-};
-
-function updateTotal(){
- const exam=document.getElementById("exam").value;
- const quantity=Number(document.getElementById("quantity").value);
- const total=exam?prices[exam]*quantity:0;
-
- document.getElementById("total").textContent=
- "₦"+total.toLocaleString("en-NG")+".00";
-}
-
-document.getElementById("exam").addEventListener("change",updateTotal);
-document.getElementById("quantity").addEventListener("change",updateTotal);
-
-function continueExam(){
- const exam=document.getElementById("exam").value;
- const quantity=Number(document.getElementById("quantity").value);
-
- if(!exam){
-  alert("Please select an examination.");
-  return;
- }
-
- const amount=prices[exam]*quantity;
-
- const params=new URLSearchParams({
-  exam:exam,
-  quantity:quantity,
-  amount:amount
- });
-
- window.location.href="exam_order_summary.html?"+params.toString();
-}
-</script>
-
 </body>
 </html>
