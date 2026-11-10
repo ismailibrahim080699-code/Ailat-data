@@ -19,7 +19,9 @@ input::placeholder{color:#aaa1b9}
 input:focus{outline:none;border-color:#8b5cf6;background:white;box-shadow:0 0 0 4px #8b5cf618}
 .password-box{position:relative}
 .password-box input{padding-right:64px}
-.toggle-password{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:auto;padding:7px 9px;margin:0;background:transparent;color:#6d28d9;border:0;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer}
+.toggle-password{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:38px;height:38px;display:grid;place-items:center;padding:0;margin:0;background:transparent;color:#7650ad;border:0;border-radius:9px;cursor:pointer;box-shadow:none}
+.toggle-password:hover{background:#f2edff;box-shadow:none;transform:translateY(-50%)}
+.toggle-password svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .field-hint{font-size:11px;line-height:1.5;color:#9187a2;margin:7px 1px 0}
 button{width:100%;padding:15px;border:0;border-radius:11px;background:linear-gradient(110deg,#5b21b6,#7c3aed);color:white;font-size:14px;font-weight:700;letter-spacing:.2px;margin-top:23px;cursor:pointer;box-shadow:0 9px 20px #6d28d926;transition:transform .2s,box-shadow .2s}
 button:hover{transform:translateY(-1px);box-shadow:0 12px 24px #6d28d933}
@@ -65,7 +67,7 @@ minlength="8" required>
 class="toggle-password"
 id="togglePassword"
 aria-label="Show password"
-aria-pressed="false">👁</button>
+aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button>
 </div>
 
 <p class="field-hint">Use at least 12 characters with a mix of letters, numbers and symbols.</p>
@@ -81,7 +83,7 @@ minlength="8" required>
 class="toggle-password"
 id="toggleConfirmPassword"
 aria-label="Show password"
-aria-pressed="false">👁️</button>
+aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button>
 </div>
 
 <label>Referral Code (Optional)</label>
@@ -148,14 +150,14 @@ function setupPasswordToggle(inputId, buttonId){
   if(passwordInput.type === "password"){
 
    passwordInput.type = "text";
-   toggleButton.textContent = "🙈";
+   toggleButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>';
    toggleButton.setAttribute("aria-label","Hide password");
    toggleButton.setAttribute("aria-pressed","true");
 
   }else{
 
    passwordInput.type = "password";
-   toggleButton.textContent = "👁";
+   toggleButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8"/><path d="M9.9 5.2A10.8 10.8 0 0112 5c6.4 0 10 7 10 7a15.8 15.8 0 01-3.1 3.8M6.2 6.2C3.5 8 2 12 2 12s3.6 7 10 7a10.4 10.4 0 004.1-.8"/></svg>';
    toggleButton.setAttribute("aria-label","Show password");
    toggleButton.setAttribute("aria-pressed","false");
 
