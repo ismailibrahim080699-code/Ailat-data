@@ -16,10 +16,69 @@ header h2{font-size:19px}
 .subtitle{font-size:13px;color:#888;margin-top:6px}
 .card{background:white;padding:20px;border-radius:16px;margin-top:20px;box-shadow:0 3px 15px #00000008}
 label{display:block;font-size:13px;font-weight:bold;margin:19px 0 9px}
-.networks{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
-.network{border:1px solid #e8e3f0;border-radius:10px;padding:13px 3px;text-align:center;font-size:12px;cursor:pointer;font-weight:bold}
-.network span{display:block;font-size:23px;margin-bottom:7px}
-.network.active{border:2px solid #6425c5;background:#f3ecff;color:#6425c5}
+.networks{
+ display:grid;
+ grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:9px;
+}
+
+.network{
+ border:1px solid #e8e3f0;
+ border-radius:12px;
+ padding:12px 4px;
+ text-align:center;
+ cursor:pointer;
+ background:white;
+ min-width:0;
+ min-height:95px;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:8px;
+ transition:.2s;
+}
+
+.network.active{
+ border:2px solid #6425c5;
+ background:#f5efff;
+ box-shadow:0 3px 10px #6425c51a;
+}
+
+.network img{
+ width:48px;
+ height:43px;
+ object-fit:contain;
+ display:block;
+}
+
+.network .network-name{
+ font-size:11px;
+ font-weight:800;
+ color:#352052;
+}
+
+.network.active .network-name{
+ color:#6425c5;
+}
+
+.ninemobile-logo{
+ width:55px;
+ height:43px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:19px;
+ font-weight:900;
+ letter-spacing:-1px;
+ color:#263b32;
+}
+
+.ninemobile-logo span{
+ color:#70b52c;
+ font-size:28px;
+ margin-right:1px;
+}
 input{width:100%;padding:15px;border:1px solid #e5e1ed;border-radius:10px;font-size:14px;outline:none}
 input:focus{border-color:#6425c5}
 .amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -47,10 +106,57 @@ button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;co
 <label>Select Network</label>
 
 <div class="networks">
-<div class="network active" onclick="chooseNetwork(this,'MTN')"><span>🟡</span>MTN</div>
-<div class="network" onclick="chooseNetwork(this,'Airtel')"><span>🔴</span>Airtel</div>
-<div class="network" onclick="chooseNetwork(this,'Glo')"><span>🟢</span>Glo</div>
-<div class="network" onclick="chooseNetwork(this,'9mobile')"><span>🟢</span>9mobile</div>
+
+<div class="network active"
+ onclick="chooseNetwork(this,'MTN')">
+
+<img
+ src="https://onlinecms.mtn.co.za/sites/default/files/design-system%2C%20vivid%2C%20images%2C%20icons/brand/mtn_logo_lg-sunshine.svg"
+ alt="MTN Logo"
+ onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+
+<span class="network-name" style="display:none">MTN</span>
+<span class="network-name">MTN</span>
+
+</div>
+
+<div class="network"
+ onclick="chooseNetwork(this,'Airtel')">
+
+<img
+ src="https://cdn.simpleicons.org/airtel/E40000"
+ alt="Airtel Logo"
+ onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+
+<span class="network-name" style="display:none">Airtel</span>
+<span class="network-name">Airtel</span>
+
+</div>
+
+<div class="network"
+ onclick="chooseNetwork(this,'Glo')">
+
+<img
+ src="https://commons.wikimedia.org/wiki/Special:FilePath/GloLogo.png"
+ alt="Glo Logo"
+ onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+
+<span class="network-name" style="display:none">Glo</span>
+<span class="network-name">Glo</span>
+
+</div>
+
+<div class="network"
+ onclick="chooseNetwork(this,'9mobile')">
+
+<div class="ninemobile-logo">
+<span>9</span>mobile
+</div>
+
+<span class="network-name">9mobile</span>
+
+</div>
+
 </div>
 
 <label>Phone Number</label>
