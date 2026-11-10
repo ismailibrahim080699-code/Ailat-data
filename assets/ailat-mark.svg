@@ -1,14 +1,31 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
 <defs>
- <linearGradient id="p" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a855f7"/><stop offset=".55" stop-color="#6d28d9"/><stop offset="1" stop-color="#35106f"/></linearGradient>
- <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe08a"/><stop offset="1" stop-color="#c58a16"/></linearGradient>
- <filter id="s" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#35106f" flood-opacity=".28"/></filter>
+ <linearGradient id="p" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c084fc"/><stop offset=".48" stop-color="#6d28d9"/><stop offset="1" stop-color="#35106f"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="0.9" y2="1"><stop stop-color="#fff7c2"/><stop offset=".18" stop-color="#f8d66d"/><stop offset=".42" stop-color="#d99a19"/><stop offset=".62" stop-color="#fff0a0"/><stop offset=".82" stop-color="#b87508"/><stop offset="1" stop-color="#ffe58a"/></linearGradient>
+ <linearGradient id="goldSide" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff0a0"/><stop offset=".5" stop-color="#c7830c"/><stop offset="1" stop-color="#7d4805"/></linearGradient>
+ <linearGradient id="silver" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".45" stop-color="#d8c9f5"/><stop offset="1" stop-color="#8b6cc1"/></linearGradient>
+ <radialGradient id="ruby"><stop stop-color="#ffd4ec"/><stop offset=".35" stop-color="#e879f9"/><stop offset="1" stop-color="#86198f"/></radialGradient>
+ <filter id="shadow" x="-35%" y="-35%" width="170%" height="180%"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#16052f" flood-opacity=".55"/></filter>
 </defs>
-<g filter="url(#s)">
- <path d="M72 58 120 27 168 58 158 91 120 73 82 91Z" fill="url(#g)" stroke="#a66c08" stroke-width="3" stroke-linejoin="round"/>
- <circle cx="72" cy="58" r="7" fill="#ffe08a"/><circle cx="120" cy="27" r="7" fill="#ffe08a"/><circle cx="168" cy="58" r="7" fill="#ffe08a"/>
- <path d="M37 198 100 82Q120 48 140 82L203 198H166L120 113 74 198Z" fill="url(#p)" stroke="#c084fc" stroke-width="4" stroke-linejoin="round"/>
- <rect x="103" y="151" width="12" height="24" rx="3" fill="#fff"/><rect x="121" y="138" width="12" height="37" rx="3" fill="#fff"/><rect x="139" y="124" width="12" height="51" rx="3" fill="#fff"/>
+<g filter="url(#shadow)">
+ <!-- Crown: sculpted gold band and five raised points -->
+ <path d="M57 67 Q53 61 59 57 L77 72 91 39 111 65 120 20 130 65 151 39 164 72 181 57 Q187 61 183 68 L174 103 Q120 119 66 103Z" fill="url(#gold)" stroke="#8b5708" stroke-width="3" stroke-linejoin="round"/>
+ <path d="M67 91 Q120 109 173 91 L168 108 Q120 126 72 108Z" fill="url(#goldSide)" stroke="#9b650d" stroke-width="2"/>
+ <path d="M61 67 78 81 91 47 111 73 120 29 130 73 151 47 164 81 181 67" fill="none" stroke="#fff6c8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/>
+ <path d="M71 94 Q120 111 169 94" fill="none" stroke="#fff1ad" stroke-width="2.5" opacity=".9"/>
+ <!-- Jewels and crown ornaments -->
+ <g fill="url(#ruby)" stroke="#7e1d65" stroke-width="1.4">
+  <path d="M116 82 120 75 124 82 120 89Z"/><path d="M88 83 92 76 96 83 92 90Z"/><path d="M144 83 148 76 152 83 148 90Z"/>
+ </g>
+ <g fill="#fff6c7"><circle cx="78" cy="64" r="2.4"/><circle cx="120" cy="27" r="2.8"/><circle cx="162" cy="64" r="2.4"/><circle cx="105" cy="99" r="2"/><circle cx="135" cy="99" r="2"/></g>
+ <path d="M76 108 Q120 121 164 108" fill="none" stroke="#fff2b2" stroke-width="2"/>
+ <!-- Main A mark -->
+ <path d="M37 198 100 82Q120 48 140 82L203 198H166L120 113 74 198Z" fill="url(#p)" stroke="#d8b4fe" stroke-width="4" stroke-linejoin="round"/>
+ <path d="M84 183 112 132 120 116 128 132 156 183" fill="none" stroke="#f3e8ff" stroke-width="2" opacity=".75"/>
+ <!-- Data bars -->
+ <rect x="103" y="151" width="12" height="24" rx="3" fill="url(#silver)"/><rect x="121" y="138" width="12" height="37" rx="3" fill="url(#silver)"/><rect x="139" y="124" width="12" height="51" rx="3" fill="url(#silver)"/>
+ <!-- Phone / connectivity detail -->
  <rect x="164" y="85" width="42" height="81" rx="9" fill="#1d103d" stroke="#c084fc" stroke-width="4" transform="rotate(12 185 125)"/>
  <path d="M177 118a13 13 0 1 0 26 0a13 13 0 1 0-26 0M190 105v26M177 118h26" fill="none" stroke="#d8b4fe" stroke-width="3" transform="rotate(12 190 118)"/>
-</g></svg>
+</g>
+</svg>
