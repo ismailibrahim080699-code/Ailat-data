@@ -88,7 +88,7 @@ a{
 
 <div class="card">
 <h3>Convert Airtime to Cash</h3>
-<p>Enter your airtime details below.</p>
+<p>This service is not available yet. You can preview the details, but no conversion request will be processed.</p>
 
 <form onsubmit="submitRequest(event)">
 
@@ -111,7 +111,7 @@ a{
  required
 >
 
-<label>Airtime Amount (₦)</label>
+<label>Requested Airtime Amount (₦)</label>
 <input
  type="number"
  id="amount"
@@ -120,19 +120,16 @@ a{
  max="1000000"
  step="1"
  required
- oninput="calculate()"
+
 >
 
 <div class="result">
-<p>Estimated Cash Value (Demo)</p>
-<h2 id="cash">₦0.00</h2>
-<p class="note">
-Illustrative estimate using a demo 80% rate.
-Actual rates may differ.
-</p>
+<p><strong>Service status</strong></p>
+<h2>Coming Soon</h2>
+<p class="note">No cash value or conversion rate is currently confirmed. Do not send airtime to anyone for this service.</p>
 </div>
 
-<button type="submit">Submit Request</button>
+<button type="submit">Review Details</button>
 
 </form>
 </div>
@@ -140,9 +137,7 @@ Actual rates may differ.
 <div class="card">
 <h3>Important Information</h3>
 <p class="note">
-This page is currently a demonstration only.
-It does not receive airtime or send money.
-Real conversion is not yet connected.
+This service is not active yet. A verified conversion partner and confirmed rates are still pending. Reviewing details does not submit a live request, receive airtime, or send money.
 </p>
 </div>
 
@@ -151,17 +146,6 @@ Real conversion is not yet connected.
 </div>
 
 <script>
-function calculate(){
- const amount=Number(document.getElementById("amount").value);
- const cash=amount*0.80;
-
- document.getElementById("cash").innerText=
- "₦"+cash.toLocaleString("en-NG",{
- minimumFractionDigits:2,
- maximumFractionDigits:2
- });
-}
-
 function submitRequest(event){
  event.preventDefault();
 
@@ -179,13 +163,10 @@ function submitRequest(event){
   return;
  }
 
- const cash=amount*0.80;
-
  const params=new URLSearchParams({
   network:network,
   phone:phone,
-  amount:String(amount),
-  cash:String(cash)
+  amount:String(amount)
  });
 
  window.location.href=
