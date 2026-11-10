@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4c1d95">
 <title>Airtime Order Summary - AILAT DATA</title>
-
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
 body{background:#f5f3ff;color:#29243c}
@@ -23,81 +22,108 @@ header .subtitle{color:#eee}
 .total{display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding:17px;border-radius:12px;background:#f3edff}
 .total strong{color:#6425c5;font-size:21px}
 .notice{background:#fff8e7;color:#805600;padding:14px;border-radius:11px;margin-top:20px;font-size:12px;line-height:1.6}
-button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;color:white;font-size:15px;font-weight:bold;margin-top:20px}
+button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;color:white;font-size:15px;font-weight:bold;margin-top:20px;cursor:pointer}
+button:disabled{opacity:.65;cursor:wait}
 .cancel{display:block;text-align:center;margin-top:18px;color:#6425c5;text-decoration:none;font-size:14px}
+#requestStatus{font-size:13px;line-height:1.6;margin-top:15px;overflow-wrap:anywhere}
+.error{color:#b42318;background:#fff0ef;padding:15px;border-radius:10px;line-height:1.6}
 </style>
 </head>
-
 <body>
 <div class="container">
-
 <header>
 <a href="airtime.html">‹</a>
 <h2>Order Summary</h2>
-<p class="subtitle">Review your airtime recharge details</p>
+<p class="subtitle">Review your airtime request details</p>
 </header>
-
 <div class="content">
-<div class="card">
+<div class="card" id="orderCard">
 <h3>Recharge Details</h3>
 <p class="subtitle">Please check that everything is correct.</p>
-
-<div class="item">
-<span>Network</span>
-<strong id="network">-</strong>
-</div>
-
-<div class="item">
-<span>Phone Number</span>
-<strong id="phone">-</strong>
-</div>
-
-<div class="total">
-<span>Total Amount</span>
-<strong id="amount">₦0.00</strong>
-</div>
-
+<div class="item"><span>Network</span><strong id="network">-</strong></div>
+<div class="item"><span>Phone Number</span><strong id="phone">-</strong></div>
+<div class="total"><span>Requested Amount</span><strong id="amount">₦0.00</strong></div>
 <div class="notice">
-<strong>Demo Notice:</strong> This is a recharge preview only. No money will be deducted and no airtime will be sent. Live payment and VTU integration are not yet enabled.
+<strong>Important:</strong> This step only records your request. No payment will be taken, no wallet balance will be deducted, and no airtime will be sent.
 </div>
-
-<button onclick="confirmOrder()">Confirm Details</button>
-
+<button id="confirmButton" type="button">Submit Airtime Request</button>
+<p id="requestStatus" role="status" aria-live="polite"></p>
 <a href="airtime.html" class="cancel">← Go Back and Edit</a>
 </div>
 </div>
 </div>
+<script type="module">
+import { app } from "./firebase.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
 
-<script>
-const params=new URLSearchParams(window.location.search);
+const SUPABASE_FUNCTION_URL = "https://bdogulpsybiggpgipdbt.supabase.co/functions/v1/ailat-order-requests";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_9wmzpjzVhnby_E3jogTjRw_c22XiDEC";
+const auth = getAuth(app);
+const params = new URLSearchParams(window.location.search);
+const network = params.get("network") || "";
+const phone = params.get("phone") || "";
+const amount = Number(params.get("amount"));
+const validNetworks = ["MTN","Airtel","Glo","9mobile"];
+const validPhone = /^0[789][01]\d{8}$/;
+const validAmount = Number.isSafeInteger(amount) && amount >= 50 && amount <= 100000;
+const button = document.getElementById("confirmButton");
+const statusBox = document.getElementById("requestStatus");
+let requestKey = crypto.randomUUID();
+let requestSaved = false;
 
-const network=params.get('network')||'';
-const phone=params.get('phone')||'';
-const amount=params.get('amount')||'';
-
-const validNetworks=['MTN','Airtel','Glo','9mobile'];
-const numericAmount=Number(amount);
-
-if(
- !validNetworks.includes(network) ||
- !/^0[0-9]{10}$/.test(phone) ||
- !Number.isSafeInteger(numericAmount) ||
- numericAmount<50 ||
- numericAmount>1000000
-){
- document.querySelector('.card').innerHTML=
- '<h3>Invalid Order Details</h3><p class="subtitle">Please go back and enter your network, phone number and amount again.</p><a class="cancel" href="airtime.html">← Back to Buy Airtime</a>';
+if(!validNetworks.includes(network) || !validPhone.test(phone) || !validAmount){
+ document.getElementById("orderCard").innerHTML =
+  '<div class="error"><h3>Invalid Order Details</h3><p class="subtitle">Please go back and enter a valid network, phone number and amount.</p></div><a class="cancel" href="airtime.html">← Back to Buy Airtime</a>';
 }else{
- document.getElementById('network').textContent=network;
- document.getElementById('phone').textContent=phone;
- document.getElementById('amount').textContent=
- '₦'+numericAmount.toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2});
+ document.getElementById("network").textContent = network;
+ document.getElementById("phone").textContent = phone;
+ document.getElementById("amount").textContent = "₦" + amount.toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 
-function confirmOrder(){
- alert('Your airtime details have been checked. Live payment and airtime delivery are not yet available.');
+function getSignedInUser(){
+ return new Promise((resolve,reject)=>{
+  const unsubscribe = onAuthStateChanged(auth,user=>{
+   unsubscribe();
+   if(!user){ reject(new Error("Please log in to submit an airtime request.")); return; }
+   resolve(user);
+  },error=>{ unsubscribe(); reject(error); });
+ });
 }
+
+button.addEventListener("click",async()=>{
+ if(requestSaved || !validNetworks.includes(network) || !validPhone.test(phone) || !validAmount) return;
+ button.disabled = true;
+ button.textContent = "Submitting request...";
+ statusBox.textContent = "Please wait while your request is securely recorded.";
+ try{
+  const user = await getSignedInUser();
+  await user.reload();
+  if(!user.emailVerified) throw new Error("Please verify your email before submitting an airtime request.");
+  const token = await user.getIdToken(true);
+  const response = await fetch(SUPABASE_FUNCTION_URL,{
+   method:"POST",
+   headers:{
+    "apikey":SUPABASE_PUBLISHABLE_KEY,
+    "Authorization":"Bearer " + token,
+    "Content-Type":"application/json"
+   },
+   body:JSON.stringify({
+    service_key:"airtime",
+    idempotency_key:requestKey,
+    customer_data:{network,phone,amount}
+   })
+  });
+  const result = await response.json().catch(()=>({}));
+  if(!response.ok || !result.success) throw new Error(result.error || "Could not save your request. Please try again.");
+  requestSaved = true;
+  button.textContent = "Request Recorded";
+  statusBox.textContent = "Your request has been recorded. Reference: " + result.order_request.reference + ". Status: " + result.order_request.status + ". No payment was taken and no airtime was sent.";
+ }catch(error){
+  button.disabled = false;
+  button.textContent = "Try Again";
+  statusBox.textContent = error.message || "Something went wrong. Please try again.";
+ }
+});
 </script>
-
 </body>
 </html>
