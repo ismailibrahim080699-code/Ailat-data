@@ -56,7 +56,7 @@ button{
 <header>
 <a href="airtime_to_cash.html">‹</a>
 <h2>Order Summary</h2>
-<p class="subtitle">Review your airtime conversion details</p>
+<p class="subtitle">Review the details you entered</p>
 </header>
 
 <div class="content">
@@ -81,13 +81,13 @@ button{
 </div>
 
 <div class="total">
-<span>Estimated Cash Value</span>
-<strong id="cash">₦0.00</strong>
+<span>Service Status</span>
+<strong>Coming Soon</strong>
 </div>
 
 <div class="notice">
 <strong>Demo Notice:</strong>
-This is only a preview. No airtime will be received and no money will be sent. The 80% rate is illustrative only. Real conversion is not yet available.
+This is only a review of the details you entered. Airtime to Cash is not active yet because no verified conversion partner or confirmed rate is connected. No airtime will be received and no money will be sent. Do not transfer airtime to anyone.
 </div>
 
 <button onclick="confirmOrder()">Confirm Details</button>
@@ -104,8 +104,6 @@ const params=new URLSearchParams(window.location.search);
 const network=params.get("network")||"";
 const phone=params.get("phone")||"";
 const amount=Number(params.get("amount"));
-const cash=Number(params.get("cash"));
-
 const validNetworks=["MTN","Airtel","Glo","9mobile"];
 
 if(
@@ -113,9 +111,7 @@ if(
  !/^0[0-9]{10}$/.test(phone) ||
  !Number.isSafeInteger(amount) ||
  amount<100 ||
- amount>1000000 ||
- !Number.isFinite(cash) ||
- cash!==amount*0.80
+ amount>1000000
 ){
  document.querySelector(".card").innerHTML=`
  <h3>Invalid Order Details</h3>
@@ -131,14 +127,10 @@ if(
  minimumFractionDigits:2,maximumFractionDigits:2
  });
 
- document.getElementById("cash").textContent=
- "₦"+cash.toLocaleString("en-NG",{
- minimumFractionDigits:2,maximumFractionDigits:2
- });
 }
 
 function confirmOrder(){
- alert("Demo only: Your details have been reviewed. No airtime conversion or money transfer has taken place.");
+ alert("Airtime to Cash is not active yet. No request was submitted, no airtime was received, and no money was sent.");
 }
 </script>
 
