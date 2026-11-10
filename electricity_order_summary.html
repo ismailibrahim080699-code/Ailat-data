@@ -56,14 +56,14 @@ button{
 <header>
 <a href="electricity.html">‹</a>
 <h2>Order Summary</h2>
-<p class="subtitle">Review your electricity payment details</p>
+<p class="subtitle">Electricity service availability</p>
 </header>
 
 <div class="content">
 <div class="card">
 
-<h3>Electricity Details</h3>
-<p class="subtitle">Please check your information below.</p>
+<h3>Electricity Payment — Coming Soon</h3>
+<p class="subtitle">This service is not active yet.</p>
 
 <div class="item">
 <span>Provider</span>
@@ -81,16 +81,16 @@ button{
 </div>
 
 <div class="total">
-<span>Total Amount</span>
+<span>Requested Amount</span>
 <strong id="amount">₦0.00</strong>
 </div>
 
 <div class="notice">
-<strong>Demo Notice:</strong>
-This is only an order preview. No electricity payment will be made and no meter will be credited. Live payment and meter verification are not yet connected.
+<strong>Service Notice:</strong>
+AILAT DATA is not currently accepting electricity payment requests. Provider verification, meter validation and payment processing are not connected. No payment has been made and no meter will be credited. Do not send money to anyone for this service.
 </div>
 
-<button onclick="confirmOrder()">Confirm Details</button>
+<button onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
 
 <a href="electricity.html" class="cancel">← Go Back and Edit</a>
 
@@ -133,9 +133,7 @@ if(
  });
 }
 
-function confirmOrder(){
- alert("Demo only: Your electricity details have been reviewed. No payment has been made and no meter has been credited.");
-}
+
 </script>
 
 </body>
