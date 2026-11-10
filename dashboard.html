@@ -52,9 +52,7 @@ header:after{width:130px;height:130px;right:95px;bottom:-95px}
  color:white;border-radius:12px;padding:10px 12px;
  font-size:20px;cursor:pointer;
 }
-.header-welcome{
- position:relative;z-index:1;margin-top:24px;
-}
+.header-welcome{position:relative;z-index:1;margin-top:24px}
 .header-welcome h2{font-size:21px;margin:0 0 7px}
 .header-welcome p{font-size:12px;margin:0;opacity:.85}
 
@@ -121,15 +119,17 @@ header:after{width:130px;height:130px;right:95px;bottom:-95px}
 }
 .service:active{transform:scale(.96)}
 .service .icon{
- width:47px;height:47px;border-radius:15px;
- background:#f0eaff;display:flex;
- align-items:center;justify-content:center;
- font-size:25px;margin-bottom:10px;
+ width:48px;height:48px;border-radius:15px;
+ background:linear-gradient(135deg,#f0eaff,#ddd6fe);
+ display:flex;align-items:center;justify-content:center;
+ color:#6d28d9;margin-bottom:10px;
+}
+.service .icon svg{
+ width:25px;height:25px;stroke-width:2;
 }
 .service p{
  margin:0;font-size:11px;font-weight:800;line-height:1.4;
 }
-
 .info-card{
  background:white;border:1px solid #eee7ff;
  border-radius:17px;padding:17px;margin-top:23px;
@@ -137,12 +137,10 @@ header:after{width:130px;height:130px;right:95px;bottom:-95px}
 }
 .info-card h3{font-size:14px;margin:0 0 8px}
 .info-card p{font-size:12px;color:#8879a4;line-height:1.6;margin:0}
-
 footer{
  text-align:center;color:#9589ac;font-size:11px;
  padding:30px 10px;line-height:1.8;
 }
-
 .menu-overlay{
  position:fixed;inset:0;background:#160b2e99;
  backdrop-filter:blur(4px);z-index:10;display:none;
@@ -185,18 +183,21 @@ footer{
 }
 .menu-links{padding-top:12px}
 .menu-links a{
- display:block;padding:15px 11px;color:#4c1d95;
+ display:flex;align-items:center;gap:12px;
+ padding:15px 11px;color:#4c1d95;
  text-decoration:none;border-bottom:1px solid #f0ebf7;
  font-size:13px;font-weight:700;border-radius:9px;
 }
+.menu-links a svg{width:19px;height:19px}
 .menu-links a:active{background:#f0eaff}
 .logout{
- display:block;width:100%;padding:14px;margin-top:22px;
+ display:flex;align-items:center;justify-content:center;
+ gap:9px;width:100%;padding:14px;margin-top:22px;
  background:linear-gradient(135deg,#dc2626,#ef4444);
  color:white;border:0;border-radius:11px;
  font-size:14px;font-weight:bold;
 }
-
+.logout svg{width:18px;height:18px}
 @media(max-width:360px){
  .services{gap:9px}
  .service{min-height:105px;padding:13px 3px}
@@ -212,20 +213,19 @@ footer{
 <header>
  <div class="topbar">
   <button class="profile-button" onclick="openAccountMenu()">
-   <span id="defaultIcon">👤</span>
+   <i data-lucide="user-round" id="defaultIcon"></i>
    <img id="topPhoto" alt="Profile">
   </button>
-
   <div class="brand">
    AILAT DATA
    <small>SMART DIGITAL SERVICES</small>
   </div>
-
   <div class="header-right">
-   <button class="menu-trigger" onclick="openAccountMenu()">☰</button>
+   <button class="menu-trigger" onclick="openAccountMenu()">
+    <i data-lucide="menu"></i>
+   </button>
   </div>
  </div>
-
  <div class="header-welcome">
   <h2 id="welcome">Welcome to your dashboard</h2>
   <p>Fast, Easy and Reliable Services</p>
@@ -238,18 +238,22 @@ footer{
   <div class="wallet-top">
    <span class="wallet-label">My Wallet Balance</span>
    <div class="wallet-actions">
-    <button class="wallet-icon" id="toggleBalance" title="Hide balance">◉</button>
-    <button class="wallet-icon" id="refreshWallet" title="Refresh wallet">↻</button>
+    <button class="wallet-icon" id="toggleBalance" title="Hide balance">
+     <i data-lucide="eye"></i>
+    </button>
+    <button class="wallet-icon" id="refreshWallet" title="Refresh wallet">
+     <i data-lucide="refresh-cw"></i>
+    </button>
    </div>
   </div>
-
   <div class="balance" id="walletBalance">Loading...</div>
-
   <div class="wallet-bottom">
    <small>Available Wallet Balance</small>
-   <button class="fund-button" onclick="fundWallet()">＋ Fund Wallet</button>
+   <button class="fund-button" onclick="fundWallet()">
+    <i data-lucide="plus" style="width:14px;height:14px;vertical-align:middle"></i>
+    Fund Wallet
+   </button>
   </div>
-
   <div class="wallet-status" id="walletStatus">
    Connecting to wallet...
   </div>
@@ -262,35 +266,43 @@ footer{
 
  <div class="services">
   <a class="service" href="data.html">
-   <div class="icon">📶</div><p>Buy Data</p>
+   <div class="icon"><i data-lucide="wifi"></i></div>
+   <p>Buy Data</p>
   </a>
 
   <a class="service" href="airtime.html">
-   <div class="icon">📱</div><p>Buy Airtime</p>
+   <div class="icon"><i data-lucide="smartphone"></i></div>
+   <p>Buy Airtime</p>
   </a>
 
   <a class="service" href="airtime_to_cash.html">
-   <div class="icon">💸</div><p>Airtime to Cash</p>
+   <div class="icon"><i data-lucide="wallet"></i></div>
+   <p>Airtime to Cash</p>
   </a>
 
   <a class="service" href="electricity.html">
-   <div class="icon">💡</div><p>Electricity</p>
+   <div class="icon"><i data-lucide="lightbulb"></i></div>
+   <p>Electricity</p>
   </a>
 
   <a class="service" href="tv.html">
-   <div class="icon">📺</div><p>TV Subscription</p>
+   <div class="icon"><i data-lucide="tv"></i></div>
+   <p>TV Subscription</p>
   </a>
 
   <a class="service" href="exam_result.html">
-   <div class="icon">🎓</div><p>Exam PIN</p>
+   <div class="icon"><i data-lucide="graduation-cap"></i></div>
+   <p>Exam PIN</p>
   </a>
 
   <a class="service" href="referral.html">
-   <div class="icon">🎁</div><p>Referral</p>
+   <div class="icon"><i data-lucide="gift"></i></div>
+   <p>Referral</p>
   </a>
 
   <a class="service" href="transaction_history.html">
-   <div class="icon">📋</div><p>Transactions</p>
+   <div class="icon"><i data-lucide="receipt-text"></i></div>
+   <p>Transactions</p>
   </a>
  </div>
 
@@ -298,7 +310,6 @@ footer{
   <h3>Welcome to AILAT DATA</h3>
   <p>Manage your digital services and transactions from one convenient dashboard.</p>
  </section>
-
 </div>
 
 <footer>
@@ -310,20 +321,22 @@ footer{
  onclick="closeAccountMenu()"></div>
 
 <div class="account-menu" id="accountMenu">
- <button class="close-menu" onclick="closeAccountMenu()">✕</button>
+ <button class="close-menu" onclick="closeAccountMenu()">
+  <i data-lucide="x"></i>
+ </button>
 
  <div class="menu-profile">
   <div class="menu-avatar">
-   <span id="menuDefaultIcon">👤</span>
+   <i data-lucide="user-round" id="menuDefaultIcon"></i>
    <img id="menuPhoto" alt="Profile">
   </div>
-
   <h3 id="menuName">My Account</h3>
   <small>AILAT DATA Member</small><br>
 
   <button class="change-photo"
    onclick="document.getElementById('photoInput').click()">
-   📷 Change Profile Photo
+   <i data-lucide="camera" style="width:15px;height:15px;vertical-align:middle"></i>
+   Change Profile Photo
   </button>
 
   <input type="file" id="photoInput" accept="image/*" hidden>
@@ -332,14 +345,21 @@ footer{
  </div>
 
  <div class="menu-links">
-  <a href="profile.html">👤 My Profile</a>
-  <a href="referral.html">🎁 My Referral</a>
-  <a href="transaction_history.html">📋 Transaction History</a>
-  <a href="dashboard.html">🏠 Dashboard</a>
+  <a href="profile.html"><i data-lucide="user"></i>My Profile</a>
+  <a href="referral.html"><i data-lucide="gift"></i>My Referral</a>
+  <a href="transaction_history.html"><i data-lucide="receipt"></i>Transaction History</a>
+  <a href="dashboard.html"><i data-lucide="house"></i>Dashboard</a>
  </div>
 
- <button class="logout" id="logoutBtn">Logout</button>
+ <button class="logout" id="logoutBtn">
+  <i data-lucide="log-out"></i> Logout
+ </button>
 </div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+</script>
 
 <script type="module">
 
@@ -419,7 +439,6 @@ async function loadWalletFromBackend(user){
   });
 
   const raw = await response.text();
-
   let result;
 
   try{
@@ -429,9 +448,7 @@ async function loadWalletFromBackend(user){
   }
 
   if(!response.ok || !result.success){
-   throw new Error(
-    result.error || "Wallet connection failed. HTTP " + response.status
-   );
+   throw new Error(result.error || "Wallet connection failed.");
   }
 
   showWalletBalance(result.wallet?.balance ?? 0);
@@ -474,9 +491,7 @@ onAuthStateChanged(auth,async(user)=>{
    const userData = userSnap.data();
    const name = userData.name || "User";
 
-   document.getElementById("welcome").textContent =
-    "Welcome, " + name;
-
+   document.getElementById("welcome").textContent = "Welcome, " + name;
    document.getElementById("menuName").textContent = name;
   }
 
@@ -510,8 +525,12 @@ document.getElementById("toggleBalance").addEventListener("click",()=>{
  balanceHidden = !balanceHidden;
  renderBalance();
 
- document.getElementById("toggleBalance").textContent =
-  balanceHidden ? "◎" : "◉";
+ const button = document.getElementById("toggleBalance");
+ button.innerHTML = balanceHidden
+  ? '<i data-lucide="eye-off"></i>'
+  : '<i data-lucide="eye"></i>';
+
+ if(window.lucide) lucide.createIcons();
 });
 
 window.fundWallet = function(){
@@ -541,7 +560,6 @@ function displayPhoto(photo){
 function resetPhotoDisplay(){
  document.getElementById("topPhoto").style.display = "none";
  document.getElementById("defaultIcon").style.display = "block";
-
  document.getElementById("menuPhoto").style.display = "none";
  document.getElementById("menuDefaultIcon").style.display = "block";
 }
@@ -549,11 +567,8 @@ function resetPhotoDisplay(){
 function loadSavedPhoto(uid){
  const savedPhoto = localStorage.getItem("ailatPhoto_" + uid);
 
- if(savedPhoto){
-  displayPhoto(savedPhoto);
- }else{
-  resetPhotoDisplay();
- }
+ if(savedPhoto) displayPhoto(savedPhoto);
+ else resetPhotoDisplay();
 }
 
 document.getElementById("photoInput").addEventListener("change",function(event){
@@ -624,9 +639,7 @@ document.getElementById("photoInput").addEventListener("change",function(event){
 document.getElementById("removePhoto").addEventListener("click",function(){
  const user = auth.currentUser;
 
- if(user){
-  localStorage.removeItem("ailatPhoto_" + user.uid);
- }
+ if(user) localStorage.removeItem("ailatPhoto_" + user.uid);
 
  resetPhotoDisplay();
  alert("Profile photo removed.");
