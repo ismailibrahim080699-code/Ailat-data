@@ -4,111 +4,203 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AILAT DATA Dashboard</title>
+<meta name="theme-color" content="#4c1d95">
+<title>AILAT DATA | Dashboard</title>
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f5f3ff;color:#24134d}
+body{
+ margin:0;font-family:Arial,sans-serif;
+ background:#f5f3ff;color:#24134d;
+}
+button,a{-webkit-tap-highlight-color:transparent}
 header{
- background:linear-gradient(135deg,#4c1d95,#6d28d9,#7c3aed);
- color:white;padding:23px 18px 32px;border-radius:0 0 28px 28px;
- box-shadow:0 8px 25px #4c1d9525;position:relative;overflow:hidden;
+ background:linear-gradient(135deg,#35106f,#5b21b6,#7c3aed);
+ color:white;padding:23px 19px 38px;
+ border-radius:0 0 30px 30px;
+ box-shadow:0 10px 30px #4c1d9530;
+ position:relative;overflow:hidden;
 }
-header:before{
- content:"";position:absolute;width:180px;height:180px;
- border-radius:50%;background:#ffffff10;right:-55px;top:-75px;
+header:before,header:after{
+ content:"";position:absolute;border-radius:50%;
+ background:#ffffff0c;pointer-events:none;
 }
-header:after{
- content:"";position:absolute;width:110px;height:110px;
- border-radius:50%;background:#ffffff0c;right:75px;bottom:-75px;
+header:before{width:210px;height:210px;right:-70px;top:-105px}
+header:after{width:130px;height:130px;right:95px;bottom:-95px}
+.topbar{
+ display:flex;align-items:center;gap:13px;
+ position:relative;z-index:1;
 }
-.topbar{display:flex;align-items:center;gap:15px;position:relative;z-index:1}
 .profile-button{
- width:52px;height:52px;border:2px solid #ffffffcc;border-radius:50%;
- background:#ede9fe;color:#5b21b6;font-size:25px;display:flex;
- align-items:center;justify-content:center;cursor:pointer;overflow:hidden;
+ width:52px;height:52px;border:2px solid #ffffffcc;
+ border-radius:50%;background:#ede9fe;color:#5b21b6;
+ font-size:24px;display:flex;align-items:center;
+ justify-content:center;cursor:pointer;overflow:hidden;
  padding:0;flex-shrink:0;
 }
-.profile-button img{width:100%;height:100%;object-fit:cover;display:none}
+.profile-button img,.menu-avatar img{
+ width:100%;height:100%;object-fit:cover;display:none;
+}
 .brand{font-size:23px;font-weight:900;letter-spacing:1px}
-header p{margin:13px 0 0;font-size:13px;opacity:.95;position:relative;z-index:1}
-header p:last-child{font-size:12px;opacity:.8}
-.container{padding:20px 17px;max-width:650px;margin:auto}
+.brand small{
+ display:block;font-size:9px;font-weight:500;
+ letter-spacing:2px;margin-top:4px;opacity:.8;
+}
+.header-right{margin-left:auto}
+.menu-trigger{
+ border:1px solid #ffffff50;background:#ffffff18;
+ color:white;border-radius:12px;padding:10px 12px;
+ font-size:20px;cursor:pointer;
+}
+.header-welcome{
+ position:relative;z-index:1;margin-top:24px;
+}
+.header-welcome h2{font-size:21px;margin:0 0 7px}
+.header-welcome p{font-size:12px;margin:0;opacity:.85}
+
+.container{padding:19px 16px;max-width:680px;margin:auto}
+
 .wallet{
- background:linear-gradient(135deg,#ffffff,#f7f3ff);padding:23px;
- border-radius:21px;margin-top:-4px;box-shadow:0 7px 22px #4c1d9512;
- border:1px solid #eee7ff;position:relative;overflow:hidden;
+ background:linear-gradient(135deg,#35106f,#5b21b6,#7c3aed);
+ color:white;padding:22px;border-radius:23px;
+ margin-top:-3px;position:relative;overflow:hidden;
+ box-shadow:0 12px 28px #4c1d9528;
 }
 .wallet:after{
- content:"";position:absolute;width:115px;height:115px;border-radius:50%;
- background:#ede9fe;right:-38px;top:-45px;opacity:.65;
+ content:"";position:absolute;width:155px;height:155px;
+ border-radius:50%;background:#ffffff0b;
+ right:-45px;top:-65px;
 }
-.wallet p{color:#777;margin:0;font-size:13px;font-weight:600;position:relative;z-index:1}
-.balance{font-size:31px;font-weight:900;margin:12px 0 17px;color:#5b21b6;letter-spacing:.3px;position:relative;z-index:1}
-.wallet button{
- background:linear-gradient(135deg,#6d28d9,#7c3aed);color:white;
- border:0;padding:12px 20px;border-radius:11px;font-weight:bold;
- font-size:13px;cursor:pointer;position:relative;z-index:1;
+.wallet-top{
+ display:flex;justify-content:space-between;
+ align-items:center;position:relative;z-index:1;
 }
-.wallet button:active{transform:scale(.96)}
-h3{margin:28px 0 16px;font-size:17px;font-weight:800;color:#35146c}
-.services{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.wallet-label{font-size:13px;opacity:.9;font-weight:600}
+.wallet-actions{display:flex;gap:8px}
+.wallet-icon{
+ border:1px solid #ffffff45;background:#ffffff17;
+ color:white;width:35px;height:35px;border-radius:10px;
+ font-size:16px;cursor:pointer;
+}
+.balance{
+ font-size:32px;font-weight:900;margin:17px 0 20px;
+ letter-spacing:.3px;position:relative;z-index:1;
+}
+.wallet-bottom{
+ display:flex;align-items:center;justify-content:space-between;
+ gap:10px;position:relative;z-index:1;
+}
+.wallet-bottom small{font-size:10px;opacity:.8}
+.fund-button{
+ background:white;color:#5b21b6;border:0;
+ padding:12px 17px;border-radius:11px;
+ font-size:12px;font-weight:800;cursor:pointer;
+}
+.wallet-status{font-size:11px;margin-top:12px;opacity:.85}
+
+.section-heading{
+ display:flex;justify-content:space-between;
+ align-items:center;margin:28px 1px 15px;
+}
+.section-heading h3{margin:0;font-size:17px;font-weight:900}
+.section-heading span{font-size:11px;color:#8b75b3}
+
+.services{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:12px;
+}
 .service{
- background:linear-gradient(145deg,#ffffff,#fbfaff);border-radius:18px;
- padding:19px 5px 17px;text-align:center;text-decoration:none;
- color:#24134d;box-shadow:0 5px 15px #0000000a;border:1px solid #eee9fb;
- transition:transform .2s;min-height:105px;display:flex;
- flex-direction:column;align-items:center;justify-content:center;
+ background:linear-gradient(145deg,#fff,#fbfaff);
+ border:1px solid #eee7ff;border-radius:18px;
+ min-height:112px;padding:17px 5px 14px;
+ display:flex;flex-direction:column;align-items:center;
+ justify-content:center;text-align:center;
+ color:#35146c;text-decoration:none;
+ box-shadow:0 5px 15px #35106f0b;
+ transition:transform .2s,box-shadow .2s;
 }
-.service:active{transform:scale(.95)}
-.icon{font-size:29px;margin-bottom:11px}
-.service p{font-size:11.5px;font-weight:800;margin:0;line-height:1.4}
-footer{text-align:center;color:#999;font-size:12px;padding:28px 10px;line-height:1.8}
+.service:active{transform:scale(.96)}
+.service .icon{
+ width:47px;height:47px;border-radius:15px;
+ background:#f0eaff;display:flex;
+ align-items:center;justify-content:center;
+ font-size:25px;margin-bottom:10px;
+}
+.service p{
+ margin:0;font-size:11px;font-weight:800;line-height:1.4;
+}
+
+.info-card{
+ background:white;border:1px solid #eee7ff;
+ border-radius:17px;padding:17px;margin-top:23px;
+ box-shadow:0 5px 15px #35106f08;
+}
+.info-card h3{font-size:14px;margin:0 0 8px}
+.info-card p{font-size:12px;color:#8879a4;line-height:1.6;margin:0}
+
+footer{
+ text-align:center;color:#9589ac;font-size:11px;
+ padding:30px 10px;line-height:1.8;
+}
+
 .menu-overlay{
- position:fixed;inset:0;background:#160b2e99;backdrop-filter:blur(3px);
- z-index:10;display:none;
+ position:fixed;inset:0;background:#160b2e99;
+ backdrop-filter:blur(4px);z-index:10;display:none;
 }
 .menu-overlay.show{display:block}
 .account-menu{
- position:fixed;top:0;left:0;width:285px;max-width:85%;height:100%;
- background:linear-gradient(180deg,#ffffff,#faf8ff);z-index:11;
+ position:fixed;top:0;left:0;width:290px;max-width:86%;
+ height:100%;background:#fff;z-index:11;
  padding:22px 18px;transform:translateX(-110%);
- transition:transform .28s ease;box-shadow:5px 0 25px #0003;overflow-y:auto;
+ transition:transform .28s ease;
+ box-shadow:5px 0 25px #0003;overflow-y:auto;
 }
 .account-menu.open{transform:translateX(0)}
-.menu-profile{text-align:center;padding:38px 0 23px;border-bottom:1px solid #eee8fa}
+.close-menu{
+ position:absolute;top:15px;right:15px;
+ border:0;background:#f1ebff;color:#5b21b6;
+ padding:9px 12px;border-radius:9px;font-size:17px;
+}
+.menu-profile{
+ text-align:center;padding:38px 0 21px;
+ border-bottom:1px solid #eee8fa;
+}
 .menu-avatar{
  width:88px;height:88px;margin:auto;border-radius:50%;
- background:linear-gradient(135deg,#ede9fe,#ddd0ff);color:#5b21b6;
- display:flex;align-items:center;justify-content:center;font-size:42px;
- overflow:hidden;border:3px solid white;
+ background:linear-gradient(135deg,#ede9fe,#ddd0ff);
+ color:#5b21b6;display:flex;align-items:center;
+ justify-content:center;font-size:40px;overflow:hidden;
+ border:3px solid white;box-shadow:0 3px 15px #5b21b625;
 }
-.menu-avatar img{width:100%;height:100%;object-fit:cover;display:none}
 .menu-profile h3{margin:14px 0 5px;font-size:18px}
+.menu-profile small{font-size:11px;color:#998bad}
 .change-photo{
- border:0;background:#ede9fe;color:#5b21b6;padding:11px 15px;
- border-radius:10px;margin-top:10px;font-weight:bold;font-size:12px;
+ border:0;background:#ede9fe;color:#5b21b6;
+ padding:11px 15px;border-radius:10px;
+ margin-top:13px;font-weight:bold;font-size:12px;
 }
-.remove-photo{border:0;background:white;color:#dc2626;padding:10px;margin-top:5px;font-size:12px}
-.menu-links{padding-top:10px}
+.remove-photo{
+ border:0;background:white;color:#dc2626;
+ padding:10px;margin-top:5px;font-size:12px;
+}
+.menu-links{padding-top:12px}
 .menu-links a{
- display:block;padding:15px 11px;color:#4c1d95;text-decoration:none;
- border-bottom:1px solid #eeeaf5;font-size:13px;font-weight:600;border-radius:9px;
+ display:block;padding:15px 11px;color:#4c1d95;
+ text-decoration:none;border-bottom:1px solid #f0ebf7;
+ font-size:13px;font-weight:700;border-radius:9px;
 }
 .menu-links a:active{background:#f0eaff}
-.close-menu{
- position:absolute;top:15px;right:15px;border:0;background:#f3f0ff;
- color:#5b21b6;padding:9px 12px;border-radius:9px;font-size:17px;
-}
 .logout{
  display:block;width:100%;padding:14px;margin-top:22px;
- background:linear-gradient(135deg,#dc2626,#ef4444);color:white;
- border:0;border-radius:11px;font-size:14px;font-weight:bold;
+ background:linear-gradient(135deg,#dc2626,#ef4444);
+ color:white;border:0;border-radius:11px;
+ font-size:14px;font-weight:bold;
 }
+
 @media(max-width:360px){
  .services{gap:9px}
- .service{padding:15px 3px}
- .service p{font-size:10.5px}
+ .service{min-height:105px;padding:13px 3px}
+ .service p{font-size:10px}
  .brand{font-size:20px}
  .balance{font-size:28px}
 }
@@ -123,32 +215,90 @@ footer{text-align:center;color:#999;font-size:12px;padding:28px 10px;line-height
    <span id="defaultIcon">👤</span>
    <img id="topPhoto" alt="Profile">
   </button>
-  <div class="brand">AILAT DATA</div>
+
+  <div class="brand">
+   AILAT DATA
+   <small>SMART DIGITAL SERVICES</small>
+  </div>
+
+  <div class="header-right">
+   <button class="menu-trigger" onclick="openAccountMenu()">☰</button>
+  </div>
  </div>
- <p id="welcome">Welcome to your dashboard</p>
- <p>Fast, Easy and Reliable Services</p>
+
+ <div class="header-welcome">
+  <h2 id="welcome">Welcome to your dashboard</h2>
+  <p>Fast, Easy and Reliable Services</p>
+ </div>
 </header>
 
 <div class="container">
- <div class="wallet">
-  <p>My Wallet Balance</p>
-  <div class="balance" id="walletBalance">₦0.00</div>
-  <button onclick="alert('Wallet funding is not available yet.')">
-   + Fund Wallet
-  </button>
+
+ <section class="wallet">
+  <div class="wallet-top">
+   <span class="wallet-label">My Wallet Balance</span>
+   <div class="wallet-actions">
+    <button class="wallet-icon" id="toggleBalance" title="Hide balance">◉</button>
+    <button class="wallet-icon" id="refreshWallet" title="Refresh wallet">↻</button>
+   </div>
+  </div>
+
+  <div class="balance" id="walletBalance">Loading...</div>
+
+  <div class="wallet-bottom">
+   <small>Available Wallet Balance</small>
+   <button class="fund-button" onclick="fundWallet()">＋ Fund Wallet</button>
+  </div>
+
+  <div class="wallet-status" id="walletStatus">
+   Connecting to wallet...
+  </div>
+ </section>
+
+ <div class="section-heading">
+  <h3>Our Services</h3>
+  <span>Choose a service</span>
  </div>
 
- <h3>Our Services</h3>
  <div class="services">
-  <a class="service" href="data.html"><div class="icon">📶</div><p>Buy Data</p></a>
-  <a class="service" href="airtime.html"><div class="icon">📱</div><p>Buy Airtime</p></a>
-  <a class="service" href="airtime_to_cash.html"><div class="icon">💸</div><p>Airtime to Cash</p></a>
-  <a class="service" href="electricity.html"><div class="icon">💡</div><p>Electricity</p></a>
-  <a class="service" href="tv.html"><div class="icon">📺</div><p>TV Subscription</p></a>
-  <a class="service" href="exam_result.html"><div class="icon">🎓</div><p>Exam PIN</p></a>
-  <a class="service" href="referral.html"><div class="icon">🎁</div><p>Referral</p></a>
-  <a class="service" href="transaction_history.html"><div class="icon">📋</div><p>Transactions</p></a>
+  <a class="service" href="data.html">
+   <div class="icon">📶</div><p>Buy Data</p>
+  </a>
+
+  <a class="service" href="airtime.html">
+   <div class="icon">📱</div><p>Buy Airtime</p>
+  </a>
+
+  <a class="service" href="airtime_to_cash.html">
+   <div class="icon">💸</div><p>Airtime to Cash</p>
+  </a>
+
+  <a class="service" href="electricity.html">
+   <div class="icon">💡</div><p>Electricity</p>
+  </a>
+
+  <a class="service" href="tv.html">
+   <div class="icon">📺</div><p>TV Subscription</p>
+  </a>
+
+  <a class="service" href="exam_result.html">
+   <div class="icon">🎓</div><p>Exam PIN</p>
+  </a>
+
+  <a class="service" href="referral.html">
+   <div class="icon">🎁</div><p>Referral</p>
+  </a>
+
+  <a class="service" href="transaction_history.html">
+   <div class="icon">📋</div><p>Transactions</p>
+  </a>
  </div>
+
+ <section class="info-card">
+  <h3>Welcome to AILAT DATA</h3>
+  <p>Manage your digital services and transactions from one convenient dashboard.</p>
+ </section>
+
 </div>
 
 <footer>
@@ -156,7 +306,8 @@ footer{text-align:center;color:#999;font-size:12px;padding:28px 10px;line-height
  All Rights Reserved
 </footer>
 
-<div class="menu-overlay" id="menuOverlay" onclick="closeAccountMenu()"></div>
+<div class="menu-overlay" id="menuOverlay"
+ onclick="closeAccountMenu()"></div>
 
 <div class="account-menu" id="accountMenu">
  <button class="close-menu" onclick="closeAccountMenu()">✕</button>
@@ -166,10 +317,15 @@ footer{text-align:center;color:#999;font-size:12px;padding:28px 10px;line-height
    <span id="menuDefaultIcon">👤</span>
    <img id="menuPhoto" alt="Profile">
   </div>
+
   <h3 id="menuName">My Account</h3>
-  <button class="change-photo" onclick="document.getElementById('photoInput').click()">
+  <small>AILAT DATA Member</small><br>
+
+  <button class="change-photo"
+   onclick="document.getElementById('photoInput').click()">
    📷 Change Profile Photo
   </button>
+
   <input type="file" id="photoInput" accept="image/*" hidden>
   <br>
   <button class="remove-photo" id="removePhoto">Remove Photo</button>
@@ -210,54 +366,96 @@ const BACKEND_URL =
 const SUPABASE_PUBLISHABLE_KEY =
  "sb_publishable_9wmzpjzVhnby_E3jogTjRw_c22XiDEC";
 
+let currentUser = null;
+let actualBalance = null;
+let balanceHidden = false;
+
+function renderBalance(){
+ const display = document.getElementById("walletBalance");
+
+ if(actualBalance === null){
+  display.textContent = "Unavailable";
+  return;
+ }
+
+ display.textContent = balanceHidden
+  ? "₦ ••••••"
+  : "₦" + actualBalance.toLocaleString("en-NG",{
+     minimumFractionDigits:2,
+     maximumFractionDigits:2
+    });
+}
+
 function showWalletBalance(value){
  const amount = Number(value);
- const safeAmount = Number.isFinite(amount) && amount >= 0 ? amount : 0;
 
- document.getElementById("walletBalance").textContent =
- "₦" + safeAmount.toLocaleString("en-NG", {
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2
- });
+ if(!Number.isFinite(amount) || amount < 0){
+  throw new Error("Invalid wallet balance received.");
+ }
+
+ actualBalance = amount;
+ renderBalance();
+
+ document.getElementById("walletStatus").textContent =
+  "Wallet balance updated successfully.";
 }
 
 async function loadWalletFromBackend(user){
- const token = await user.getIdToken(true);
+ const status = document.getElementById("walletStatus");
+ const refresh = document.getElementById("refreshWallet");
 
- const response = await fetch(BACKEND_URL, {
-  method: "GET",
-  headers: {
-   "apikey": SUPABASE_PUBLISHABLE_KEY,
-   "Authorization": "Bearer " + token
+ status.textContent = "Connecting to wallet...";
+ refresh.disabled = true;
+
+ try{
+  const token = await user.getIdToken(true);
+
+  const response = await fetch(BACKEND_URL,{
+   method:"GET",
+   headers:{
+    "apikey":SUPABASE_PUBLISHABLE_KEY,
+    "Authorization":"Bearer " + token
+   }
+  });
+
+  const raw = await response.text();
+
+  let result;
+
+  try{
+   result = JSON.parse(raw);
+  }catch{
+   throw new Error("Invalid backend response. HTTP " + response.status);
   }
- });
 
- const raw = await response.text();
+  if(!response.ok || !result.success){
+   throw new Error(
+    result.error || "Wallet connection failed. HTTP " + response.status
+   );
+  }
 
- let result;
+  showWalletBalance(result.wallet?.balance ?? 0);
+  return result;
 
- try {
-  result = JSON.parse(raw);
- } catch {
-  throw new Error("HTTP " + response.status + ": " + raw);
+ }catch(error){
+  actualBalance = null;
+  renderBalance();
+  status.textContent = "Wallet could not load. Tap refresh to try again.";
+  console.error("Wallet error:",error);
+  throw error;
+
+ }finally{
+  refresh.disabled = false;
  }
-
- if(!response.ok || !result.success){
-  throw new Error(
-   "HTTP " + response.status + ": " +
-   (result.error || "Backend connection failed")
-  );
- }
-
- showWalletBalance(result.wallet?.balance ?? 0);
- return result;
 }
 
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(auth,async(user)=>{
  if(!user){
   window.location.href = "login.html";
   return;
  }
+
+ currentUser = user;
 
  try{
   await user.reload();
@@ -269,26 +467,56 @@ onAuthStateChanged(auth, async (user) => {
    return;
   }
 
-  const userRef = doc(db, "users", user.uid);
+  const userRef = doc(db,"users",user.uid);
   const userSnap = await getDoc(userRef);
 
   if(userSnap.exists()){
    const userData = userSnap.data();
    const name = userData.name || "User";
 
-   document.getElementById("welcome").textContent = "Welcome, " + name;
+   document.getElementById("welcome").textContent =
+    "Welcome, " + name;
+
    document.getElementById("menuName").textContent = name;
   }
 
   loadSavedPhoto(user.uid);
-  await loadWalletFromBackend(user);
+
+  try{
+   await loadWalletFromBackend(user);
+  }catch(error){
+   console.error(error);
+  }
 
  }catch(error){
-  console.error("Dashboard error:", error);
-  showWalletBalance(0);
-  alert("WALLET ERROR: " + (error.message || error));
+  console.error("Dashboard error:",error);
  }
 });
+
+document.getElementById("refreshWallet").addEventListener("click",async()=>{
+ if(!currentUser){
+  alert("Please wait while your account loads.");
+  return;
+ }
+
+ try{
+  await loadWalletFromBackend(currentUser);
+ }catch(error){
+  console.error(error);
+ }
+});
+
+document.getElementById("toggleBalance").addEventListener("click",()=>{
+ balanceHidden = !balanceHidden;
+ renderBalance();
+
+ document.getElementById("toggleBalance").textContent =
+  balanceHidden ? "◎" : "◉";
+});
+
+window.fundWallet = function(){
+ alert("Wallet funding is being prepared. Please check back later.");
+};
 
 window.openAccountMenu = function(){
  document.getElementById("accountMenu").classList.add("open");
@@ -310,12 +538,25 @@ function displayPhoto(photo){
  document.getElementById("menuDefaultIcon").style.display = "none";
 }
 
-function loadSavedPhoto(uid){
- const savedPhoto = localStorage.getItem("ailatPhoto_" + uid);
- if(savedPhoto) displayPhoto(savedPhoto);
+function resetPhotoDisplay(){
+ document.getElementById("topPhoto").style.display = "none";
+ document.getElementById("defaultIcon").style.display = "block";
+
+ document.getElementById("menuPhoto").style.display = "none";
+ document.getElementById("menuDefaultIcon").style.display = "block";
 }
 
-document.getElementById("photoInput").addEventListener("change", function(event){
+function loadSavedPhoto(uid){
+ const savedPhoto = localStorage.getItem("ailatPhoto_" + uid);
+
+ if(savedPhoto){
+  displayPhoto(savedPhoto);
+ }else{
+  resetPhotoDisplay();
+ }
+}
+
+document.getElementById("photoInput").addEventListener("change",function(event){
  const file = event.target.files[0];
  if(!file) return;
 
@@ -353,14 +594,14 @@ document.getElementById("photoInput").addEventListener("change", function(event)
    canvas.height = height;
 
    const context = canvas.getContext("2d");
-   context.drawImage(image, 0, 0, width, height);
+   context.drawImage(image,0,0,width,height);
 
-   const photo = canvas.toDataURL("image/jpeg", 0.75);
+   const photo = canvas.toDataURL("image/jpeg",0.75);
    const user = auth.currentUser;
 
    if(user){
     try{
-     localStorage.setItem("ailatPhoto_" + user.uid, photo);
+     localStorage.setItem("ailatPhoto_" + user.uid,photo);
      displayPhoto(photo);
      alert("Profile photo updated!");
     }catch(error){
@@ -369,26 +610,29 @@ document.getElementById("photoInput").addEventListener("change", function(event)
    }
   };
 
+  image.onerror = function(){
+   alert("Unable to read this image.");
+  };
+
   image.src = e.target.result;
  };
 
  reader.readAsDataURL(file);
+ event.target.value = "";
 });
 
-document.getElementById("removePhoto").addEventListener("click", function(){
+document.getElementById("removePhoto").addEventListener("click",function(){
  const user = auth.currentUser;
 
- if(user) localStorage.removeItem("ailatPhoto_" + user.uid);
+ if(user){
+  localStorage.removeItem("ailatPhoto_" + user.uid);
+ }
 
- document.getElementById("topPhoto").style.display = "none";
- document.getElementById("defaultIcon").style.display = "block";
- document.getElementById("menuPhoto").style.display = "none";
- document.getElementById("menuDefaultIcon").style.display = "block";
-
+ resetPhotoDisplay();
  alert("Profile photo removed.");
 });
 
-document.getElementById("logoutBtn").addEventListener("click", async function(){
+document.getElementById("logoutBtn").addEventListener("click",async function(){
  try{
   await signOut(auth);
   window.location.href = "login.html";
@@ -399,5 +643,4 @@ document.getElementById("logoutBtn").addEventListener("click", async function(){
 
 </script>
 </body>
- </html>
- 
+</html>
