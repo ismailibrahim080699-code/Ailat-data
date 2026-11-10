@@ -65,7 +65,7 @@ minlength="8" required>
 class="toggle-password"
 id="togglePassword"
 aria-label="Show password"
-aria-pressed="false">Show</button>
+aria-pressed="false">👁</button>
 </div>
 
 <p class="field-hint">Use at least 12 characters with a mix of letters, numbers and symbols.</p>
@@ -148,14 +148,14 @@ function setupPasswordToggle(inputId, buttonId){
   if(passwordInput.type === "password"){
 
    passwordInput.type = "text";
-   toggleButton.textContent = "Hide";
+   toggleButton.textContent = "🙈";
    toggleButton.setAttribute("aria-label","Hide password");
    toggleButton.setAttribute("aria-pressed","true");
 
   }else{
 
    passwordInput.type = "password";
-   toggleButton.textContent = "Show";
+   toggleButton.textContent = "👁";
    toggleButton.setAttribute("aria-label","Show password");
    toggleButton.setAttribute("aria-pressed","false");
 
