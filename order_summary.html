@@ -41,6 +41,7 @@ button:disabled{opacity:.65;cursor:wait}
 <h3>Purchase Details</h3>
 <p class="subtitle">Please check that everything is correct.</p>
 <div class="item"><span>Network</span><strong id="network">-</strong></div>
+<div class="item"><span>Purchase Type</span><strong id="purchaseType">-</strong></div>
 <div class="item"><span>Phone Number</span><strong id="phone">-</strong></div>
 <div class="item"><span>Data Bundle</span><strong id="bundle">-</strong></div>
 <div class="total"><span>Supplier Price</span><strong id="amount">Not available</strong></div>
@@ -62,6 +63,8 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_9wmzpjzVhnby_E3jogTjRw_c22XiDEC
 const auth = getAuth(app);
 const params = new URLSearchParams(window.location.search);
 const network = params.get("network") || "";
+const purchaseType = (params.get("type") || "SME").toUpperCase();
+const validPurchaseTypes = ["SME","GIFTING","CORPORATE"];
 const phone = params.get("phone") || "";
 const plan = params.get("plan") || "";
 const plans = {
@@ -72,7 +75,7 @@ const plans = {
  "5gb":{name:"5GB"},
  "10gb":{name:"10GB"}
 };
-const validNetworks = ["MTN","Airtel","Glo","9mobile"];
+const validNetworks = ["MTN","Airtel","Glo","9mobile","Vitel"];
 const validPhone = /^0[789][01]\d{8}$/;
 const selectedPlan = plans[plan];
 const button = document.getElementById("confirmButton");
@@ -80,11 +83,12 @@ const statusBox = document.getElementById("requestStatus");
 let requestKey = crypto.randomUUID();
 let requestSaved = false;
 
-if(!validNetworks.includes(network) || !validPhone.test(phone) || !selectedPlan){
+if(!validNetworks.includes(network) || !validPurchaseTypes.includes(purchaseType) || !validPhone.test(phone) || !selectedPlan){
  document.getElementById("orderCard").innerHTML =
   '<div class="error"><h3>Invalid Order Details</h3><p class="subtitle">Your order information is incomplete or incorrect. Please return and select your network, phone number and data plan again.</p></div><a href="data.html" class="cancel">← Back to Buy Data</a>';
 }else{
  document.getElementById("network").textContent = network;
+ document.getElementById("purchaseType").textContent = purchaseType;
  document.getElementById("phone").textContent = phone;
  document.getElementById("bundle").textContent = selectedPlan.name;
 }
@@ -119,7 +123,7 @@ button.addEventListener("click", async()=>{
    body:JSON.stringify({
     service_key:"data",
     idempotency_key:requestKey,
-    customer_data:{network,phone,bundle:plan}
+    customer_data:{network,phone,bundle:plan,purchase_type:purchaseType}
    })
   });
   const result = await response.json().catch(()=>({}));
