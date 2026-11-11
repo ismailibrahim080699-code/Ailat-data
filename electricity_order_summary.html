@@ -1,71 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Electricity Order Summary - AILAT DATA</title>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Electricity Order Summary - AILAT DATA</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-body{background:#f5f3ff;color:#29243c}
-.container{max-width:480px;margin:auto;min-height:100vh;padding-bottom:35px}
-header{background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;padding:25px 20px;border-radius:0 0 22px 22px}
-header a{color:white;text-decoration:none;font-size:24px}
-header h2{margin-top:15px;font-size:22px}
-.subtitle{color:#888;font-size:13px;margin-top:7px;line-height:1.6}
-header .subtitle{color:#eee}
-.content{padding:22px 18px}
-.card{background:white;padding:22px;border-radius:17px;margin-top:20px;box-shadow:0 4px 16px #00000009}
-.item{display:flex;justify-content:space-between;gap:12px;padding:17px 0;border-bottom:1px solid #eee;font-size:14px}
-.item span:first-child{color:#888}
-.item strong{text-align:right;overflow-wrap:anywhere}
-.total{display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding:17px;border-radius:12px;background:#f3edff}
-.total strong{color:#6425c5;font-size:21px}
-.notice{background:#fff8e7;color:#805600;padding:14px;border-radius:11px;margin-top:20px;font-size:12px;line-height:1.6}
-button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;color:white;font-size:15px;font-weight:bold;margin-top:20px}
-.cancel{display:block;text-align:center;margin-top:18px;color:#6425c5;text-decoration:none;font-size:14px}
-</style>
-</head>
-<body>
-<div class="container">
-<header>
-<a href="electricity.html">‹</a>
-<h2>Order Summary</h2>
-<p class="subtitle">Review your electricity details</p>
-</header>
-<div class="content">
-<div class="card" id="summaryCard">
-<h3>Electricity Order Details</h3>
-<p class="subtitle">Please review the details entered.</p>
-<div class="item"><span>Provider</span><strong id="provider">-</strong></div>
-<div class="item"><span>DISCO ID</span><strong id="disco">-</strong></div>
-<div class="item"><span>Meter Type</span><strong id="type">-</strong></div>
-<div class="item"><span>Meter Number</span><strong id="meter">-</strong></div>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}body{background:#f5f3ff;color:#29243c}.container{max-width:480px;margin:auto;min-height:100vh;padding-bottom:35px}header{background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;padding:25px 20px;border-radius:0 0 22px 22px}header a{color:white;text-decoration:none;font-size:24px}header h2{margin-top:15px;font-size:22px}.subtitle{color:#888;font-size:13px;margin-top:7px;line-height:1.6}header .subtitle{color:#eee}.content{padding:22px 18px}.card{background:white;padding:22px;border-radius:17px;margin-top:20px;box-shadow:0 4px 16px #00000009}.item{display:flex;justify-content:space-between;gap:12px;padding:17px 0;border-bottom:1px solid #eee;font-size:14px}.item span:first-child{color:#888}.item strong{text-align:right;overflow-wrap:anywhere}.total{display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding:17px;border-radius:12px;background:#f3edff}.total strong{color:#6425c5;font-size:21px}.notice{background:#fff8e7;color:#805600;padding:14px;border-radius:11px;margin-top:20px;font-size:12px;line-height:1.6}button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;color:white;font-size:15px;font-weight:bold;margin-top:20px;cursor:pointer}button:disabled{opacity:.65}.cancel{display:block;text-align:center;margin-top:18px;color:#6425c5;text-decoration:none;font-size:14px}#requestStatus{font-size:13px;line-height:1.6;margin-top:15px;overflow-wrap:anywhere}
+</style></head><body><div class="container"><header><a href="electricity.html">‹</a><h2>Order Summary</h2><p class="subtitle">Review your electricity details</p></header><div class="content"><div class="card" id="summaryCard">
+<h3>Electricity Order Details</h3><p class="subtitle">Please review the details entered.</p>
+<div class="item"><span>Provider</span><strong id="provider">-</strong></div><div class="item"><span>DISCO ID</span><strong id="disco">-</strong></div><div class="item"><span>Meter Type</span><strong id="type">-</strong></div><div class="item"><span>Meter Number</span><strong id="meter">-</strong></div>
 <div class="total"><span>Requested Amount</span><strong id="amount">₦0.00</strong></div>
-<div class="notice"><strong>Service status:</strong> The details are displayed for review only. This page does not submit a bill payment, charge a wallet, or issue an electricity token. Do not treat this page as a completed transaction.</div>
-<button type="button" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
-<a href="electricity.html" class="cancel">← Go Back and Edit</a>
-</div>
-</div>
-</div>
-<script>
-const params=new URLSearchParams(window.location.search);
-const provider=params.get("provider")||"";
-const disco=params.get("disco")||"";
-const type=params.get("type")||"";
-const meter=params.get("meter")||"";
-const amount=Number(params.get("amount"));
-const validDiscos=["1","2","3","4","5","6","7","8","9","10"];
-const validTypes=["prepaid","postpaid"];
-if(!provider || !validDiscos.includes(disco) || !validTypes.includes(type) ||
- !/^[0-9]{6,20}$/.test(meter) || !Number.isSafeInteger(amount) || amount<100 || amount>1000000){
- document.getElementById("summaryCard").innerHTML='<h3>Invalid Order Details</h3><p class="subtitle">Please go back and enter your electricity details again.</p><a class="cancel" href="electricity.html">← Back to Electricity</a>';
-}else{
- document.getElementById("provider").textContent=provider;
- document.getElementById("disco").textContent=disco;
- document.getElementById("type").textContent=type==="prepaid"?"Prepaid":"Postpaid";
- document.getElementById("meter").textContent=meter;
- document.getElementById("amount").textContent="₦"+amount.toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+<div class="notice"><strong>Important:</strong> Submitting records your order details in AILAT DATA only. This does not call LegitDataWay, charge a wallet or issue an electricity token.</div>
+<button id="submitButton" type="button">Submit Electricity Request</button><p id="requestStatus" role="status" aria-live="polite"></p><a href="electricity.html" class="cancel">← Go Back and Edit</a>
+</div></div></div>
+<script type="module">
+import { app } from "./firebase.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
+const FUNCTION_URL="https://bdogulpsybiggpgipdbt.supabase.co/functions/v1/ailat-electricity-orders";
+const PUBLISHABLE_KEY="sb_publishable_9wmzpjzVhnby_E3jogTjRw_c22XiDEC";
+const auth=getAuth(app),params=new URLSearchParams(location.search);
+const provider=params.get("provider")||"",disco=params.get("disco")||"",type=params.get("type")||"",meter=params.get("meter")||"",amount=Number(params.get("amount"));
+const valid=!!provider&&["1","2","3","4","5","6","7","8","9","10"].includes(disco)&&["prepaid","postpaid"].includes(type)&&/^[0-9]{6,20}$/.test(meter)&&Number.isSafeInteger(amount)&&amount>=100&&amount<=1000000;
+const button=document.getElementById("submitButton"),status=document.getElementById("requestStatus");
+let requestKey=crypto.randomUUID(),saved=false;
+if(!valid){document.getElementById("summaryCard").innerHTML='<h3>Invalid Order Details</h3><p class="subtitle">Please go back and enter your electricity details again.</p><a class="cancel" href="electricity.html">← Back to Electricity</a>';}
+else{
+ document.getElementById("provider").textContent=provider;document.getElementById("disco").textContent=disco;document.getElementById("type").textContent=type==="prepaid"?"Prepaid":"Postpaid";document.getElementById("meter").textContent=meter;document.getElementById("amount").textContent="₦"+amount.toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
-</script>
-</body>
-</html>
+function signedInUser(){return new Promise((resolve,reject)=>{const unsub=onAuthStateChanged(auth,user=>{unsub();if(!user){reject(new Error("Please log in before submitting your electricity request."));return;}resolve(user);},error=>{unsub();reject(error);});});}
+button.addEventListener("click",async()=>{
+ if(!valid||saved)return;button.disabled=true;button.textContent="Submitting...";status.textContent="Securely recording your request. Please wait.";
+ try{
+  const user=await signedInUser();await user.reload();if(!user.emailVerified)throw new Error("Please verify your email before submitting this request.");
+  const token=await user.getIdToken(true),response=await fetch(FUNCTION_URL,{method:"POST",headers:{"apikey":PUBLISHABLE_KEY,"Authorization":"Bearer "+token,"Content-Type":"application/json"},body:JSON.stringify({idempotency_key:requestKey,customer_data:{disco:Number(disco),meter_type:type,meter_number:meter,amount}})});
+  const result=await response.json().catch(()=>({}));if(!response.ok||!result.success)throw new Error(result.error||"Could not record your request.");
+  saved=true;button.textContent="Request Recorded";status.textContent="Request recorded. Reference: "+result.order_request.reference+". Status: "+result.order_request.status+". No payment was taken and no electricity token was issued.";
+ }catch(error){button.disabled=false;button.textContent="Try Again";status.textContent=error.message||"Something went wrong. Please try again.";}
+});
+</script></body></html>
