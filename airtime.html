@@ -63,6 +63,8 @@ label{display:block;font-size:13px;font-weight:bold;margin:19px 0 9px}
  color:#6425c5;
 }
 
+.network .vitel-logo-img{width:72px;height:50px;object-fit:contain;display:block;background:#fff;border-radius:5px}
+
 .vitel-logo{
  width:48px;height:43px;display:flex;align-items:center;justify-content:center;
  border-radius:11px;background:linear-gradient(135deg,#143b70,#2476c8);
@@ -168,7 +170,7 @@ button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;co
 
 <div class="network"
  onclick="chooseNetwork(this,'Vitel')">
- <div class="vitel-logo">V</div>
+ <img class="vitel-logo-img" src="https://mma.prnewswire.com/media/2609274/Vitel_Wireless_Logo.jpg" alt="Vitel Wireless official logo" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<span class="network-name">Vitel</span>')">
  <span class="network-name">Vitel</span>
 </div>
 
