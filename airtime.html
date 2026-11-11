@@ -240,13 +240,13 @@ document.getElementById('total').textContent=
 function continuePurchase(){
 let phone=document.getElementById('phone').value.trim();
 
-if(!/^0[0-9]{10}$/.test(phone)){
+if(!/^0[789][01]\\d{8}$/.test(phone)){
 alert('Please enter a valid 11-digit Nigerian phone number.');
 return;
 }
 
-if(!Number.isInteger(selectedAmount) || selectedAmount<50){
-alert('Please enter a whole amount of at least ₦50.');
+if(!Number.isInteger(selectedAmount) || selectedAmount<50 || selectedAmount>100000){
+alert('Please enter a whole amount between ₦50 and ₦100,000.');
 return;
 }
 
