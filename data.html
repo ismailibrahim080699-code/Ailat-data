@@ -344,7 +344,7 @@ Choose your network and preferred data plan.
 
 <p id="planAvailability" class="note" aria-live="polite"></p>
 <div class="demo" style="background:#fff8e7;color:#805600;padding:12px;border-radius:10px;font-size:12px;line-height:1.6;margin-top:15px">
-<strong>Important:</strong> Prices are copied from the supplier catalogue and are not AILAT retail prices. This form only records a request; it does not debit a wallet or deliver data.
+<strong>Price information:</strong> Displayed prices are AILAT DATA selling prices, calculated as supplier price + ₦50. This form only records a request; it does not debit a wallet or deliver data.
 </div>
 
 <button onclick="continuePurchase()">Continue</button>
@@ -427,7 +427,7 @@ function renderPlans(){
    bottom.className="bundle-card-bottom";
    const amount=document.createElement("strong");
    amount.className="bundle-price";
-   amount.textContent=formatPrice(item.amount);
+   amount.textContent=formatPrice(Number(item.amount)+50);
    const action=document.createElement("span");
    action.className="bundle-select";
    action.textContent=String(item.id)===selectedPlanId?"SELECTED":"SELECT";
@@ -438,7 +438,7 @@ function renderPlans(){
   });
  }
  const note=document.getElementById("planAvailability");
- if(note) note.textContent=matching.length+" supplier-listed bundles available for "+selectedNetwork+". Choose a card to select your bundle.";
+ if(note) note.textContent=matching.length+" bundles available for "+selectedNetwork+". Prices include AILAT DATA’s ₦50 service margin.";
 }
 function continuePurchase(){
  const phone=document.getElementById("phone").value.trim();
