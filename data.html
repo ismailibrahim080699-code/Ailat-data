@@ -227,12 +227,6 @@ button{
 .bundle-select{font-size:10px;color:#8b8498;font-weight:700}
 .bundle-card.selected .bundle-select{color:#6425c5}
 .bundle-empty{grid-column:1/-1;text-align:center;padding:25px 14px;background:#faf8fd;border:1px dashed #d9cde9;border-radius:13px;color:#82798e;font-size:12px;line-height:1.6}
-.selected-bundle{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:16px;padding:15px;background:linear-gradient(135deg,#f4edff,#fbf9ff);border:1px solid #e6dafa;border-radius:13px}
-.selected-bundle>div{display:flex;flex-direction:column;gap:4px;min-width:0}
-.selected-label{font-size:9px;letter-spacing:1px;font-weight:800;color:#8b72b4}
-#selectedPlanName{font-size:13px;color:#352052}
-#selectedPlanValidity{font-size:10px;color:#8b8498}
-.selected-price{font-size:17px;color:#6425c5;white-space:nowrap}
 @media(max-width:360px){.bundle-grid{gap:7px}.bundle-card{padding:12px 9px}.bundle-card.selected{padding:11px 8px}.bundle-data{font-size:19px}.bundle-price{font-size:13px}}
 
 @media(max-width:360px){
@@ -360,15 +354,6 @@ Choose your network and preferred data plan.
 
 <div class="bundle-grid" id="bundleGrid" aria-live="polite"></div>
 
-<div class="selected-bundle" id="selectedBundle">
-  <div>
-    <span class="selected-label">SELECTED BUNDLE</span>
-    <strong id="selectedPlanName">Choose a bundle above</strong>
-    <small id="selectedPlanValidity">Your selected plan will appear here</small>
-  </div>
-  <strong class="selected-price" id="price">—</strong>
-</div>
-
 <p id="planAvailability" class="note" aria-live="polite"></p>
 <div class="demo" style="background:#fff8e7;color:#805600;padding:12px;border-radius:10px;font-size:12px;line-height:1.6;margin-top:15px">
 <strong>Important:</strong> Prices are copied from the supplier catalogue and are not AILAT retail prices. This form only records a request; it does not debit a wallet or deliver data.
@@ -394,9 +379,6 @@ let selectedPlanId="";
 let selectedFilter="ALL";
 
 const bundleGrid=document.getElementById("bundleGrid");
-const priceLabel=document.getElementById("price");
-const selectedPlanName=document.getElementById("selectedPlanName");
-const selectedPlanValidity=document.getElementById("selectedPlanValidity");
 const bundleCount=document.getElementById("bundleCount");
 
 function normalizedType(type){
@@ -415,9 +397,6 @@ function formatPrice(amount){
 }
 function clearSelectedPlan(){
  selectedPlanId="";
- selectedPlanName.textContent="Choose a bundle above";
- selectedPlanValidity.textContent="Your selected plan will appear here";
- priceLabel.textContent="—";
 }
 function choosePurchaseType(element,type){
  selectedPurchaseType=type;
@@ -435,11 +414,6 @@ function chooseNetwork(element,network){
 }
 function selectBundle(id){
  selectedPlanId=String(id);
- const selected=DATA_PLANS.find(item=>String(item.id)===selectedPlanId);
- if(!selected) return;
- selectedPlanName.textContent=selected.name+" Data";
- selectedPlanValidity.textContent=selected.validity;
- priceLabel.textContent=formatPrice(selected.amount);
  renderPlans();
 }
 function renderPlans(){
