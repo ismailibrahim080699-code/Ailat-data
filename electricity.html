@@ -8,17 +8,20 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#f5f4fa;color:#29243c}
-.container{max-width:480px;margin:auto;min-height:100vh}
+.container{max-width:480px;margin:auto;min-height:100vh;padding-bottom:35px}
 header{background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;padding:22px 20px;display:flex;align-items:center;gap:15px;border-radius:0 0 20px 20px}
 .back{font-size:26px;text-decoration:none;color:white}
 header h2{font-size:19px}
 .content{padding:22px 18px}
 .subtitle{color:#888;font-size:13px;margin-top:6px;line-height:1.6}
 .card{background:white;padding:20px;border-radius:16px;margin-top:20px;box-shadow:0 3px 15px #00000008}
-.note{font-size:12px;color:#777;line-height:1.7;margin-top:14px}
 .icon{background:#f0e8ff;width:55px;height:55px;border-radius:15px;display:grid;place-items:center;font-size:27px;margin-bottom:12px}
-.status{color:#6425c5;font-size:22px;margin-top:12px}
-.brand-mark{width:34px;height:34px;object-fit:contain;flex:0 0 34px;vertical-align:middle}
+label{display:block;font-size:13px;font-weight:bold;margin:17px 0 8px}
+select,input{width:100%;padding:14px;border:1px solid #ded8eb;border-radius:10px;background:#fff;color:#29243c;font-size:15px;outline:none}
+select:focus,input:focus{border-color:#7c3aed}
+button{width:100%;padding:16px;border:0;border-radius:11px;background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;font-size:15px;font-weight:bold;margin-top:22px}
+.note{font-size:12px;color:#777;line-height:1.7;margin-top:14px}
+.brand-mark{width:34px;height:34px;object-fit:contain;flex:0 0 34px}
 </style>
 </head>
 <body>
@@ -31,13 +34,59 @@ header h2{font-size:19px}
 <div class="content">
 <div class="icon">💡</div>
 <h2>Pay Electricity Bill</h2>
-<p class="subtitle">Electricity payment service status</p>
+<p class="subtitle">Enter your electricity meter details.</p>
 <div class="card">
-<h3 class="status">Coming Soon</h3>
-<p class="note">Electricity provider verification, meter validation and secure payment are not connected yet. This service will be enabled only after a verified provider API and secure payment process are ready.</p>
-<p class="note"><strong>Important:</strong> Do not enter your meter number or send money to anyone claiming to process an AILAT DATA electricity payment.</p>
+<form id="electricityForm">
+<label for="provider">Electricity Distribution Company</label>
+<select id="provider" required>
+<option value="">Select electricity company</option>
+<option value="8">Abuja Electricity</option>
+<option value="10">Benin Electricity</option>
+<option value="2">Eko Electricity</option>
+<option value="6">Ibadan Electricity</option>
+<option value="1">Ikeja Electricity</option>
+<option value="5">Jos Electricity</option>
+<option value="7">Kaduna Electric</option>
+<option value="3">Kano Electricity</option>
+<option value="4">Port Harcourt Electricity</option>
+<option value="9">Yola Electricity</option>
+</select>
+<label for="meterType">Meter Type</label>
+<select id="meterType" required>
+<option value="">Select meter type</option>
+<option value="prepaid">Prepaid</option>
+<option value="postpaid">Postpaid</option>
+</select>
+<label for="meterNumber">Meter Number</label>
+<input id="meterNumber" type="text" inputmode="numeric" autocomplete="off" maxlength="20" placeholder="Enter meter number" required>
+<label for="amount">Amount (₦)</label>
+<input id="amount" type="number" inputmode="numeric" min="100" max="1000000" step="1" placeholder="Enter amount" required>
+<button type="submit">Continue</button>
+</form>
+<p class="note"><strong>Notice:</strong> This page collects and checks the details for the order summary only. Electricity payment is not activated and no money will be charged from this page.</p>
 </div>
 </div>
 </div>
+<script>
+document.getElementById("electricityForm").addEventListener("submit",function(event){
+ event.preventDefault();
+ const provider=document.getElementById("provider");
+ const type=document.getElementById("meterType").value;
+ const meter=document.getElementById("meterNumber").value.trim();
+ const amount=Number(document.getElementById("amount").value);
+ if(!provider.value || !["prepaid","postpaid"].includes(type) || !/^[0-9]{6,20}$/.test(meter) || !Number.isSafeInteger(amount) || amount<100 || amount>1000000){
+  alert("Please check your electricity details and try again.");
+  return;
+ }
+ const params=new URLSearchParams({
+  provider:provider.options[provider.selectedIndex].text,
+  disco:provider.value,
+  type:type,
+  meter:meter,
+  amount:String(amount)
+ });
+ window.location.href="electricity_order_summary.html?"+params.toString();
+});
+</script>
 </body>
 </html>
