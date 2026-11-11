@@ -56,6 +56,7 @@ button:disabled{opacity:.65;cursor:wait}
 </div>
 <script type="module">
 import { app } from "./firebase.js";
+import { DATA_PLANS } from "./data-plans.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
 
 const SUPABASE_FUNCTION_URL = "https://bdogulpsybiggpgipdbt.supabase.co/functions/v1/ailat-order-requests";
@@ -66,31 +67,24 @@ const network = params.get("network") || "";
 const purchaseType = (params.get("type") || "SME").toUpperCase();
 const validPurchaseTypes = ["SME","GIFTING","CORPORATE"];
 const phone = params.get("phone") || "";
-const plan = params.get("plan") || "";
-const plans = {
- "500mb":{name:"500MB"},
- "1gb":{name:"1GB"},
- "2gb":{name:"2GB"},
- "3gb":{name:"3GB"},
- "5gb":{name:"5GB"},
- "10gb":{name:"10GB"}
-};
+const planId = params.get("plan_id") || params.get("plan") || "";
 const validNetworks = ["MTN","Airtel","Glo","9mobile","Vitel"];
-const validPhone = /^0[789][01]\d{8}$/;
-const selectedPlan = plans[plan];
+const validPhone = /^0[789][01]\\d{8}$/;
+const selectedPlan = DATA_PLANS.find(item => String(item.id)===String(planId) && item.network.toLowerCase()===network.toLowerCase());
+const normalizedType = type => { const v=String(type||"").toUpperCase(); return v==="COOPERATE GIFTING" || v==="CORPORATE" ? "CORPORATE" : v; };
 const button = document.getElementById("confirmButton");
 const statusBox = document.getElementById("requestStatus");
 let requestKey = crypto.randomUUID();
 let requestSaved = false;
 
-if(!validNetworks.includes(network) || !validPurchaseTypes.includes(purchaseType) || !validPhone.test(phone) || !selectedPlan){
- document.getElementById("orderCard").innerHTML =
-  '<div class="error"><h3>Invalid Order Details</h3><p class="subtitle">Your order information is incomplete or incorrect. Please return and select your network, phone number and data plan again.</p></div><a href="data.html" class="cancel">← Back to Buy Data</a>';
+if(!validNetworks.includes(network) || !validPurchaseTypes.includes(purchaseType) || !validPhone.test(phone) || !selectedPlan || normalizedType(selectedPlan.type)!==purchaseType){
+ document.getElementById("orderCard").innerHTML = '<div class="error"><h3>Invalid Order Details</h3><p class="subtitle">Your order information is incomplete or incorrect. Please return and select your network, phone number and data plan again.</p></div><a href="data.html" class="cancel">← Back to Buy Data</a>';
 }else{
  document.getElementById("network").textContent = network;
  document.getElementById("purchaseType").textContent = purchaseType;
  document.getElementById("phone").textContent = phone;
- document.getElementById("bundle").textContent = selectedPlan.name;
+ document.getElementById("bundle").textContent = selectedPlan.name+" — "+selectedPlan.validity+" (Plan ID "+selectedPlan.id+")";
+ document.getElementById("amount").textContent = "₦"+Number(selectedPlan.amount).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 
 function getSignedInUser(){
@@ -104,7 +98,7 @@ function getSignedInUser(){
 }
 
 button.addEventListener("click", async()=>{
- if(requestSaved || !selectedPlan || !validNetworks.includes(network) || !validPhone.test(phone)) return;
+ if(requestSaved || !selectedPlan || !validNetworks.includes(network) || !validPhone.test(phone) || normalizedType(selectedPlan.type)!==purchaseType) return;
  button.disabled = true;
  button.textContent = "Submitting request...";
  statusBox.textContent = "Please wait while your request is securely recorded.";
@@ -115,22 +109,14 @@ button.addEventListener("click", async()=>{
   const token = await user.getIdToken(true);
   const response = await fetch(SUPABASE_FUNCTION_URL,{
    method:"POST",
-   headers:{
-    "apikey":SUPABASE_PUBLISHABLE_KEY,
-    "Authorization":"Bearer " + token,
-    "Content-Type":"application/json"
-   },
-   body:JSON.stringify({
-    service_key:"data",
-    idempotency_key:requestKey,
-    customer_data:{network,phone,bundle:plan,purchase_type:purchaseType}
-   })
+   headers:{"apikey":SUPABASE_PUBLISHABLE_KEY,"Authorization":"Bearer "+token,"Content-Type":"application/json"},
+   body:JSON.stringify({service_key:"data",idempotency_key:requestKey,customer_data:{network,phone,bundle:selectedPlan.name+" ("+selectedPlan.validity+")",purchase_type:purchaseType,supplier_plan_id:selectedPlan.id,supplier_amount:selectedPlan.amount}})
   });
   const result = await response.json().catch(()=>({}));
   if(!response.ok || !result.success) throw new Error(result.error || "Could not save your request. Please try again.");
   requestSaved = true;
   button.textContent = "Request Recorded";
-  statusBox.textContent = "Your request has been recorded. Reference: " + result.order_request.reference + ". Status: " + result.order_request.status + ". No payment was taken and no data was delivered.";
+  statusBox.textContent = "Your request has been recorded. Reference: "+result.order_request.reference+". Status: "+result.order_request.status+". No payment was taken and no data was delivered.";
  }catch(error){
   button.disabled = false;
   button.textContent = "Try Again";
