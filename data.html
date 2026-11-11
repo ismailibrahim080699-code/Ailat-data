@@ -359,7 +359,9 @@ Please check your phone number and selected data bundle before continuing.
 
 
 <script type="module">
-import { DATA_PLANS } from "./data-plans.js";
+const SUPABASE_FUNCTION_URL="https://bdogulpsybiggpgipdbt.supabase.co/functions/v1/ailat-order-requests";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_9wmzpjzVhnby_E3jogTjRw_c22XiDEC";
+let DATA_PLANS=[];
 
 let selectedNetwork="MTN";
 let selectedPurchaseType="SME";
@@ -427,7 +429,7 @@ function renderPlans(){
    bottom.className="bundle-card-bottom";
    const amount=document.createElement("strong");
    amount.className="bundle-price";
-   amount.textContent=formatPrice(Number(item.amount)+50);
+   amount.textContent=formatPrice(item.amount);
    const action=document.createElement("span");
    action.className="bundle-select";
    action.textContent=String(item.id)===selectedPlanId?"SELECTED":"SELECT";
@@ -453,7 +455,22 @@ function continuePurchase(){
 window.choosePurchaseType=choosePurchaseType;
 window.chooseNetwork=chooseNetwork;
 window.continuePurchase=continuePurchase;
-renderPlans();
+loadPlans();
+
+async function loadPlans(){
+ try{
+  const response=await fetch(SUPABASE_FUNCTION_URL+"?action=plans",{headers:{"apikey":SUPABASE_PUBLISHABLE_KEY}});
+  const result=await response.json();
+  if(!response.ok || !result.success || !Array.isArray(result.plans)) throw new Error("Could not load data bundles.");
+  DATA_PLANS=result.plans;
+  renderPlans();
+ }catch(error){
+  bundleGrid.textContent="Data bundles are temporarily unavailable. Please refresh the page.";
+  bundleCount.textContent="Unavailable";
+  const note=document.getElementById("planAvailability");
+  if(note) note.textContent=error.message;
+ }
+}
 </script>
 
 </body>
