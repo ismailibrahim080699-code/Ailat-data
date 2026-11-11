@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,17 +12,34 @@ header{background:linear-gradient(135deg,#7136d6,#43148d);color:white;padding:25
 header a{color:white;text-decoration:none;font-size:14px}
 header h2{margin:25px 0 5px;font-size:25px}
 header p{margin:0;opacity:.85;font-size:14px}
-.container{max-width:500px;margin:22px auto;padding:0 16px 30px}
+.container{max-width:540px;margin:22px auto;padding:0 16px 30px}
 .card{background:white;padding:22px;border-radius:18px;margin-bottom:17px;box-shadow:0 6px 22px rgba(55,25,100,.08)}
 .card h3{margin:0 0 12px;color:#49218b}
 .code{background:#f2edff;padding:16px;border:1px dashed #8051d1;border-radius:10px;text-align:center;color:#5423a6;font-size:21px;font-weight:bold;overflow-wrap:anywhere}
 .link{background:#f7f4ff;padding:13px;border-radius:10px;font-size:13px;overflow-wrap:anywhere;color:#4d3477;line-height:1.6}
 button{width:100%;border:0;padding:14px;border-radius:10px;background:linear-gradient(135deg,#7136d6,#4b1e9e);color:white;font-size:15px;font-weight:bold;margin-top:12px;cursor:pointer}
 .secondary{background:#eee7ff;color:#5423a6}
-.count{font-size:38px;font-weight:bold;color:#6425c5;text-align:center}
+button:disabled{opacity:.55;cursor:not-allowed}
+.count{font-size:34px;font-weight:bold;color:#6425c5;text-align:center}
 .small{text-align:center;color:#777;font-size:13px;margin-top:8px}
 #message{text-align:center;font-size:14px;margin:12px 0}
-.brand-mark{width:34px;height:34px;object-fit:contain;flex:0 0 34px;vertical-align:middle}
+.brand-mark{width:34px;height:34px;object-fit:contain;vertical-align:middle;margin-right:8px}
+.wallet-card{background:linear-gradient(135deg,#3f147f,#7136d6);color:white}
+.wallet-card h3{color:white}
+.wallet-main{font-size:34px;font-weight:800;margin:8px 0 18px}
+.wallet-label{font-size:12px;opacity:.8}
+.wallet-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.wallet-stat{background:rgba(255,255,255,.12);padding:13px;border:1px solid rgba(255,255,255,.13);border-radius:12px}
+.wallet-stat strong{display:block;font-size:18px;margin-top:5px}
+.section-note{font-size:12px;line-height:1.6;color:#827694;margin:8px 0 0}
+.history-item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid #eee8f8}
+.history-item:last-child{border-bottom:0;padding-bottom:0}
+.history-name{font-weight:700;font-size:13px;color:#3f216d;text-transform:capitalize}
+.history-meta{font-size:11px;color:#8b819b;margin-top:5px}
+.history-amount{text-align:right;font-weight:700;color:#5521a1;font-size:14px;white-space:nowrap}
+.status{display:inline-block;padding:4px 8px;border-radius:20px;background:#f0eaff;color:#6941a5;font-size:10px;margin-top:5px;text-transform:capitalize}
+.empty{padding:18px 8px;text-align:center;color:#8b819b;font-size:13px;background:#faf8ff;border-radius:12px}
+@media(max-width:380px){.wallet-main{font-size:29px}.card{padding:18px}}
 </style>
 </head>
 <body>
@@ -31,10 +47,22 @@ button{width:100%;border:0;padding:14px;border-radius:10px;background:linear-gra
 <img class="brand-mark" src="assets/ailat-mark.svg" alt="AILAT DATA">
 <a href="dashboard.html">← Back to Dashboard</a>
 <h2>My Referral</h2>
-<p>Invite friends and grow with AILAT DATA.</p>
+<p>Invite friends and earn from eligible successful transactions.</p>
 </header>
 
 <div class="container">
+<div class="card wallet-card">
+<h3>Referral Wallet</h3>
+<div class="wallet-label">Available commission</div>
+<div class="wallet-main" id="availableBalance">₦0.00</div>
+<div class="wallet-grid">
+ <div class="wallet-stat"><span class="wallet-label">Pending Commission</span><strong id="pendingBalance">₦0.00</strong></div>
+ <div class="wallet-stat"><span class="wallet-label">Total Earned</span><strong id="totalEarned">₦0.00</strong></div>
+</div>
+<button id="withdrawButton" disabled>WITHDRAWAL COMING SOON</button>
+<p class="section-note" style="color:#eee4ff">Withdrawals will open after commission verification and the payout process are ready.</p>
+</div>
+
 <div class="card">
 <h3>Your Referral Code</h3>
 <div class="code" id="referralCode">Loading...</div>
@@ -54,27 +82,27 @@ button{width:100%;border:0;padding:14px;border-radius:10px;background:linear-gra
 <div class="count" id="referralCount">0</div>
 <div class="small">People registered using your referral code</div>
 </div>
+
+<div class="card">
+<h3>Commission History</h3>
+<div id="commissionHistory"><div class="empty">Loading commission history...</div></div>
+</div>
+
+<div class="card">
+<h3>Withdrawal History</h3>
+<div id="withdrawalHistory"><div class="empty">Loading withdrawal history...</div></div>
+</div>
 <div id="message"></div>
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+import { app } from "./firebase.js";
 import { getAuth,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
 import { getFirestore,doc,getDoc,setDoc,updateDoc,collection,query,where,getDocs,serverTimestamp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
 
-const firebaseConfig = {
- apiKey: "AIzaSyBv7ixj82ZWaSHyvv0dzg86MOUBae3pA94",
- authDomain: "ailat-data.firebaseapp.com",
- projectId: "ailat-data",
- storageBucket: "ailat-data.firebasestorage.app",
- messagingSenderId: "936036858829",
- appId: "1:936036858829:web:c9b72589796524b378a284"
-};
-
-const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getFirestore(app);
-
+const REFERRAL_API="https://bdogulpsybiggpgipdbt.supabase.co/functions/v1/ailat-referral";
 const codeElement=document.getElementById("referralCode");
 const linkElement=document.getElementById("referralLink");
 const countElement=document.getElementById("referralCount");
@@ -85,49 +113,74 @@ function showMessage(text,color="green"){
  message.style.color=color;
  message.textContent=text;
 }
-
-onAuthStateChanged(auth,async(user)=>{
- if(!user){
-  window.location.href="login.html";
+function money(value){
+ const amount=Number(value||0);
+ return "₦"+(Number.isFinite(amount)?amount:0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function safeText(value){
+ return String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+}
+function dateText(value){
+ if(!value)return "Date unavailable";
+ const date=new Date(value);
+ return Number.isNaN(date.getTime())?"Date unavailable":date.toLocaleString("en-NG",{dateStyle:"medium",timeStyle:"short"});
+}
+function renderHistory(containerId,items,type){
+ const container=document.getElementById(containerId);
+ if(!items||!items.length){
+  container.innerHTML='<div class="empty">No '+(type==="commission"?"commission":"withdrawal")+' records yet.</div>';
   return;
  }
+ container.innerHTML=items.map(item=>{
+  const name=type==="commission"?(item.service_key||"Service").replaceAll("_"," "):"Referral withdrawal";
+  const amount=money(type==="commission"?item.commission_amount:item.amount);
+  const status=safeText(item.status||"pending");
+  const date=dateText(type==="commission"?item.created_at:item.requested_at);
+  const extra=type==="commission"?"Commission":"Request";
+  return '<div class="history-item"><div><div class="history-name">'+safeText(name)+'</div><div class="history-meta">'+extra+' • '+safeText(date)+'</div><span class="status">'+status+'</span></div><div class="history-amount">'+amount+'</div></div>';
+ }).join("");
+}
+async function loadReferralWallet(user){
+ const token=await user.getIdToken();
+ const response=await fetch(REFERRAL_API,{method:"GET",headers:{Authorization:"Bearer "+token}});
+ const result=await response.json();
+ if(!response.ok||!result.success)throw new Error(result.error||"Unable to load referral wallet.");
+ const wallet=result.wallet||{};
+ document.getElementById("availableBalance").textContent=money(wallet.available_balance);
+ document.getElementById("pendingBalance").textContent=money(wallet.pending_balance);
+ document.getElementById("totalEarned").textContent=money(wallet.total_earned);
+ renderHistory("commissionHistory",result.commissions||[],"commission");
+ renderHistory("withdrawalHistory",result.withdrawals||[],"withdrawal");
+}
+
+onAuthStateChanged(auth,async(user)=>{
+ if(!user){window.location.href="login.html";return;}
  try{
   const userRef=doc(db,"users",user.uid);
   const userSnap=await getDoc(userRef);
-  if(!userSnap.exists()){
-   showMessage("User profile not found.","red");
-   return;
-  }
-
+  if(!userSnap.exists()){showMessage("User profile not found.","red");return;}
   let referralCode=userSnap.data().referralCode;
-
   if(!referralCode){
    referralCode="AILAT"+user.uid.substring(0,8).toUpperCase();
-   await updateDoc(userRef,{referralCode:referralCode});
+   await updateDoc(userRef,{referralCode});
   }
-
   const codeRef=doc(db,"referralCodes",referralCode);
   const codeSnap=await getDoc(codeRef);
-
-  if(!codeSnap.exists()){
-   await setDoc(codeRef,{
-    ownerUid:user.uid,
-    createdAt:serverTimestamp()
-   });
-  }
-
+  if(!codeSnap.exists())await setDoc(codeRef,{ownerUid:user.uid,createdAt:serverTimestamp()});
   codeElement.textContent=referralCode;
-
   referralLink="https://ismailibrahim080699-code.github.io/Ailat-data/register.html?ref="+encodeURIComponent(referralCode);
   linkElement.textContent=referralLink;
-
-  const referralsQuery=query(
-   collection(db,"referrals"),
-   where("ownerUid","==",user.uid)
-  );
+  const referralsQuery=query(collection(db,"referrals"),where("ownerUid","==",user.uid));
   const referralsSnapshot=await getDocs(referralsQuery);
   countElement.textContent=referralsSnapshot.size;
-
+  try{
+   await loadReferralWallet(user);
+  }catch(walletError){
+   console.error("Referral wallet error:",walletError);
+   document.getElementById("commissionHistory").innerHTML='<div class="empty">Commission history is temporarily unavailable.</div>';
+   document.getElementById("withdrawalHistory").innerHTML='<div class="empty">Withdrawal history is temporarily unavailable.</div>';
+   showMessage("Referral code loaded, but wallet information could not be loaded.", "red");
+  }
  }catch(error){
   console.error(error);
   showMessage("Unable to load referral information. Please try again.","red");
@@ -137,40 +190,20 @@ onAuthStateChanged(auth,async(user)=>{
 document.getElementById("copyCode").addEventListener("click",async()=>{
  const code=codeElement.textContent;
  if(!code||code==="Loading...")return;
- try{
-  await navigator.clipboard.writeText(code);
-  showMessage("Referral code copied!");
- }catch(error){
-  showMessage("Could not copy code. Please copy it manually.","red");
- }
+ try{await navigator.clipboard.writeText(code);showMessage("Referral code copied!");}
+ catch(error){showMessage("Could not copy code. Please copy it manually.","red");}
 });
-
 document.getElementById("copyLink").addEventListener("click",async()=>{
  if(!referralLink)return;
- try{
-  await navigator.clipboard.writeText(referralLink);
-  showMessage("Referral link copied successfully!");
- }catch(error){
-  showMessage("Could not copy link. Please copy it manually.","red");
- }
+ try{await navigator.clipboard.writeText(referralLink);showMessage("Referral link copied successfully!");}
+ catch(error){showMessage("Could not copy link. Please copy it manually.","red");}
 });
-
 document.getElementById("shareLink").addEventListener("click",async()=>{
  if(!referralLink)return;
  try{
-  if(navigator.share){
-   await navigator.share({
-    title:"Join AILAT DATA",
-    text:"Register on AILAT DATA using my referral link:",
-    url:referralLink
-   });
-  }else{
-   await navigator.clipboard.writeText(referralLink);
-   showMessage("Referral link copied. You can share it now!");
-  }
- }catch(error){
-  if(error.name!=="AbortError")showMessage("Unable to share link.","red");
- }
+  if(navigator.share)await navigator.share({title:"Join AILAT DATA",text:"Register on AILAT DATA using my referral link:",url:referralLink});
+  else{await navigator.clipboard.writeText(referralLink);showMessage("Referral link copied. You can share it now!");}
+ }catch(error){if(error.name!=="AbortError")showMessage("Unable to share link.","red");}
 });
 </script>
 </body>
