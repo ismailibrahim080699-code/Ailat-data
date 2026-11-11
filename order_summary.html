@@ -56,11 +56,14 @@ button:disabled{opacity:.65;cursor:wait}
 </div>
 <script type="module">
 import { app } from "./firebase.js";
-import { DATA_PLANS } from "./data-plans.js";
+
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
 
 const SUPABASE_FUNCTION_URL = "https://bdogulpsybiggpgipdbt.supabase.co/functions/v1/ailat-order-requests";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_9wmzpjzVhnby_E3jogTjRw_c22XiDEC";
+const plansResponse = await fetch(SUPABASE_FUNCTION_URL+"?action=plans",{headers:{"apikey":SUPABASE_PUBLISHABLE_KEY}});
+const plansResult = await plansResponse.json().catch(()=>({}));
+const DATA_PLANS = plansResponse.ok && plansResult.success && Array.isArray(plansResult.plans) ? plansResult.plans : [];
 const auth = getAuth(app);
 const params = new URLSearchParams(window.location.search);
 const network = params.get("network") || "";
@@ -84,7 +87,7 @@ if(!validNetworks.includes(network) || !validPurchaseTypes.includes(purchaseType
  document.getElementById("purchaseType").textContent = purchaseType;
  document.getElementById("phone").textContent = phone;
  document.getElementById("bundle").textContent = selectedPlan.name+" — "+selectedPlan.validity+" (Plan ID "+selectedPlan.id+")";
- document.getElementById("amount").textContent = "₦"+(Number(selectedPlan.amount)+50).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+ document.getElementById("amount").textContent = "₦"+Number(selectedPlan.amount).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 
 function getSignedInUser(){
@@ -110,7 +113,7 @@ button.addEventListener("click", async()=>{
   const response = await fetch(SUPABASE_FUNCTION_URL,{
    method:"POST",
    headers:{"apikey":SUPABASE_PUBLISHABLE_KEY,"Authorization":"Bearer "+token,"Content-Type":"application/json"},
-   body:JSON.stringify({service_key:"data",idempotency_key:requestKey,customer_data:{network,phone,bundle:selectedPlan.name+" ("+selectedPlan.validity+")",purchase_type:purchaseType,supplier_plan_id:selectedPlan.id,supplier_amount:selectedPlan.amount,selling_amount:Number(selectedPlan.amount)+50}})
+   body:JSON.stringify({service_key:"data",idempotency_key:requestKey,customer_data:{network,phone,bundle:selectedPlan.name+" ("+selectedPlan.validity+")",purchase_type:purchaseType,supplier_plan_id:selectedPlan.id}})
   });
   const result = await response.json().catch(()=>({}));
   if(!response.ok || !result.success) throw new Error(result.error || "Could not save your request. Please try again.");
