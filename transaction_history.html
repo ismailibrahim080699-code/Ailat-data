@@ -239,6 +239,20 @@ function renderTransactions(items){
  container.innerHTML = items.map(item => {
   const type = safe(item.type || "Transaction");
   const rawStatus = String(item.status || "unknown").toLowerCase();
+  const customer = item.customer_data && typeof item.customer_data === "object" ? item.customer_data : {};
+  const network = customer.network ? String(customer.network).toUpperCase() : "";
+  const phone = customer.phone ? String(customer.phone) : "";
+  const bundle = customer.bundle ? String(customer.bundle) : "";
+  const purchaseType = customer.purchase_type ? String(customer.purchase_type) : "";
+  const validity = customer.validity ? String(customer.validity) : "";
+  const detailRows = [
+   network ? `<div>Network: ${safe(network)}</div>` : "",
+   phone ? `<div>Phone: ${safe(phone)}</div>` : "",
+   bundle ? `<div>Bundle: ${safe(bundle)}</div>` : "",
+   purchaseType ? `<div>Plan Type: ${safe(purchaseType)}</div>` : "",
+   validity ? `<div>Validity: ${safe(validity)}</div>` : "",
+   customer.amount !== undefined ? `<div>Airtime Amount: ${formatAmount(customer.amount)}</div>` : ""
+  ].join("");
   const status = rawStatus === "received" ? "pending" : rawStatus;
   const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
   const amount = item.amount === null || item.amount === undefined || item.amount === ""
@@ -254,6 +268,7 @@ function renderTransactions(items){
 
     <div class="details">
      <div>Date: ${safe(formatDate(item.created_at))}</div>
+     ${detailRows}
      <div>Description: ${safe(item.description || "Transaction")}</div>
      ${item.reference ? `<div>Reference: ${safe(item.reference)}</div>` : ""}
     </div>
@@ -299,7 +314,8 @@ async function loadTransactions(user){
    created_at: request.created_at,
    description: "Request received. No payment was taken and no service has been delivered.",
    reference: request.reference,
-   status: request.status || "received"
+   status: request.status || "received",
+   customer_data: request.customer_data || {}
   }));
 
   const combined = [...transactions, ...requests].sort((a,b) =>
