@@ -204,6 +204,37 @@ button{
 
 
 
+
+.bundle-heading{display:flex;align-items:end;justify-content:space-between;gap:10px;margin-top:24px}
+.bundle-heading label{margin:0}
+.bundle-title{font-size:15px}
+.bundle-subtitle{font-size:11px;color:#8b8498;margin-top:5px}
+.bundle-count{font-size:10px;font-weight:700;color:#6d28d9;background:#f2eaff;padding:7px 9px;border-radius:20px;white-space:nowrap}
+.bundle-filters{display:flex;gap:7px;overflow-x:auto;padding:14px 0 12px;scrollbar-width:none}
+.bundle-filters::-webkit-scrollbar{display:none}
+.filter-chip{width:auto;margin:0;padding:9px 13px;border:1px solid #e8e1f2;border-radius:22px;background:#fff;color:#655b74;font-size:11px;font-weight:700;white-space:nowrap}
+.filter-chip.active{background:#6425c5;border-color:#6425c5;color:#fff}
+.bundle-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.bundle-card{width:100%;margin:0;padding:14px 12px;text-align:left;background:#fff;color:#302044;border:1px solid #e9e3f1;border-radius:14px;min-height:112px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;box-shadow:0 3px 12px #35106f08;transition:border-color .18s,background .18s}
+.bundle-card:active{transform:scale(.99)}
+.bundle-card.selected{border:2px solid #6425c5;background:#f7f1ff;padding:13px 11px;box-shadow:0 4px 14px #6425c51a}
+.bundle-card-top{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.bundle-data{font-size:21px;font-weight:800;letter-spacing:-.5px;color:#281344}
+.bundle-tag{font-size:9px;font-weight:700;color:#6d28d9;background:#f0e8ff;padding:5px 7px;border-radius:20px;white-space:nowrap}
+.bundle-validity{font-size:11px;color:#82798e;margin-top:4px}
+.bundle-card-bottom{display:flex;justify-content:space-between;align-items:center;gap:5px}
+.bundle-price{font-size:15px;font-weight:800;color:#6425c5}
+.bundle-select{font-size:10px;color:#8b8498;font-weight:700}
+.bundle-card.selected .bundle-select{color:#6425c5}
+.bundle-empty{grid-column:1/-1;text-align:center;padding:25px 14px;background:#faf8fd;border:1px dashed #d9cde9;border-radius:13px;color:#82798e;font-size:12px;line-height:1.6}
+.selected-bundle{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:16px;padding:15px;background:linear-gradient(135deg,#f4edff,#fbf9ff);border:1px solid #e6dafa;border-radius:13px}
+.selected-bundle>div{display:flex;flex-direction:column;gap:4px;min-width:0}
+.selected-label{font-size:9px;letter-spacing:1px;font-weight:800;color:#8b72b4}
+#selectedPlanName{font-size:13px;color:#352052}
+#selectedPlanValidity{font-size:10px;color:#8b8498}
+.selected-price{font-size:17px;color:#6425c5;white-space:nowrap}
+@media(max-width:360px){.bundle-grid{gap:7px}.bundle-card{padding:12px 9px}.bundle-card.selected{padding:11px 8px}.bundle-data{font-size:19px}.bundle-price{font-size:13px}}
+
 @media(max-width:360px){
  .networks{gap:6px}
  .network{padding:10px 2px}
@@ -311,21 +342,31 @@ Choose your network and preferred data plan.
  maxlength="11"
  inputmode="numeric">
 
-<label>Select Data Plan</label>
+<div class="bundle-heading">
+  <div>
+    <label class="bundle-title">Choose Your Bundle</label>
+    <p class="bundle-subtitle">Select the data plan that works for you.</p>
+  </div>
+  <span class="bundle-count" id="bundleCount">0 plans</span>
+</div>
 
-<select id="plan" onchange="updatePrice()">
-<option value="">Choose data bundle</option>
-<option value="500mb">500MB</option>
-<option value="1gb">1GB</option>
-<option value="2gb">2GB</option>
-<option value="3gb">3GB</option>
-<option value="5gb">5GB</option>
-<option value="10gb">10GB</option>
-</select>
+<div class="bundle-filters" id="bundleFilters" role="group" aria-label="Filter bundles">
+  <button type="button" class="filter-chip active" data-filter="ALL">All</button>
+  <button type="button" class="filter-chip" data-filter="DAILY">Daily</button>
+  <button type="button" class="filter-chip" data-filter="WEEKLY">Weekly</button>
+  <button type="button" class="filter-chip" data-filter="MONTHLY">Monthly</button>
+  <button type="button" class="filter-chip" data-filter="OTHER">Other</button>
+</div>
 
-<div class="price-box">
-<span>Supplier Price</span>
-<strong id="price">Not available</strong>
+<div class="bundle-grid" id="bundleGrid" aria-live="polite"></div>
+
+<div class="selected-bundle" id="selectedBundle">
+  <div>
+    <span class="selected-label">SELECTED BUNDLE</span>
+    <strong id="selectedPlanName">Choose a bundle above</strong>
+    <small id="selectedPlanValidity">Your selected plan will appear here</small>
+  </div>
+  <strong class="selected-price" id="price">—</strong>
 </div>
 
 <p id="planAvailability" class="note" aria-live="polite"></p>
@@ -349,55 +390,124 @@ import { DATA_PLANS } from "./data-plans.js";
 
 let selectedNetwork="MTN";
 let selectedPurchaseType="SME";
-const planSelect=document.getElementById("plan");
+let selectedPlanId="";
+let selectedFilter="ALL";
+
+const bundleGrid=document.getElementById("bundleGrid");
 const priceLabel=document.getElementById("price");
+const selectedPlanName=document.getElementById("selectedPlanName");
+const selectedPlanValidity=document.getElementById("selectedPlanValidity");
+const bundleCount=document.getElementById("bundleCount");
 
 function normalizedType(type){
  const value=String(type||"").toUpperCase();
  return value==="COOPERATE GIFTING" || value==="CORPORATE" ? "CORPORATE" : value;
 }
+function validityCategory(validity){
+ const value=String(validity||"").toLowerCase();
+ if(value.includes("daily") || value.includes("day") || value.includes("24 hour")) return "DAILY";
+ if(value.includes("weekly") || value.includes("week") || value.includes("7 days") || value.includes("14 days")) return "WEEKLY";
+ if(value.includes("monthly") || value.includes("month") || value.includes("30 days")) return "MONTHLY";
+ return "OTHER";
+}
+function formatPrice(amount){
+ return "₦"+Number(amount).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function clearSelectedPlan(){
+ selectedPlanId="";
+ selectedPlanName.textContent="Choose a bundle above";
+ selectedPlanValidity.textContent="Your selected plan will appear here";
+ priceLabel.textContent="—";
+}
 function choosePurchaseType(element,type){
  selectedPurchaseType=type;
  document.querySelectorAll(".type-option").forEach(item=>item.classList.remove("active"));
  element.classList.add("active");
+ clearSelectedPlan();
  renderPlans();
 }
 function chooseNetwork(element,network){
  selectedNetwork=network;
  document.querySelectorAll(".network").forEach(item=>item.classList.remove("active"));
  element.classList.add("active");
+ clearSelectedPlan();
+ renderPlans();
+}
+function selectBundle(id){
+ selectedPlanId=String(id);
+ const selected=DATA_PLANS.find(item=>String(item.id)===selectedPlanId);
+ if(!selected) return;
+ selectedPlanName.textContent=selected.name+" Data";
+ selectedPlanValidity.textContent=selected.validity;
+ priceLabel.textContent=formatPrice(selected.amount);
  renderPlans();
 }
 function renderPlans(){
- const matches=DATA_PLANS.filter(item=>item.network.toLowerCase()===selectedNetwork.toLowerCase() && normalizedType(item.type)===selectedPurchaseType);
- planSelect.innerHTML='<option value="">Choose data bundle</option>';
- matches.forEach(item=>{
-  const option=document.createElement("option");
-  option.value=String(item.id);
-  option.textContent=item.name+" • "+item.validity+" • ₦"+Number(item.amount).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
-  planSelect.appendChild(option);
- });
- priceLabel.textContent="Select a plan";
+ const matching=DATA_PLANS
+  .filter(item=>item.network.toLowerCase()===selectedNetwork.toLowerCase() && normalizedType(item.type)===selectedPurchaseType)
+  .sort((a,b)=>Number(a.amount)-Number(b.amount));
+ const visible=selectedFilter==="ALL" ? matching : matching.filter(item=>validityCategory(item.validity)===selectedFilter);
+ bundleGrid.replaceChildren();
+ bundleCount.textContent=visible.length+" plans";
+ if(!visible.length){
+  const empty=document.createElement("div");
+  empty.className="bundle-empty";
+  empty.textContent="No bundles in this category for the selected network and data type. Try another category.";
+  bundleGrid.appendChild(empty);
+ }else{
+  visible.forEach(item=>{
+   const card=document.createElement("button");
+   card.type="button";
+   card.className="bundle-card"+(String(item.id)===selectedPlanId?" selected":"");
+   card.setAttribute("aria-pressed",String(String(item.id)===selectedPlanId));
+   const top=document.createElement("div");
+   top.className="bundle-card-top";
+   const data=document.createElement("strong");
+   data.className="bundle-data";
+   data.textContent=item.name;
+   const tag=document.createElement("span");
+   tag.className="bundle-tag";
+   tag.textContent=validityCategory(item.validity)==="OTHER"?"SPECIAL":validityCategory(item.validity);
+   top.append(data,tag);
+   const validity=document.createElement("div");
+   validity.className="bundle-validity";
+   validity.textContent=item.validity;
+   const bottom=document.createElement("div");
+   bottom.className="bundle-card-bottom";
+   const amount=document.createElement("strong");
+   amount.className="bundle-price";
+   amount.textContent=formatPrice(item.amount);
+   const action=document.createElement("span");
+   action.className="bundle-select";
+   action.textContent=String(item.id)===selectedPlanId?"SELECTED":"SELECT";
+   bottom.append(amount,action);
+   card.append(top,validity,bottom);
+   card.addEventListener("click",()=>selectBundle(item.id));
+   bundleGrid.appendChild(card);
+  });
+ }
  const note=document.getElementById("planAvailability");
- if(note) note.textContent=matches.length ? matches.length+" matching plans available. Prices shown are supplier-listed amounts." : "No plans found for this network and type. Try another type.";
+ if(note) note.textContent=matching.length+" supplier-listed bundles available for "+selectedNetwork+". Choose a card to select your bundle.";
 }
-function updatePrice(){
- const selected=DATA_PLANS.find(item=>String(item.id)===planSelect.value);
- priceLabel.textContent=selected ? "₦"+Number(selected.amount).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2}) : "Select a plan";
-}
+document.getElementById("bundleFilters").addEventListener("click",event=>{
+ const chip=event.target.closest("[data-filter]");
+ if(!chip) return;
+ selectedFilter=chip.dataset.filter;
+ document.querySelectorAll(".filter-chip").forEach(item=>item.classList.toggle("active",item===chip));
+ renderPlans();
+});
 function continuePurchase(){
  const phone=document.getElementById("phone").value.trim();
- const selected=DATA_PLANS.find(item=>String(item.id)===planSelect.value);
+ const selected=DATA_PLANS.find(item=>String(item.id)===selectedPlanId && item.network.toLowerCase()===selectedNetwork.toLowerCase() && normalizedType(item.type)===selectedPurchaseType);
  if(!/^0[789][01]\d{8}$/.test(phone)){
   alert("Please enter a valid 11-digit Nigerian phone number."); return;
  }
- if(!selected){ alert("Please select a valid data plan."); return; }
+ if(!selected){ alert("Please select a data bundle."); return; }
  const params=new URLSearchParams({network:selectedNetwork,phone,plan_id:String(selected.id),type:selectedPurchaseType});
  window.location.href="order_summary.html?"+params.toString();
 }
 window.choosePurchaseType=choosePurchaseType;
 window.chooseNetwork=chooseNetwork;
-window.updatePrice=updatePrice;
 window.continuePurchase=continuePurchase;
 renderPlans();
 </script>
