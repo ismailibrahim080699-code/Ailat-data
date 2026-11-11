@@ -210,10 +210,6 @@ button{
 .bundle-title{font-size:15px}
 .bundle-subtitle{font-size:11px;color:#8b8498;margin-top:5px}
 .bundle-count{font-size:10px;font-weight:700;color:#6d28d9;background:#f2eaff;padding:7px 9px;border-radius:20px;white-space:nowrap}
-.bundle-filters{display:flex;gap:7px;overflow-x:auto;padding:14px 0 12px;scrollbar-width:none}
-.bundle-filters::-webkit-scrollbar{display:none}
-.filter-chip{width:auto;margin:0;padding:9px 13px;border:1px solid #e8e1f2;border-radius:22px;background:#fff;color:#655b74;font-size:11px;font-weight:700;white-space:nowrap}
-.filter-chip.active{background:#6425c5;border-color:#6425c5;color:#fff}
 .bundle-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .bundle-card{width:100%;margin:0;padding:14px 12px;text-align:left;background:#fff;color:#302044;border:1px solid #e9e3f1;border-radius:14px;min-height:112px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;box-shadow:0 3px 12px #35106f08;transition:border-color .18s,background .18s}
 .bundle-card:active{transform:scale(.99)}
@@ -344,14 +340,6 @@ Choose your network and preferred data plan.
   <span class="bundle-count" id="bundleCount">0 plans</span>
 </div>
 
-<div class="bundle-filters" id="bundleFilters" role="group" aria-label="Filter bundles">
-  <button type="button" class="filter-chip active" data-filter="ALL">All</button>
-  <button type="button" class="filter-chip" data-filter="DAILY">Daily</button>
-  <button type="button" class="filter-chip" data-filter="WEEKLY">Weekly</button>
-  <button type="button" class="filter-chip" data-filter="MONTHLY">Monthly</button>
-  <button type="button" class="filter-chip" data-filter="OTHER">Other</button>
-</div>
-
 <div class="bundle-grid" id="bundleGrid" aria-live="polite"></div>
 
 <p id="planAvailability" class="note" aria-live="polite"></p>
@@ -376,7 +364,6 @@ import { DATA_PLANS } from "./data-plans.js";
 let selectedNetwork="MTN";
 let selectedPurchaseType="SME";
 let selectedPlanId="";
-let selectedFilter="ALL";
 
 const bundleGrid=document.getElementById("bundleGrid");
 const bundleCount=document.getElementById("bundleCount");
@@ -384,13 +371,6 @@ const bundleCount=document.getElementById("bundleCount");
 function normalizedType(type){
  const value=String(type||"").toUpperCase();
  return value==="COOPERATE GIFTING" || value==="CORPORATE" ? "CORPORATE" : value;
-}
-function validityCategory(validity){
- const value=String(validity||"").toLowerCase();
- if(value.includes("daily") || value.includes("day") || value.includes("24 hour")) return "DAILY";
- if(value.includes("weekly") || value.includes("week") || value.includes("7 days") || value.includes("14 days")) return "WEEKLY";
- if(value.includes("monthly") || value.includes("month") || value.includes("30 days")) return "MONTHLY";
- return "OTHER";
 }
 function formatPrice(amount){
  return "₦"+Number(amount).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -420,7 +400,7 @@ function renderPlans(){
  const matching=DATA_PLANS
   .filter(item=>item.network.toLowerCase()===selectedNetwork.toLowerCase() && normalizedType(item.type)===selectedPurchaseType)
   .sort((a,b)=>Number(a.amount)-Number(b.amount));
- const visible=selectedFilter==="ALL" ? matching : matching.filter(item=>validityCategory(item.validity)===selectedFilter);
+ const visible=matching;
  bundleGrid.replaceChildren();
  bundleCount.textContent=visible.length+" plans";
  if(!visible.length){
@@ -439,10 +419,7 @@ function renderPlans(){
    const data=document.createElement("strong");
    data.className="bundle-data";
    data.textContent=item.name;
-   const tag=document.createElement("span");
-   tag.className="bundle-tag";
-   tag.textContent=validityCategory(item.validity)==="OTHER"?"SPECIAL":validityCategory(item.validity);
-   top.append(data,tag);
+   top.append(data);
    const validity=document.createElement("div");
    validity.className="bundle-validity";
    validity.textContent=item.validity;
@@ -463,13 +440,6 @@ function renderPlans(){
  const note=document.getElementById("planAvailability");
  if(note) note.textContent=matching.length+" supplier-listed bundles available for "+selectedNetwork+". Choose a card to select your bundle.";
 }
-document.getElementById("bundleFilters").addEventListener("click",event=>{
- const chip=event.target.closest("[data-filter]");
- if(!chip) return;
- selectedFilter=chip.dataset.filter;
- document.querySelectorAll(".filter-chip").forEach(item=>item.classList.toggle("active",item===chip));
- renderPlans();
-});
 function continuePurchase(){
  const phone=document.getElementById("phone").value.trim();
  const selected=DATA_PLANS.find(item=>String(item.id)===selectedPlanId && item.network.toLowerCase()===selectedNetwork.toLowerCase() && normalizedType(item.type)===selectedPurchaseType);
