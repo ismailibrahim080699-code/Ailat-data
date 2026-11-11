@@ -78,6 +78,21 @@ select:focus,input:focus{
  border-color:#6425c5;
 }
 
+.purchase-types{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:8px;
+ margin-top:4px;
+}
+.purchase-types .type-option{
+ width:100%;min-width:0;margin:0;padding:13px 5px;
+ border:1px solid #e8e3f0;border-radius:11px;background:#fff;
+ color:#352052;display:flex;flex-direction:column;align-items:center;
+ gap:5px;font-size:12px;
+}
+.purchase-types .type-option span{font-size:10px;color:#888;font-weight:normal}
+.purchase-types .type-option.active{border:2px solid #6425c5;background:#f5efff;color:#6425c5}
+
 .networks{
  display:grid;
  grid-template-columns:repeat(4,minmax(0,1fr));
@@ -218,6 +233,13 @@ Choose your network and preferred data plan.
 
 <div class="card">
 
+<label>Choose Data Type</label>
+<div class="purchase-types" role="group" aria-label="Choose data purchase type">
+<button type="button" class="type-option active" onclick="choosePurchaseType(this,'SME')"><strong>SME</strong><span>For yourself</span></button>
+<button type="button" class="type-option" onclick="choosePurchaseType(this,'GIFTING')"><strong>Gifting</strong><span>For someone</span></button>
+<button type="button" class="type-option" onclick="choosePurchaseType(this,'CORPORATE')"><strong>Corporate</strong><span>Business data</span></button>
+</div>
+
 <label>Select Network</label>
 
 <div class="networks">
@@ -323,6 +345,13 @@ Please check your phone number and selected data bundle before continuing.
 <script>
 
 let selectedNetwork="MTN";
+let selectedPurchaseType="SME";
+
+function choosePurchaseType(element,type){
+ selectedPurchaseType=type;
+ document.querySelectorAll(".type-option").forEach(item=>item.classList.remove("active"));
+ element.classList.add("active");
+}
 
 const plans={
  "500mb":{name:"500MB"},
@@ -377,7 +406,8 @@ function continuePurchase(){
  const params=new URLSearchParams({
   network:selectedNetwork,
   phone:phone,
-  plan:plan
+  plan:plan,
+  type:selectedPurchaseType
  });
 
  window.location.href="order_summary.html?"+params.toString();
