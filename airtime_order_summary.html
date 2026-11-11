@@ -63,7 +63,7 @@ const params = new URLSearchParams(window.location.search);
 const network = params.get("network") || "";
 const phone = params.get("phone") || "";
 const amount = Number(params.get("amount"));
-const validNetworks = ["MTN","Airtel","Glo","9mobile"];
+const validNetworks = ["MTN","Airtel","Glo","9mobile","Vitel"];
 const validPhone = /^0[789][01]\d{8}$/;
 const validAmount = Number.isSafeInteger(amount) && amount >= 50 && amount <= 100000;
 const button = document.getElementById("confirmButton");
