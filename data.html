@@ -324,12 +324,12 @@ Choose your network and preferred data plan.
 </select>
 
 <div class="price-box">
-<span>Total Amount</span>
+<span>Supplier Price</span>
 <strong id="price">Not available</strong>
 </div>
 
-<div class="demo" style="background:#fff8e7;color:#805600;padding:12px;border-radius:10px;font-size:12px;line-height:1.6;margin-top:15px">
-<strong>Supplier pricing pending:</strong> We will show the confirmed price when the official supplier API is connected. Submitting this request will not take payment or deliver data.
+<p id="planAvailability" class="note" aria-live="polite"></p>\n<div class="demo" style="background:#fff8e7;color:#805600;padding:12px;border-radius:10px;font-size:12px;line-height:1.6;margin-top:15px">
+<strong>Important:</strong> Prices are copied from the supplier catalogue and are not AILAT retail prices. This form only records a request; it does not debit a wallet or deliver data.
 </div>
 
 <button onclick="continuePurchase()">Continue</button>
@@ -342,77 +342,63 @@ Please check your phone number and selected data bundle before continuing.
 </div>
 </div>
 
-<script>
+
+<script type="module">
+import { DATA_PLANS } from "./data-plans.js";
 
 let selectedNetwork="MTN";
 let selectedPurchaseType="SME";
+const planSelect=document.getElementById("plan");
+const priceLabel=document.getElementById("price");
 
+function normalizedType(type){
+ const value=String(type||"").toUpperCase();
+ return value==="COOPERATE GIFTING" || value==="CORPORATE" ? "CORPORATE" : value;
+}
 function choosePurchaseType(element,type){
  selectedPurchaseType=type;
  document.querySelectorAll(".type-option").forEach(item=>item.classList.remove("active"));
  element.classList.add("active");
+ renderPlans();
 }
-
-const plans={
- "500mb":{name:"500MB"},
- "1gb":{name:"1GB"},
- "2gb":{name:"2GB"},
- "3gb":{name:"3GB"},
- "5gb":{name:"5GB"},
- "10gb":{name:"10GB"}
-};
-
 function chooseNetwork(element,network){
-
  selectedNetwork=network;
-
- document.querySelectorAll(".network").forEach(item=>{
-  item.classList.remove("active");
- });
-
+ document.querySelectorAll(".network").forEach(item=>item.classList.remove("active"));
  element.classList.add("active");
-
- updatePrice();
+ renderPlans();
 }
-
-function updatePrice(){
-
- const plan=document.getElementById("plan").value;
- const price=document.getElementById("price");
-
- if(!plan || !plans[plan]){
-  price.textContent="Not available";
-  return;
- }
-
- price.textContent="Awaiting supplier price";
-}
-
-function continuePurchase(){
-
- const phone=document.getElementById("phone").value.trim();
- const plan=document.getElementById("plan").value;
-
- if(!/^0[0-9]{10}$/.test(phone)){
-  alert("Please enter a valid 11-digit Nigerian phone number.");
-  return;
- }
-
- if(!plans[plan]){
-  alert("Please select a valid data bundle.");
-  return;
- }
-
- const params=new URLSearchParams({
-  network:selectedNetwork,
-  phone:phone,
-  plan:plan,
-  type:selectedPurchaseType
+function renderPlans(){
+ const matches=DATA_PLANS.filter(item=>item.network.toLowerCase()===selectedNetwork.toLowerCase() && normalizedType(item.type)===selectedPurchaseType);
+ planSelect.innerHTML='<option value="">Choose data bundle</option>';
+ matches.forEach(item=>{
+  const option=document.createElement("option");
+  option.value=String(item.id);
+  option.textContent=item.name+" • "+item.validity+" • ₦"+Number(item.amount).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+  planSelect.appendChild(option);
  });
-
+ priceLabel.textContent="Select a plan";
+ const note=document.getElementById("planAvailability");
+ if(note) note.textContent=matches.length ? matches.length+" matching plans available. Prices shown are supplier-listed amounts." : "No plans found for this network and type. Try another type.";
+}
+function updatePrice(){
+ const selected=DATA_PLANS.find(item=>String(item.id)===planSelect.value);
+ priceLabel.textContent=selected ? "₦"+Number(selected.amount).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2}) : "Select a plan";
+}
+function continuePurchase(){
+ const phone=document.getElementById("phone").value.trim();
+ const selected=DATA_PLANS.find(item=>String(item.id)===planSelect.value);
+ if(!/^0[789][01]\\d{8}$/.test(phone)){
+  alert("Please enter a valid 11-digit Nigerian phone number."); return;
+ }
+ if(!selected){ alert("Please select a valid data plan."); return; }
+ const params=new URLSearchParams({network:selectedNetwork,phone,plan_id:String(selected.id),type:selectedPurchaseType});
  window.location.href="order_summary.html?"+params.toString();
 }
-
+window.choosePurchaseType=choosePurchaseType;
+window.chooseNetwork=chooseNetwork;
+window.updatePrice=updatePrice;
+window.continuePurchase=continuePurchase;
+renderPlans();
 </script>
 
 </body>
