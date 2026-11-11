@@ -44,7 +44,7 @@ button:disabled{opacity:.65;cursor:wait}
 <div class="item"><span>Purchase Type</span><strong id="purchaseType">-</strong></div>
 <div class="item"><span>Phone Number</span><strong id="phone">-</strong></div>
 <div class="item"><span>Data Bundle</span><strong id="bundle">-</strong></div>
-<div class="total"><span>Supplier Price</span><strong id="amount">Not available</strong></div>
+<div class="total"><span>AILAT DATA Selling Price</span><strong id="amount">Not available</strong></div>
 <div class="notice">
 <strong>Important:</strong> This step only records your request. Supplier pricing has not yet been confirmed. No payment will be taken, no wallet balance will be deducted, and no data will be delivered.
 </div>
@@ -84,7 +84,7 @@ if(!validNetworks.includes(network) || !validPurchaseTypes.includes(purchaseType
  document.getElementById("purchaseType").textContent = purchaseType;
  document.getElementById("phone").textContent = phone;
  document.getElementById("bundle").textContent = selectedPlan.name+" — "+selectedPlan.validity+" (Plan ID "+selectedPlan.id+")";
- document.getElementById("amount").textContent = "₦"+Number(selectedPlan.amount).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+ document.getElementById("amount").textContent = "₦"+(Number(selectedPlan.amount)+50).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 
 function getSignedInUser(){
@@ -110,7 +110,7 @@ button.addEventListener("click", async()=>{
   const response = await fetch(SUPABASE_FUNCTION_URL,{
    method:"POST",
    headers:{"apikey":SUPABASE_PUBLISHABLE_KEY,"Authorization":"Bearer "+token,"Content-Type":"application/json"},
-   body:JSON.stringify({service_key:"data",idempotency_key:requestKey,customer_data:{network,phone,bundle:selectedPlan.name+" ("+selectedPlan.validity+")",purchase_type:purchaseType,supplier_plan_id:selectedPlan.id,supplier_amount:selectedPlan.amount}})
+   body:JSON.stringify({service_key:"data",idempotency_key:requestKey,customer_data:{network,phone,bundle:selectedPlan.name+" ("+selectedPlan.validity+")",purchase_type:purchaseType,supplier_plan_id:selectedPlan.id,supplier_amount:selectedPlan.amount,selling_amount:Number(selectedPlan.amount)+50}})
   });
   const result = await response.json().catch(()=>({}));
   if(!response.ok || !result.success) throw new Error(result.error || "Could not save your request. Please try again.");
