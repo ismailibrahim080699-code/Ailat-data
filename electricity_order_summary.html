@@ -6,41 +6,20 @@
 <h3>Electricity Order Details</h3><p class="subtitle">Please review the details entered.</p>
 <div class="item"><span>Provider</span><strong id="provider">-</strong></div><div class="item"><span>DISCO ID</span><strong id="disco">-</strong></div><div class="item"><span>Meter Type</span><strong id="type">-</strong></div><div class="item"><span>Meter Number</span><strong id="meter">-</strong></div>
 <div class="total"><span>Requested Amount</span><strong id="amount">₦0.00</strong></div>
-<div class="notice"><strong>Important:</strong> Your request is sent securely through AILAT DATA to the electricity provider. A token is shown only if the provider confirms a successful prepaid transaction. AILAT DATA wallet charging is not enabled yet.</div>
-<button id="submitButton" type="button">Submit Electricity Request</button><p id="requestStatus" role="status" aria-live="polite"></p><div class="tokenBox" id="tokenBox"><strong>Electricity Token</strong><span class="tokenValue" id="tokenValue"></span></div><a href="electricity.html" class="cancel">← Go Back and Edit</a>
+<div class="notice"><strong>Service not active:</strong> Electricity payments are not available yet. This page only displays the details you entered. No request will be sent to the provider, no payment will be taken, and no token will be issued.</div>
+<button id="submitButton" type="button" disabled>Electricity Service Coming Soon</button><p id="requestStatus" role="status" aria-live="polite"></p><a href="electricity.html" class="cancel">← Go Back and Edit</a>
 </div></div></div>
-<script type="module">
-import { app } from "./firebase.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
-const FUNCTION_URL="https://bdogulpsybiggpgipdbt.supabase.co/functions/v1/ailat-electricity-orders";
-const PUBLISHABLE_KEY="sb_publishable_9wmzpjzVhnby_E3jogTjRw_c22XiDEC";
-const auth=getAuth(app),params=new URLSearchParams(location.search);
+<script>
+const params=new URLSearchParams(location.search);
 const provider=params.get("provider")||"",disco=params.get("disco")||"",type=params.get("type")||"",meter=params.get("meter")||"",amount=Number(params.get("amount"));
 const valid=!!provider&&["1","2","3","4","5","6","7","8","9","10"].includes(disco)&&["prepaid","postpaid"].includes(type)&&/^[0-9]{6,20}$/.test(meter)&&Number.isSafeInteger(amount)&&amount>=100&&amount<=1000000;
-const button=document.getElementById("submitButton"),status=document.getElementById("requestStatus");
-let requestKey=crypto.randomUUID(),saved=false;
-if(!valid){document.getElementById("summaryCard").innerHTML='<h3>Invalid Order Details</h3><p class="subtitle">Please go back and enter your electricity details again.</p><a class="cancel" href="electricity.html">← Back to Electricity</a>';}
-else{
- document.getElementById("provider").textContent=provider;document.getElementById("disco").textContent=disco;document.getElementById("type").textContent=type==="prepaid"?"Prepaid":"Postpaid";document.getElementById("meter").textContent=meter;document.getElementById("amount").textContent="₦"+amount.toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+if(!valid){
+ document.getElementById("summaryCard").innerHTML='<h3>Invalid Order Details</h3><p class="subtitle">Please go back and enter your electricity details again.</p><a class="cancel" href="electricity.html">← Back to Electricity</a>';
+}else{
+ document.getElementById("provider").textContent=provider;
+ document.getElementById("disco").textContent=disco;
+ document.getElementById("type").textContent=type==="prepaid"?"Prepaid":"Postpaid";
+ document.getElementById("meter").textContent=meter;
+ document.getElementById("amount").textContent="₦"+amount.toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
-function signedInUser(){return new Promise((resolve,reject)=>{const unsub=onAuthStateChanged(auth,user=>{unsub();if(!user){reject(new Error("Please log in before submitting your electricity request."));return;}resolve(user);},error=>{unsub();reject(error);});});}
-button.addEventListener("click",async()=>{
- if(!valid||saved)return;button.disabled=true;button.textContent="Submitting...";status.textContent="Connecting securely to the electricity provider. Please wait.";
- try{
-  const user=await signedInUser();await user.reload();if(!user.emailVerified)throw new Error("Please verify your email before submitting this request.");
-  const token=await user.getIdToken(true),response=await fetch(FUNCTION_URL,{method:"POST",headers:{"apikey":PUBLISHABLE_KEY,"Authorization":"Bearer "+token,"Content-Type":"application/json"},body:JSON.stringify({idempotency_key:requestKey,customer_data:{disco:Number(disco),meter_type:type,meter_number:meter,amount}})});
-  const result=await response.json().catch(()=>({}));if(!response.ok||!result.success)throw new Error(result.error||"Could not complete your electricity request.");
-  saved=true;button.textContent="Request Submitted";
-  const ref=result.order_request?.reference||"Unavailable";
-  if(result.provider_status==="success"){
-    status.textContent="Provider confirmed SUCCESS. Reference: "+ref+". "+(result.provider_message||"");
-    if(result.token){document.getElementById("tokenValue").textContent=result.token;document.getElementById("tokenBox").style.display="block";}
-    else if(result.token_available===false)status.textContent+=" No token was returned by the provider; keep this reference for support.";
-    status.textContent+=" AILAT DATA has not deducted your wallet.";
-  }else{
-    status.textContent=(result.notice||"Request received; provider confirmation is pending.")+" Reference: "+ref+". Status: "+(result.order_request?.status||"processing")+".";
-    button.textContent="Request Submitted";
-  }
- }catch(error){button.disabled=false;button.textContent="Try Again";status.textContent=error.message||"Something went wrong. Please try again.";}
-});
 </script></body></html>
