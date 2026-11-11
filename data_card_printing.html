@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4c1d95">
+<title>AILAT DATA | Data Card Printing</title>
+<link rel="icon" type="image/svg+xml" href="assets/ailat-mark.svg">
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Arial,sans-serif;background:#f5f3ff;color:#24134d;display:flex;flex-direction:column}
+header{padding:20px;background:linear-gradient(135deg,#35106f,#5b21b6,#7c3aed);color:white}
+header a{color:white;text-decoration:none;font-weight:bold;font-size:14px}
+main{width:min(92%,480px);margin:45px auto;flex:1}
+.card{background:white;border:1px solid #eee7ff;border-radius:22px;padding:28px 22px;text-align:center;box-shadow:0 10px 28px #35106f12}
+.icon{width:70px;height:70px;margin:0 auto 18px;border-radius:20px;background:#ede9fe;color:#6d28d9;display:grid;place-items:center}
+.icon svg{width:34px;height:34px}
+h1{font-size:23px;margin:0 0 10px}
+p{font-size:14px;line-height:1.7;color:#75658f}
+.status{display:inline-block;margin:14px 0;padding:9px 14px;border-radius:20px;background:#fef3c7;color:#92400e;font-size:12px;font-weight:800}
+.note{font-size:12px;color:#8b7aa6;margin-top:15px}
+button{border:0;background:linear-gradient(135deg,#5b21b6,#7c3aed);color:white;padding:13px 20px;border-radius:12px;font-weight:bold;font-size:13px;margin-top:12px}
+footer{text-align:center;padding:22px;color:#9589ac;font-size:11px}
+</style>
+</head>
+<body>
+<header><a href="dashboard.html">← Back to Dashboard</a></header>
+<main>
+<section class="card">
+<div class="icon"><i data-lucide="printer"></i></div>
+<h1>Data Card Printing</h1>
+<p>Create and print data recharge cards after provider integration is available.</p>
+<div class="status">COMING SOON</div>
+<p>This service is not available for purchases yet. It will be activated only after provider API support, pricing, and transaction handling have been verified.</p>
+<p class="note">No payment is collected here. No order or transaction is placed.</p>
+<button type="button" onclick="location.href='dashboard.html'">Back to Dashboard</button>
+</section>
+</main>
+<footer>AILAT DATA © 2026 · All Rights Reserved</footer>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>if(window.lucide)lucide.createIcons();</script>
+</body>
+</html>
