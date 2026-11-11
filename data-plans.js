@@ -123,7 +123,7 @@ export const DATA_PLANS = [
   {id:270,network:"MTN",type:"GIFTING",name:"3.2GB",amount:980,validity:"2 days"},
   {id:271,network:"MTN",type:"GIFTING",name:"2GB",amount:1470,validity:"30 days"},
   {id:272,network:"MTN",type:"GIFTING",name:"2.7GB",amount:1960,validity:"30 days"},
-  {id:273,network:"MTN",type:"GIFTING",name:"3.5GB",amount:2450,validity:"30 days"},,
+  {id:273,network:"MTN",type:"GIFTING",name:"3.5GB",amount:2450,validity:"30 days"},
 
   // Page 51–100 (supplier documentation; transcribed 11 Nov 2026)
   {id:274,network:"MTN",type:"GIFTING",name:"3.5GB",amount:1470,validity:"7 days"},
