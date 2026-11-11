@@ -387,7 +387,7 @@ function updatePrice(){
 function continuePurchase(){
  const phone=document.getElementById("phone").value.trim();
  const selected=DATA_PLANS.find(item=>String(item.id)===planSelect.value);
- if(!/^0[789][01]\\d{8}$/.test(phone)){
+ if(!/^0[789][01]\d{8}$/.test(phone)){
   alert("Please enter a valid 11-digit Nigerian phone number."); return;
  }
  if(!selected){ alert("Please select a valid data plan."); return; }
