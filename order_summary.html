@@ -69,7 +69,7 @@ const validPurchaseTypes = ["SME","GIFTING","CORPORATE"];
 const phone = params.get("phone") || "";
 const planId = params.get("plan_id") || params.get("plan") || "";
 const validNetworks = ["MTN","Airtel","Glo","9mobile","Vitel"];
-const validPhone = /^0[789][01]\\d{8}$/;
+const validPhone = /^0[789][01]\d{8}$/;
 const selectedPlan = DATA_PLANS.find(item => String(item.id)===String(planId) && item.network.toLowerCase()===network.toLowerCase());
 const normalizedType = type => { const v=String(type||"").toUpperCase(); return v==="COOPERATE GIFTING" || v==="CORPORATE" ? "CORPORATE" : v; };
 const button = document.getElementById("confirmButton");
