@@ -254,7 +254,7 @@ function renderTransactions(items){
    customer.amount !== undefined ? `<div>Airtime Amount: ${formatAmount(customer.amount)}</div>` : ""
   ].join("");
   const status = rawStatus === "received" ? "pending" : rawStatus;
-  const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
+  const statusLabel = rawStatus === "received" ? "Request Recorded" : status.charAt(0).toUpperCase() + status.slice(1);
   const amount = item.amount === null || item.amount === undefined || item.amount === ""
    ? "—"
    : formatAmount(item.amount);
