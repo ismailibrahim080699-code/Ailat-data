@@ -3,40 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4c1d95">
+<meta name="description" content="AILAT DATA Cable TV Subscription service setup.">
 <link rel="icon" type="image/svg+xml" href="assets/ailat-mark.svg">
-<title>Cable TV - AILAT DATA</title>
+<title>Cable TV Subscription - AILAT DATA</title>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif}
 body{margin:0;background:#f5f3ff;color:#24134d}
-.container{max-width:480px;min-height:100vh;margin:auto}
-header{background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;padding:22px 20px;border-radius:0 0 20px 20px;display:flex;align-items:center;gap:15px}
+.container{max-width:500px;min-height:100vh;margin:auto;display:flex;flex-direction:column}
+header{background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;padding:22px 20px;border-radius:0 0 20px 20px;display:flex;align-items:center;gap:14px}
 .back{color:white;text-decoration:none;font-size:27px}
-header h2{font-size:19px;margin:0}
-.content{padding:22px 18px}
-.card{background:white;border-radius:18px;padding:24px 20px;margin-top:20px;box-shadow:0 5px 20px #24134d10;text-align:center}
-.icon{font-size:48px;margin:8px 0 18px}
-h1{font-size:23px;margin:0 0 10px;color:#5425a8}
-.status{display:inline-block;background:#fff0c2;color:#795600;padding:7px 13px;border-radius:20px;font-size:12px;font-weight:bold;margin:8px 0 15px}
+header h2{font-size:18px;margin:0}
+.content{padding:22px 18px;flex:1}
+.card{background:white;border:1px solid #eee7ff;border-radius:18px;padding:24px 20px;margin-top:8px;box-shadow:0 5px 20px #24134d10}
+.hero{text-align:center}
+.icon{font-size:46px;margin:5px 0 16px}
+h1{font-size:23px;margin:0 0 9px;color:#5425a8}
 p{font-size:14px;line-height:1.7;color:#686078}
-.notice{background:#fff7e5;color:#795600;padding:14px;border-radius:12px;font-size:13px;line-height:1.7;margin-top:18px;text-align:left}
-button{width:100%;padding:15px;border:0;border-radius:12px;background:linear-gradient(135deg,#702bd1,#4520a0);color:white;font-size:15px;font-weight:bold;margin-top:22px}
-.brand-mark{width:34px;height:34px;object-fit:contain;flex:0 0 34px;vertical-align:middle}
+.status{display:inline-block;background:#fff0c2;color:#795600;padding:8px 13px;border-radius:20px;font-size:12px;font-weight:bold;margin:10px 0 14px}
+.panel{background:#faf8ff;border:1px solid #eee7ff;border-radius:13px;padding:16px;margin-top:17px}
+.panel h3{font-size:14px;color:#5425a8;margin:0 0 9px}
+ul{padding-left:19px;margin:0;color:#686078;font-size:13px;line-height:1.9}
+.notice{background:#fff7e5;color:#795600;padding:14px;border-radius:12px;font-size:12px;line-height:1.7;margin-top:17px}
+button{width:100%;padding:15px;border:0;border-radius:12px;background:linear-gradient(135deg,#702bd1,#4520a0);color:white;font-size:15px;font-weight:bold;margin-top:20px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#9589ac;font-size:11px}
 </style>
 </head>
 <body>
 <div class="container">
-<header><a href="dashboard.html" class="back" aria-label="Back to dashboard">‹</a><img class="brand-mark" src="assets/ailat-mark.svg" alt="AILAT DATA"><h2>Cable TV Subscription</h2></header>
+<header><a href="dashboard.html" class="back" aria-label="Back to dashboard">‹</a><h2>Cable TV Subscription</h2></header>
 <main class="content">
-<div class="card">
+<section class="card">
+<div class="hero">
 <div class="icon" aria-hidden="true">📺</div>
-<h1>TV Subscription</h1>
-<span class="status">COMING SOON</span>
-<p>DStv, GOtv and Startimes subscription services are not active yet.</p>
-<p>We are waiting for a verified service provider, confirmed package information and a secure payment connection before enabling this service.</p>
-<div class="notice"><strong>Important:</strong> Do not enter your Smartcard/IUC number or send money for a TV subscription through AILAT DATA at this time. No subscription request or payment can be processed yet.</div>
-<button type="button" onclick="location.href='dashboard.html'">Back to Dashboard</button>
+<h1>Cable TV Subscription</h1>
+<p>DStv, GOtv and StarTimes</p>
+<span class="status">PROVIDER INTEGRATION PENDING</span>
+<p>Cable TV subscription page is prepared for provider catalogue integration.</p>
 </div>
+<div class="panel">
+<h3>Remaining setup</h3>
+<ul><li>Confirm the TV provider and supported bouquets</li><li>Load official package identifiers and current prices</li><li>Confirm Smartcard/IUC validation and customer-name lookup</li><li>Connect order recording and verified subscription delivery</li></ul>
+</div>
+<div class="notice"><strong>Important:</strong> Do not submit a Smartcard/IUC number or make payment through this page yet. No subscription will be processed.</div>
+<button type="button" onclick="location.href='dashboard.html'">Back to Dashboard</button>
+</section>
 </main>
+<footer>AILAT DATA © 2026 · All Rights Reserved</footer>
 </div>
 </body>
 </html>
