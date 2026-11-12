@@ -363,7 +363,8 @@ const SUPABASE_FUNCTION_URL="https://bdogulpsybiggpgipdbt.supabase.co/functions/
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_9wmzpjzVhnby_E3jogTjRw_c22XiDEC";
 let DATA_PLANS=[];
 
-const INTERNAL_NETWORK_IDS = Object.freeze({
+// AILAT DATA's own stable network identifiers. These are not supplier IDs.
+const AILAT_NETWORK_IDS = Object.freeze({
  mtn:1,
  airtel:2,
  glo:3,
@@ -371,7 +372,7 @@ const INTERNAL_NETWORK_IDS = Object.freeze({
  vitel:5
 });
 function getInternalNetworkId(network){
- return INTERNAL_NETWORK_IDS[String(network||"").toLowerCase()] ?? null;
+ return AILAT_NETWORK_IDS[String(network||"").toLowerCase()] ?? null;
 }
 
 let selectedNetwork="MTN";
@@ -469,7 +470,7 @@ function continuePurchase(){
   alert("Please enter a valid 11-digit Nigerian phone number."); return;
  }
  if(!selected){ alert("Please select a data bundle."); return; }
- const params=new URLSearchParams({network:selectedNetwork,network_id:String(getInternalNetworkId(selectedNetwork)),phone,plan_id:String(selected.id),type:selectedPurchaseType});
+ const params=new URLSearchParams({network:selectedNetwork,internal_network_id:String(getInternalNetworkId(selectedNetwork)),phone,plan_id:String(selected.id),type:selectedPurchaseType});
  window.location.href="order_summary.html?"+params.toString();
 }
 window.choosePurchaseType=choosePurchaseType;
