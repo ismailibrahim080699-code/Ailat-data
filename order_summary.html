@@ -97,7 +97,10 @@ let requestKey = crypto.randomUUID();
 let requestSaved = false;
 
 if(!validNetworks.includes(network) || expectedNetworkId===null || suppliedNetworkId!==expectedNetworkId || !validPurchaseTypes.includes(purchaseType) || !validPhone.test(phone) || !selectedPlan || normalizedType(selectedPlan.type)!==purchaseType){
- document.getElementById("orderCard").innerHTML = '<div class="error"><h3>Invalid Order Details</h3><p class="subtitle">${plansLoadError ? "Data plan details could not be loaded. Please return to Buy Data and try again when your connection is available." : "Your order information is incomplete or incorrect. Please return and select your network, phone number and data plan again."}</p></div><a href="data.html" class="cancel">← Back to Buy Data</a>';
+ const invalidMessage = plansLoadError
+  ? "Data plan details could not be loaded. Please return to Buy Data and try again when your connection is available."
+  : "Your order information is incomplete or incorrect. Please return and select your network, phone number and data plan again.";
+ document.getElementById("orderCard").innerHTML = `<div class="error"><h3>Invalid Order Details</h3><p class="subtitle">${invalidMessage}</p></div><a href="data.html" class="cancel">← Back to Buy Data</a>`;
 }else{
  document.getElementById("network").textContent = network;
  document.getElementById("purchaseType").textContent = purchaseType;
