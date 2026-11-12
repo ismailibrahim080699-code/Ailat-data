@@ -4,21 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#4c1d95">
-<title>AILAT DATA | Vitel Network</title>
+<meta name="description" content="AILAT DATA VITEL Data service preparation.">
+<link rel="icon" type="image/svg+xml" href="assets/ailat-mark.svg">
+<title>AILAT DATA | VITEL Data</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;font-family:Arial,sans-serif;background:#f5f3ff;color:#24134d;display:flex;flex-direction:column}
 header{padding:20px;background:linear-gradient(135deg,#35106f,#5b21b6,#7c3aed);color:white}
 header a{color:white;text-decoration:none;font-weight:bold;font-size:14px}
-main{width:min(92%,480px);margin:45px auto;flex:1}
-.card{background:white;border:1px solid #eee7ff;border-radius:22px;padding:28px 22px;text-align:center;box-shadow:0 10px 28px #35106f12}
-.icon{width:70px;height:70px;margin:0 auto 18px;border-radius:20px;background:#ede9fe;color:#6d28d9;display:grid;place-items:center}
-.icon svg{width:34px;height:34px}
-h1{font-size:23px;margin:0 0 10px}
+main{width:min(92%,520px);margin:30px auto;flex:1}
+.card{background:white;border:1px solid #eee7ff;border-radius:22px;padding:26px 22px;box-shadow:0 10px 28px #35106f12}
+.hero{text-align:center}
+.icon{width:72px;height:72px;margin:0 auto 17px;border-radius:21px;background:#ede9fe;color:#6d28d9;display:grid;place-items:center;font-size:30px}
+h1{font-size:24px;margin:0 0 10px}
 p{font-size:14px;line-height:1.7;color:#75658f}
-.status{display:inline-block;margin:14px 0;padding:9px 14px;border-radius:20px;background:#fef3c7;color:#92400e;font-size:12px;font-weight:800}
-.note{font-size:12px;color:#8b7aa6;margin-top:15px}
-button{border:0;background:linear-gradient(135deg,#5b21b6,#7c3aed);color:white;padding:13px 20px;border-radius:12px;font-weight:bold;font-size:13px;margin-top:12px}
+.status{display:inline-block;margin:12px 0;padding:9px 14px;border-radius:20px;background:#fff4d6;color:#875500;font-size:12px;font-weight:800}
+.section{margin-top:22px;padding:17px;background:#faf8ff;border:1px solid #eee7ff;border-radius:15px}
+.section h2{font-size:15px;margin:0 0 8px;color:#4c1d95}
+ul{padding-left:19px;margin:10px 0 0;color:#75658f;font-size:13px;line-height:1.9}
+.notice{margin-top:18px;padding:14px;border-radius:13px;background:#f3efff;color:#5b21b6;font-size:12px;line-height:1.7}
+button{width:100%;border:0;background:linear-gradient(135deg,#5b21b6,#7c3aed);color:white;padding:14px 18px;border-radius:12px;font-weight:bold;font-size:14px;margin-top:20px;cursor:pointer}
 footer{text-align:center;padding:22px;color:#9589ac;font-size:11px}
 </style>
 </head>
@@ -26,17 +31,21 @@ footer{text-align:center;padding:22px;color:#9589ac;font-size:11px}
 <header><a href="dashboard.html">← Back to Dashboard</a></header>
 <main>
 <section class="card">
-<div class="icon"><i data-lucide="network"></i></div>
-<h1>Vitel Network</h1>
-<p>Vitel network service. We are preparing this service for AILAT DATA.</p>
+<div class="hero">
+<div class="icon" aria-hidden="true">📶</div>
+<h1>VITEL Data</h1>
+<p>VITEL network data bundles</p>
 <div class="status">COMING SOON</div>
-<p>This service is not available for purchases yet. It will be activated only after provider API support, pricing, and transaction handling have been verified.</p>
-<p class="note">No payment is collected here. No order or transaction is placed.</p>
+<p>This service is being prepared for AILAT DATA. The checklist below records what must be confirmed before its order form can be activated.</p>
+</div>
+<div class="section">
+<h2>Launch requirements</h2>
+<ul><li>Confirm the correct VITEL provider/API and network mapping</li><li>Obtain the provider's official bundle catalogue and plan identifiers</li><li>Confirm prices, validity and supported phone-number formats</li><li>Connect authenticated order handling and transaction records</li></ul>
+</div>
+<div class="notice"><strong>Safe status:</strong> No payment is collected and no live order is submitted from this page. Product details and provider integration must be verified before activation.</div>
 <button type="button" onclick="location.href='dashboard.html'">Back to Dashboard</button>
 </section>
 </main>
 <footer>AILAT DATA © 2026 · All Rights Reserved</footer>
-<script src="https://unpkg.com/lucide@latest"></script>
-<script>if(window.lucide)lucide.createIcons();</script>
 </body>
 </html>
