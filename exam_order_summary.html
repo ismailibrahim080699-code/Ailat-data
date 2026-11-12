@@ -3,25 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Exam PIN - AILAT DATA</title>
+<meta name="theme-color" content="#4c1d95">
+<title>Exam PIN / Result Checker - AILAT DATA</title>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif}
 body{margin:0;min-height:100vh;background:#f5f3ff;color:#24134d;padding:20px}
-.container{max-width:480px;margin:35px auto;background:white;padding:25px;border-radius:20px;box-shadow:0 8px 25px #24134d18;text-align:center}
-h2{color:#5425a8}
-.status{display:inline-block;background:#fff0c2;color:#795600;padding:7px 13px;border-radius:20px;font-size:12px;font-weight:bold;margin:10px 0}
+.container{max-width:480px;margin:35px auto;background:white;padding:25px;border-radius:20px;box-shadow:0 8px 25px #24134d18}
+header a{color:#6425c5;text-decoration:none;font-size:14px;font-weight:bold}
+h1{font-size:22px;color:#5425a8;margin:24px 0 10px}
+.status{display:inline-block;background:#fff0c2;color:#795600;padding:8px 13px;border-radius:20px;font-size:12px;font-weight:bold;margin:10px 0}
 p{font-size:14px;line-height:1.7;color:#686078}
-.notice{background:#fff7e5;color:#795600;padding:14px;border-radius:12px;font-size:13px;line-height:1.7;text-align:left;margin:20px 0}
-button{width:100%;padding:15px;border:0;border-radius:12px;background:linear-gradient(135deg,#702bd1,#4520a0);color:white;font-size:15px;font-weight:bold}
+.notice{background:#fff7e5;color:#795600;padding:14px;border-radius:12px;font-size:13px;line-height:1.7;margin:20px 0}
+button{width:100%;padding:15px;border:0;border-radius:12px;background:linear-gradient(135deg,#702bd1,#4520a0);color:white;font-size:15px;font-weight:bold;cursor:pointer}
 </style>
 </head>
 <body>
 <main class="container">
-<h2>Examination Services</h2>
-<span class="status">COMING SOON</span>
-<p>Examination PIN orders are not being accepted yet.</p>
-<div class="notice"><strong>Service unavailable:</strong> PIN supply, result-checking verification, confirmed pricing and secure payment are not connected. No PIN has been purchased or delivered, and no result can be checked through AILAT DATA yet.</div>
-<button type="button" onclick="location.href='exam_result.html'">Back to Exam Services</button>
+<header><a href="exam_result.html">← Back to Exam Services</a></header>
+<h1>Exam PIN / Result Checker Summary</h1>
+<p>WAEC, NECO, NABTEB and JAMB PIN requests are not being accepted yet.</p>
+<span class="status">PROVIDER INTEGRATION PENDING</span>
+<div class="notice"><strong>Service unavailable:</strong> Examination PIN supply, product pricing and result-checking verification are not connected. Do not send examination details or pay anyone claiming to process an order through AILAT DATA. No order has been submitted, no payment has been taken and no service has been delivered.</div>
+<button type="button" onclick="location.href='exam_result.html'">Back to Service</button>
 </main>
 </body>
 </html>
