@@ -194,6 +194,7 @@ button{
  margin-top:22px;
  cursor:pointer;
 }
+button:disabled{opacity:.48;cursor:not-allowed}
 
 .note{
  font-size:11px;
@@ -347,7 +348,7 @@ Choose your network and preferred data plan.
 <strong>Price information:</strong> Displayed prices are AILAT DATA selling prices. This form only records a request; it does not debit a wallet or deliver data.
 </div>
 
-<button onclick="continuePurchase()">Continue</button>
+<button id="continueDataBtn" onclick="continuePurchase()" disabled>Choose a data bundle</button>
 
 <p class="note">
 Please check your phone number and selected data bundle before continuing.
@@ -391,6 +392,14 @@ function formatPrice(amount){
 }
 function clearSelectedPlan(){
  selectedPlanId="";
+ updateContinueButton();
+}
+function updateContinueButton(){
+ const button=document.getElementById("continueDataBtn");
+ if(!button) return;
+ const selected=DATA_PLANS.some(item=>String(item.id)===selectedPlanId && item.network.toLowerCase()===selectedNetwork.toLowerCase() && normalizedType(item.type)===selectedPurchaseType);
+ button.disabled=!selected;
+ button.textContent=selected?"Continue":"Choose a data bundle";
 }
 function choosePurchaseType(element,type){
  selectedPurchaseType=type;
@@ -462,6 +471,7 @@ function renderPlans(){
  }
  const note=document.getElementById("planAvailability");
  if(note) note.textContent=matching.length+" bundles available for "+selectedNetwork+". Prices shown are AILAT DATA selling prices.";
+ updateContinueButton();
 }
 function continuePurchase(){
  const phone=document.getElementById("phone").value.trim();
@@ -488,6 +498,8 @@ async function loadPlans(){
  }catch(error){
   bundleGrid.textContent="Data bundles are temporarily unavailable. Please refresh the page.";
   bundleCount.textContent="Unavailable";
+  const continueButton=document.getElementById("continueDataBtn");
+  if(continueButton){continueButton.disabled=true;continueButton.textContent="Bundles unavailable";}
   const note=document.getElementById("planAvailability");
   if(note) note.textContent=error.message;
  }
