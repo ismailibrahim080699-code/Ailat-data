@@ -95,7 +95,7 @@ input:focus{border-color:#6425c5}
 .amount.active{background:#f3ecff;border:2px solid #6425c5;color:#6425c5}
 .total{background:#f3edff;padding:17px;border-radius:11px;margin-top:20px;display:flex;justify-content:space-between;align-items:center}
 .total strong{color:#6425c5;font-size:21px}
-button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;color:white;font-size:15px;font-weight:bold;margin-top:22px;cursor:pointer}
+button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;color:white;font-size:15px;font-weight:bold;margin-top:22px;cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}
 .note{font-size:11px;color:#888;line-height:1.6;margin-top:14px}
 .brand-mark{width:34px;height:34px;object-fit:contain;flex:0 0 34px;vertical-align:middle}
 </style>
@@ -177,7 +177,7 @@ button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;co
 </div>
 
 <label>Phone Number</label>
-<input type="tel" id="phone" placeholder="Enter 11-digit phone number" maxlength="11">
+<input type="tel" id="phone" inputmode="numeric" autocomplete="tel-national" placeholder="Enter 11-digit phone number" maxlength="11">
 
 <label>Select Amount</label>
 
@@ -191,14 +191,14 @@ button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;co
 </div>
 
 <label>Or Enter Amount</label>
-<input type="number" id="customAmount" placeholder="Enter amount (₦)" min="50" step="1" oninput="customValue()">
+<input type="number" id="customAmount" inputmode="numeric" placeholder="Enter amount (₦)" min="50" max="100000" step="1" oninput="customValue()">
 
 <div class="total">
 <span>Requested Airtime Value</span>
 <strong id="total">₦0.00</strong>
 </div>
 
-<button onclick="continuePurchase()">Continue</button>
+<button id="continueAirtimeBtn" onclick="continuePurchase()" disabled>Enter phone number and amount</button>
 
 <div class="note" style="background:#fff8e7;color:#805600;padding:13px;border-radius:10px;margin-top:15px">
 <strong>Supplier integration pending:</strong> The amount selected is the airtime value you are requesting, not a confirmed service fee or final charge. No payment will be taken and no airtime will be sent until an approved supplier and payment system are connected.
@@ -212,6 +212,16 @@ button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;co
 let selectedNetwork="MTN";
 let selectedAmount=0;
 
+function updateAirtimeContinue(){
+ const button=document.getElementById("continueAirtimeBtn");
+ if(!button) return;
+ const phone=document.getElementById("phone").value.trim();
+ const validPhone=/^0[789][01]\\d{8}$/.test(phone);
+ const validAmount=Number.isSafeInteger(selectedAmount) && selectedAmount>=50 && selectedAmount<=100000;
+ button.disabled=!(validPhone && validAmount);
+ button.textContent=button.disabled?"Enter valid phone and amount":"Continue";
+}
+
 function chooseNetwork(element,network){
 selectedNetwork=network;
 document.querySelectorAll('.network').forEach(n=>n.classList.remove('active'));
@@ -224,18 +234,23 @@ document.getElementById('customAmount').value='';
 document.querySelectorAll('.amount').forEach(a=>a.classList.remove('active'));
 element.classList.add('active');
 updateTotal();
+ updateAirtimeContinue();
 }
 
 function customValue(){
 selectedAmount=Number(document.getElementById('customAmount').value);
 document.querySelectorAll('.amount').forEach(a=>a.classList.remove('active'));
 updateTotal();
+ updateAirtimeContinue();
 }
 
 function updateTotal(){
 document.getElementById('total').textContent=
-'₦'+selectedAmount.toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2});
+'₦'+(Number.isFinite(selectedAmount)?selectedAmount:0).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2});
 }
+
+document.getElementById("phone").addEventListener("input",updateAirtimeContinue);
+updateAirtimeContinue();
 
 function continuePurchase(){
 let phone=document.getElementById('phone').value.trim();
