@@ -19,7 +19,7 @@ header h2{font-size:19px}
 label{display:block;font-size:13px;font-weight:bold;margin:17px 0 8px}
 select,input{width:100%;padding:14px;border:1px solid #ded8eb;border-radius:10px;background:#fff;color:#29243c;font-size:15px;outline:none}
 select:focus,input:focus{border-color:#7c3aed}
-button{width:100%;padding:16px;border:0;border-radius:11px;background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;font-size:15px;font-weight:bold;margin-top:22px}
+button{width:100%;padding:16px;border:0;border-radius:11px;background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;font-size:15px;font-weight:bold;margin-top:22px;cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}
 .note{font-size:12px;color:#777;line-height:1.7;margin-top:14px}
 .brand-mark{width:34px;height:34px;object-fit:contain;flex:0 0 34px}
 </style>
@@ -61,23 +61,41 @@ button{width:100%;padding:16px;border:0;border-radius:11px;background:linear-gra
 <input id="meterNumber" type="text" inputmode="numeric" autocomplete="off" maxlength="20" placeholder="Enter meter number" required>
 <label for="amount">Amount (₦)</label>
 <input id="amount" type="number" inputmode="numeric" min="100" max="1000000" step="1" placeholder="Enter amount" required>
-<button type="submit">Continue</button>
+<button id="continueButton" type="submit" disabled>Continue</button>
 </form>
 <p class="note"><strong>Notice:</strong> This page collects and checks the details for the order summary only. Electricity payment is not activated and no money will be charged from this page.</p>
 </div>
 </div>
 </div>
 <script>
-document.getElementById("electricityForm").addEventListener("submit",function(event){
+const electricityForm=document.getElementById("electricityForm");
+const continueButton=document.getElementById("continueButton");
+const providerInput=document.getElementById("provider");
+const meterTypeInput=document.getElementById("meterType");
+const meterNumberInput=document.getElementById("meterNumber");
+const amountInput=document.getElementById("amount");
+function electricityDetailsValid(){
+ const meter=meterNumberInput.value.trim();
+ const amount=Number(amountInput.value);
+ return !!providerInput.value && ["prepaid","postpaid"].includes(meterTypeInput.value) &&
+  /^[0-9]{6,20}$/.test(meter) && amountInput.value.trim()!=="" &&
+  Number.isSafeInteger(amount) && amount>=100 && amount<=1000000;
+}
+[providerInput,meterTypeInput,meterNumberInput,amountInput].forEach(input=>{
+ input.addEventListener("input",()=>continueButton.disabled=!electricityDetailsValid());
+ input.addEventListener("change",()=>continueButton.disabled=!electricityDetailsValid());
+});
+electricityForm.addEventListener("submit",function(event){
  event.preventDefault();
- const provider=document.getElementById("provider");
- const type=document.getElementById("meterType").value;
- const meter=document.getElementById("meterNumber").value.trim();
- const amount=Number(document.getElementById("amount").value);
- if(!provider.value || !["prepaid","postpaid"].includes(type) || !/^[0-9]{6,20}$/.test(meter) || !Number.isSafeInteger(amount) || amount<100 || amount>1000000){
+ if(!electricityDetailsValid()){
+  continueButton.disabled=true;
   alert("Please check your electricity details and try again.");
   return;
  }
+ const provider=providerInput;
+ const type=meterTypeInput.value;
+ const meter=meterNumberInput.value.trim();
+ const amount=Number(amountInput.value);
  const params=new URLSearchParams({
   provider:provider.options[provider.selectedIndex].text,
   disco:provider.value,
