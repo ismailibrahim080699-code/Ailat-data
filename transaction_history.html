@@ -290,26 +290,30 @@ async function loadTransactions(user){
    "Authorization":"Bearer " + token
   };
 
-  const [transactionResponse, requestResponse] = await Promise.all([
+  const results = await Promise.allSettled([
    fetch(BACKEND_URL + "?action=transactions", { method:"GET", headers }),
    fetch(ORDER_REQUESTS_URL, { method:"GET", headers })
   ]);
 
-  const [transactionResult, requestResult] = await Promise.all([
-   transactionResponse.json(),
-   requestResponse.json()
-  ]);
-
-  if(!transactionResponse.ok || transactionResult.success === false){
-   throw new Error(transactionResult.error || "Unable to load recorded transactions.");
+  async function readResult(result){
+   if(result.status !== "fulfilled") return { ok:false, data:null };
+   try{
+    const data = await result.value.json();
+    return { ok:result.value.ok && data.success !== false, data };
+   }catch{
+    return { ok:false, data:null };
+   }
   }
 
-  if(!requestResponse.ok || requestResult.success === false){
-   throw new Error(requestResult.error || "Unable to load order requests.");
+  const [transactionResult, requestResult] = await Promise.all(results.map(readResult));
+  if(!transactionResult.ok && !requestResult.ok){
+   throw new Error("Unable to load transactions or order requests. Please refresh and try again.");
   }
 
-  const transactions = transactionResult.transactions || transactionResult.data || [];
-  const requests = (requestResult.order_requests || []).map(request => ({
+  const transactions = transactionResult.ok
+   ? (transactionResult.data.transactions || transactionResult.data.data || [])
+   : [];
+  const requests = (requestResult.ok ? (requestResult.data.order_requests || []) : []).map(request => ({
    type: String(request.service_key || "service") + " order request",
    amount: request.requested_amount,
    created_at: request.created_at,
@@ -325,6 +329,13 @@ async function loadTransactions(user){
   );
 
   renderTransactions(combined);
+  if(!transactionResult.ok || !requestResult.ok){
+   const warning=document.createElement("p");
+   warning.className="details";
+   warning.style.color="#9a6700";
+   warning.textContent="Some history sources could not be reached. Refresh to try loading the missing records.";
+   container.prepend(warning);
+  }
 
  }catch(error){
   console.error("Transaction error:",error);
