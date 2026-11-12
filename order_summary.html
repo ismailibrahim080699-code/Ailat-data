@@ -92,7 +92,7 @@ if(!validNetworks.includes(network) || expectedNetworkId===null || suppliedNetwo
  document.getElementById("network").textContent = network;
  document.getElementById("purchaseType").textContent = purchaseType;
  document.getElementById("phone").textContent = phone;
- document.getElementById("bundle").textContent = selectedPlan.name+" — "+selectedPlan.validity+" (Plan ID "+selectedPlan.id+")";
+ document.getElementById("bundle").textContent = selectedPlan.name+" — "+selectedPlan.validity;
  document.getElementById("amount").textContent = "₦"+Number(selectedPlan.amount).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 
