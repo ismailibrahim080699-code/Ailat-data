@@ -55,7 +55,9 @@ button{
  border-radius:10px;
  font-size:16px;
  font-weight:bold;
+ cursor:pointer;
 }
+button:disabled{opacity:.55;cursor:not-allowed}
 .result{
  background:#f1eafe;
  padding:15px;
@@ -108,6 +110,8 @@ a{
 <input
  type="tel"
  id="phone"
+ inputmode="numeric"
+ autocomplete="tel-national"
  placeholder="Enter phone number"
  maxlength="11"
  inputmode="numeric"
@@ -121,6 +125,7 @@ a{
  placeholder="Enter amount"
  min="100"
  max="1000000"
+ inputmode="numeric"
  step="1"
  required
 
@@ -132,7 +137,7 @@ a{
 <p class="note">No cash value or conversion rate is currently confirmed. Do not send airtime to anyone for this service.</p>
 </div>
 
-<button type="submit">Review Details</button>
+<button id="reviewButton" type="submit" disabled>Enter valid details to continue</button>
 
 </form>
 </div>
@@ -149,20 +154,43 @@ This service is not active yet. A verified conversion partner and confirmed rate
 </div>
 
 <script>
+const networkInput=document.getElementById("network");
+const phoneInput=document.getElementById("phone");
+const amountInput=document.getElementById("amount");
+const reviewButton=document.getElementById("reviewButton");
+
+function updateReviewButton(){
+ const validPhone=/^0[789][01]\\d{8}$/.test(phoneInput.value.trim());
+ const amount=Number(amountInput.value);
+ const validAmount=Number.isSafeInteger(amount)&&amount>=100&&amount<=1000000;
+ reviewButton.disabled=!(networkInput.value&&validPhone&&validAmount);
+ reviewButton.textContent=reviewButton.disabled?"Enter valid details to continue":"Review Details";
+}
+
+networkInput.addEventListener("change",updateReviewButton);
+phoneInput.addEventListener("input",updateReviewButton);
+amountInput.addEventListener("input",updateReviewButton);
+updateReviewButton();
+
 function submitRequest(event){
  event.preventDefault();
 
- const network=document.getElementById("network").value;
- const phone=document.getElementById("phone").value.trim();
- const amount=Number(document.getElementById("amount").value);
+ const network=networkInput.value;
+ const phone=phoneInput.value.trim();
+ const amount=Number(amountInput.value);
 
- if(!/^0[0-9]{10}$/.test(phone)){
-  alert("Please enter a valid 11-digit phone number.");
+ if(!network || !["MTN","Airtel","Glo","9mobile"].includes(network)){
+  alert("Please select a supported network.");
+  return;
+ }
+
+ if(!/^0[789][01]\\d{8}$/.test(phone)){
+  alert("Please enter a valid 11-digit Nigerian mobile number.");
   return;
  }
 
  if(!Number.isSafeInteger(amount)||amount<100||amount>1000000){
-  alert("Please enter a valid amount between ₦100 and ₦1,000,000.");
+  alert("Please enter a whole amount between ₦100 and ₦1,000,000.");
   return;
  }
 
