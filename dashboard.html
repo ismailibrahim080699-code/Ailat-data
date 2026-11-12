@@ -241,10 +241,10 @@ footer{
 
   <div class="wallet-bottom">
    <small>Available Wallet Balance</small>
-   <button class="fund-button" onclick="fundWallet()">
-    <i data-lucide="plus" style="width:14px;height:14px;vertical-align:middle"></i>
-    Fund Wallet
-   </button>
+   <div style="display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end">
+    <button class="fund-button" onclick="fundWallet()">Fund Wallet</button>
+    <a class="fund-button" href="withdrawal.html" style="text-decoration:none;display:inline-flex;align-items:center">Withdraw</a>
+   </div>
   </div>
 
   <div class="wallet-status" id="walletStatus">
