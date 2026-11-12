@@ -1,138 +1,70 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4c1d95">
 <title>Airtime to Cash Summary - AILAT DATA</title>
-
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
 body{background:#f5f3ff;color:#29243c}
 .container{max-width:480px;margin:auto;min-height:100vh;padding-bottom:35px}
-header{
- background:linear-gradient(135deg,#4c1d95,#7c3aed);
- color:white;padding:25px 20px;border-radius:0 0 22px 22px
-}
+header{background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;padding:25px 20px;border-radius:0 0 22px 22px}
 header a{color:white;text-decoration:none;font-size:24px}
 header h2{margin-top:15px;font-size:22px}
 .subtitle{color:#888;font-size:13px;margin-top:7px;line-height:1.6}
 header .subtitle{color:#eee}
 .content{padding:22px 18px}
-.card{
- background:white;padding:22px;border-radius:17px;
- margin-top:20px;box-shadow:0 4px 16px #00000009
-}
-.item{
- display:flex;justify-content:space-between;gap:12px;
- padding:17px 0;border-bottom:1px solid #eee;font-size:14px
-}
+.card{background:white;padding:22px;border-radius:17px;margin-top:20px;box-shadow:0 4px 16px #00000009}
+.item{display:flex;justify-content:space-between;gap:12px;padding:17px 0;border-bottom:1px solid #eee;font-size:14px}
 .item span:first-child{color:#888}
 .item strong{text-align:right;overflow-wrap:anywhere}
-.total{
- display:flex;justify-content:space-between;align-items:center;
- margin-top:22px;padding:17px;border-radius:12px;background:#f3edff
-}
-.total strong{color:#6425c5;font-size:21px}
-.notice{
- background:#fff8e7;color:#805600;padding:14px;
- border-radius:11px;margin-top:20px;font-size:12px;line-height:1.6
-}
-button{
- width:100%;padding:16px;border:0;border-radius:11px;
- background:#6425c5;color:white;font-size:15px;
- font-weight:bold;margin-top:20px
-}
-.cancel{
- display:block;text-align:center;margin-top:18px;
- color:#6425c5;text-decoration:none;font-size:14px
-}
+.total{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:22px;padding:17px;border-radius:12px;background:#f3edff}
+.total strong{color:#6425c5;font-size:15px;text-align:right}
+.notice{background:#fff8e7;color:#805600;padding:14px;border-radius:11px;margin-top:20px;font-size:12px;line-height:1.7}
+button{width:100%;padding:16px;border:0;border-radius:11px;background:#ddd6e9;color:#71647f;font-size:14px;font-weight:bold;margin-top:20px;cursor:not-allowed}
+.cancel{display:block;text-align:center;margin-top:18px;color:#6425c5;text-decoration:none;font-size:14px}
+.error{color:#b42318;background:#fff0ef;padding:15px;border-radius:10px;line-height:1.6}
 </style>
 </head>
-
 <body>
 <div class="container">
-
 <header>
-<a href="airtime_to_cash.html">‹</a>
+<a href="airtime_to_cash.html" aria-label="Back to Airtime to Cash">‹</a>
 <h2>Order Summary</h2>
 <p class="subtitle">Review the details you entered</p>
 </header>
-
-<div class="content">
-<div class="card">
-
+<main class="content">
+<section class="card" id="summaryCard">
 <h3>Conversion Details</h3>
 <p class="subtitle">Please check your details below.</p>
-
-<div class="item">
-<span>Network</span>
-<strong id="network">-</strong>
-</div>
-
-<div class="item">
-<span>Phone Number</span>
-<strong id="phone">-</strong>
-</div>
-
-<div class="item">
-<span>Airtime Amount</span>
-<strong id="amount">₦0.00</strong>
-</div>
-
-<div class="total">
-<span>Service Status</span>
-<strong>Coming Soon</strong>
-</div>
-
+<div class="item"><span>Network</span><strong id="network">-</strong></div>
+<div class="item"><span>Phone Number</span><strong id="phone">-</strong></div>
+<div class="item"><span>Airtime Amount</span><strong id="amount">₦0.00</strong></div>
+<div class="total"><span>Service Status</span><strong>Not active yet</strong></div>
 <div class="notice">
-<strong>Demo Notice:</strong>
-This is only a review of the details you entered. Airtime to Cash is not active yet because no verified conversion partner or confirmed rate is connected. No airtime will be received and no money will be sent. Do not transfer airtime to anyone.
+<strong>Partner integration pending:</strong> No verified airtime-conversion partner or confirmed conversion rate is connected. This page only displays the details entered. Do not transfer airtime to anyone. No request is submitted, no airtime is received and no money is sent.
 </div>
-
-<button onclick="confirmOrder()">Confirm Details</button>
-
+<button type="button" disabled aria-disabled="true">Airtime to Cash Not Available Yet</button>
 <a href="airtime_to_cash.html" class="cancel">← Go Back and Edit</a>
-
+</section>
+</main>
 </div>
-</div>
-</div>
-
 <script>
 const params=new URLSearchParams(window.location.search);
-
 const network=params.get("network")||"";
 const phone=params.get("phone")||"";
 const amount=Number(params.get("amount"));
 const validNetworks=["MTN","Airtel","Glo","9mobile"];
-
-if(
- !validNetworks.includes(network) ||
- !/^0[0-9]{10}$/.test(phone) ||
- !Number.isSafeInteger(amount) ||
- amount<100 ||
- amount>1000000
-){
- document.querySelector(".card").innerHTML=`
- <h3>Invalid Order Details</h3>
- <p class="subtitle">Please go back and enter your details again.</p>
- <a class="cancel" href="airtime_to_cash.html">← Back to Airtime to Cash</a>
- `;
+const validPhone=/^0[789][01]\d{8}$/;
+const validAmount=Number.isSafeInteger(amount)&&amount>=100&&amount<=1000000;
+if(!validNetworks.includes(network)||!validPhone.test(phone)||!validAmount){
+ document.getElementById("summaryCard").innerHTML='<div class="error"><h3>Invalid Order Details</h3><p class="subtitle">The details are incomplete or invalid. Please return and enter them again.</p></div><a class="cancel" href="airtime_to_cash.html">← Back to Airtime to Cash</a>';
 }else{
  document.getElementById("network").textContent=network;
  document.getElementById("phone").textContent=phone;
-
- document.getElementById("amount").textContent=
- "₦"+amount.toLocaleString("en-NG",{
- minimumFractionDigits:2,maximumFractionDigits:2
- });
-
-}
-
-function confirmOrder(){
- alert("Airtime to Cash is not active yet. These details are for review only. No request was submitted, no airtime was received, and no money was sent.");
+ document.getElementById("amount").textContent="₦"+amount.toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 </script>
-
 </body>
 </html>
