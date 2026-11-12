@@ -258,12 +258,13 @@ function renderTransactions(items){
   const amount = item.amount === null || item.amount === undefined || item.amount === ""
    ? "—"
    : formatAmount(item.amount);
+  const amountDisplay = item.is_request && amount !== "—" ? "Requested: " + amount : amount;
 
   return `
    <div class="transaction">
     <div class="transaction-top">
      <div class="transaction-title">${type}</div>
-     <div class="amount">${amount}</div>
+     <div class="amount">${safe(amountDisplay)}</div>
     </div>
 
     <div class="details">
@@ -315,6 +316,7 @@ async function loadTransactions(user){
    description: "Request received. No payment was taken and no service has been delivered.",
    reference: request.reference,
    status: request.status || "received",
+   is_request: true,
    customer_data: request.customer_data || {}
   }));
 
