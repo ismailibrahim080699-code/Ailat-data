@@ -113,9 +113,13 @@ header p{margin:8px 0 0;font-size:14px;opacity:.9}
  background:#dcfce7;
  color:#166534;
 }
-.status.pending{
+.status.pending,.status.processing{
  background:#fef3c7;
  color:#92400e;
+}
+.status.rejected,.status.failed,.status.cancelled{
+ background:#fee2e2;
+ color:#991b1b;
 }
 .status.failed{
  background:#fee2e2;
@@ -218,7 +222,7 @@ function formatDate(value){
 function formatAmount(value){
  const amount = Number(value);
 
- if(!Number.isFinite(amount)) return "₦0.00";
+ if(!Number.isFinite(amount)) return "—";
 
  return "₦" + amount.toLocaleString("en-NG",{
   minimumFractionDigits:2,
@@ -259,8 +263,20 @@ function renderTransactions(items){
    item.is_request ? `<div>Supplier Dispatch: ${safe(dispatchState === "disabled_safe_mode" || dispatchState === "not_sent" ? "Not sent (safe mode)" : dispatchState)}</div>` : "",
    customer.amount !== undefined ? `<div>Airtime Amount: ${formatAmount(customer.amount)}</div>` : ""
   ].join("");
-  const status = rawStatus === "received" ? "pending" : rawStatus;
-  const statusLabel = rawStatus === "received" ? "Request Recorded" : status.charAt(0).toUpperCase() + status.slice(1);
+  const statusClass = ["completed","success","received","pending","processing","failed","rejected","cancelled"].includes(rawStatus)
+   ? (rawStatus === "received" ? "pending" : rawStatus)
+   : "unknown";
+  const statusLabel = ({
+   received:"Request Recorded",
+   pending:"Pending",
+   processing:"Processing",
+   completed:"Completed",
+   success:"Successful",
+   failed:"Failed",
+   rejected:"Rejected",
+   cancelled:"Cancelled",
+   unknown:"Status Unavailable"
+  })[rawStatus] || "Status Unavailable";
   const amount = item.amount === null || item.amount === undefined || item.amount === ""
    ? "—"
    : formatAmount(item.amount);
@@ -280,7 +296,7 @@ function renderTransactions(items){
      ${item.reference ? `<div>Reference: ${safe(item.reference)}</div>` : ""}
     </div>
 
-    <span class="status ${safe(status)}">${safe(statusLabel)}</span>
+    <span class="status ${safe(statusClass)}">${safe(statusLabel)}</span>
    </div>
   `;
  }).join("");
@@ -319,7 +335,10 @@ async function loadTransactions(user){
   const transactions = transactionResult.ok
    ? (transactionResult.data.transactions || transactionResult.data.data || [])
    : [];
-  const requests = (requestResult.ok ? (requestResult.data.order_requests || []) : []).map(request => ({
+  const requestRows = requestResult.ok && Array.isArray(requestResult.data.order_requests)
+   ? requestResult.data.order_requests
+   : [];
+  const requests = requestRows.map(request => ({
    type: String(request.service_key || "service") + " order request",
    amount: request.requested_amount,
    created_at: request.created_at,
@@ -333,7 +352,8 @@ async function loadTransactions(user){
    customer_data: request.customer_data || {}
   }));
 
-  const combined = [...transactions, ...requests].sort((a,b) =>
+  const transactionRows = Array.isArray(transactions) ? transactions : [];
+  const combined = [...transactionRows, ...requests].sort((a,b) =>
    new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()
   );
 
