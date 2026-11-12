@@ -61,9 +61,19 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 
 const SUPABASE_FUNCTION_URL = "https://bdogulpsybiggpgipdbt.supabase.co/functions/v1/ailat-order-requests";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_9wmzpjzVhnby_E3jogTjRw_c22XiDEC";
-const plansResponse = await fetch(SUPABASE_FUNCTION_URL+"?action=plans",{headers:{"apikey":SUPABASE_PUBLISHABLE_KEY}});
-const plansResult = await plansResponse.json().catch(()=>({}));
-const DATA_PLANS = plansResponse.ok && plansResult.success && Array.isArray(plansResult.plans) ? plansResult.plans : [];
+let DATA_PLANS = [];
+let plansLoadError = false;
+try {
+ const plansResponse = await fetch(SUPABASE_FUNCTION_URL+"?action=plans",{headers:{"apikey":SUPABASE_PUBLISHABLE_KEY}});
+ const plansResult = await plansResponse.json().catch(()=>({}));
+ if(!plansResponse.ok || !plansResult.success || !Array.isArray(plansResult.plans)){
+  throw new Error("Data plan details could not be loaded.");
+ }
+ DATA_PLANS = plansResult.plans;
+} catch(error) {
+ plansLoadError = true;
+ console.error("Buy Data plan loading error:",error);
+}
 const auth = getAuth(app);
 const params = new URLSearchParams(window.location.search);
 const network = params.get("network") || "";
@@ -87,7 +97,7 @@ let requestKey = crypto.randomUUID();
 let requestSaved = false;
 
 if(!validNetworks.includes(network) || expectedNetworkId===null || suppliedNetworkId!==expectedNetworkId || !validPurchaseTypes.includes(purchaseType) || !validPhone.test(phone) || !selectedPlan || normalizedType(selectedPlan.type)!==purchaseType){
- document.getElementById("orderCard").innerHTML = '<div class="error"><h3>Invalid Order Details</h3><p class="subtitle">Your order information is incomplete or incorrect. Please return and select your network, phone number and data plan again.</p></div><a href="data.html" class="cancel">← Back to Buy Data</a>';
+ document.getElementById("orderCard").innerHTML = '<div class="error"><h3>Invalid Order Details</h3><p class="subtitle">${plansLoadError ? "Data plan details could not be loaded. Please return to Buy Data and try again when your connection is available." : "Your order information is incomplete or incorrect. Please return and select your network, phone number and data plan again."}</p></div><a href="data.html" class="cancel">← Back to Buy Data</a>';
 }else{
  document.getElementById("network").textContent = network;
  document.getElementById("purchaseType").textContent = purchaseType;
