@@ -117,7 +117,10 @@ button.addEventListener("click",async()=>{
   if(!response.ok || !result.success) throw new Error(result.error || "Could not save your request. Please try again.");
   requestSaved = true;
   button.textContent = "Request Recorded";
-  statusBox.textContent = "Your request has been recorded. Reference: " + result.order_request.reference + ". Status: " + result.order_request.status + ". No payment was taken and no airtime was sent.";
+  const savedRequest = result.order_request || {};
+  const referenceText = savedRequest.reference ? " Reference: " + savedRequest.reference + "." : "";
+  const statusText = savedRequest.status ? " Status: " + savedRequest.status + "." : "";
+  statusBox.textContent = "Your request has been recorded." + referenceText + statusText + " No payment was taken and no airtime was sent.";
  }catch(error){
   button.disabled = false;
   button.textContent = "Try Again";
