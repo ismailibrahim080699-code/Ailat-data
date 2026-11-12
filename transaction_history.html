@@ -245,12 +245,18 @@ function renderTransactions(items){
   const bundle = customer.bundle ? String(customer.bundle) : "";
   const purchaseType = customer.purchase_type ? String(customer.purchase_type) : "";
   const validity = customer.validity ? String(customer.validity) : "";
+  const providerPlanId = item.supplier_plan_id ?? customer.supplier_plan_id;
+  const providerNetworkId = item.supplier_network_id ?? customer.provider_network_id;
+  const dispatchState = item.provider_dispatch_status || customer.provider_dispatch_status || "not_sent";
   const detailRows = [
    network ? `<div>Network: ${safe(network)}</div>` : "",
    phone ? `<div>Phone: ${safe(phone)}</div>` : "",
    bundle ? `<div>Bundle: ${safe(bundle)}</div>` : "",
    purchaseType ? `<div>Plan Type: ${safe(purchaseType)}</div>` : "",
    validity ? `<div>Validity: ${safe(validity)}</div>` : "",
+   providerNetworkId !== undefined && providerNetworkId !== null ? `<div>Supplier Network ID: ${safe(providerNetworkId)}</div>` : "",
+   providerPlanId !== undefined && providerPlanId !== null ? `<div>Supplier Plan ID: ${safe(providerPlanId)}</div>` : "",
+   item.is_request ? `<div>Supplier Dispatch: ${safe(dispatchState === "disabled_safe_mode" || dispatchState === "not_sent" ? "Not sent (safe mode)" : dispatchState)}</div>` : "",
    customer.amount !== undefined ? `<div>Airtime Amount: ${formatAmount(customer.amount)}</div>` : ""
   ].join("");
   const status = rawStatus === "received" ? "pending" : rawStatus;
@@ -317,10 +323,13 @@ async function loadTransactions(user){
    type: String(request.service_key || "service") + " order request",
    amount: request.requested_amount,
    created_at: request.created_at,
-   description: "Request received. No payment was taken and no service has been delivered.",
+   description: "Request record only. No payment was taken and no service was delivered.",
    reference: request.reference,
    status: request.status || "received",
    is_request: true,
+   supplier_plan_id: request.supplier_plan_id,
+   supplier_network_id: request.supplier_network_id,
+   provider_dispatch_status: request.provider_dispatch_status,
    customer_data: request.customer_data || {}
   }));
 
