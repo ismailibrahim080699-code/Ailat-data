@@ -160,7 +160,7 @@ const amountInput=document.getElementById("amount");
 const reviewButton=document.getElementById("reviewButton");
 
 function updateReviewButton(){
- const validPhone=/^0[789][01]\\d{8}$/.test(phoneInput.value.trim());
+ const validPhone=/^0[789][01]\d{8}$/.test(phoneInput.value.trim());
  const amount=Number(amountInput.value);
  const validAmount=Number.isSafeInteger(amount)&&amount>=100&&amount<=1000000;
  reviewButton.disabled=!(networkInput.value&&validPhone&&validAmount);
@@ -184,7 +184,7 @@ function submitRequest(event){
   return;
  }
 
- if(!/^0[789][01]\\d{8}$/.test(phone)){
+ if(!/^0[789][01]\d{8}$/.test(phone)){
   alert("Please enter a valid 11-digit Nigerian mobile number.");
   return;
  }
