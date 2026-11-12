@@ -3,25 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TV Subscription - AILAT DATA</title>
+<meta name="theme-color" content="#4c1d95">
+<title>Cable TV Subscription - AILAT DATA</title>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif}
 body{margin:0;min-height:100vh;background:#f5f3ff;color:#24134d;padding:20px}
-.container{max-width:480px;margin:35px auto;background:white;padding:25px;border-radius:20px;box-shadow:0 8px 25px #24134d18;text-align:center}
-h2{color:#5425a8}
-.status{display:inline-block;background:#fff0c2;color:#795600;padding:7px 13px;border-radius:20px;font-size:12px;font-weight:bold;margin:10px 0}
+.container{max-width:480px;margin:35px auto;background:white;padding:25px;border-radius:20px;box-shadow:0 8px 25px #24134d18}
+header a{color:#6425c5;text-decoration:none;font-size:14px;font-weight:bold}
+h1{font-size:22px;color:#5425a8;margin:24px 0 10px}
+.status{display:inline-block;background:#fff0c2;color:#795600;padding:8px 13px;border-radius:20px;font-size:12px;font-weight:bold;margin:10px 0}
 p{font-size:14px;line-height:1.7;color:#686078}
-.notice{background:#fff7e5;color:#795600;padding:14px;border-radius:12px;font-size:13px;line-height:1.7;text-align:left;margin:20px 0}
-button{width:100%;padding:15px;border:0;border-radius:12px;background:linear-gradient(135deg,#702bd1,#4520a0);color:white;font-size:15px;font-weight:bold}
+.notice{background:#fff7e5;color:#795600;padding:14px;border-radius:12px;font-size:13px;line-height:1.7;margin:20px 0}
+button{width:100%;padding:15px;border:0;border-radius:12px;background:linear-gradient(135deg,#702bd1,#4520a0);color:white;font-size:15px;font-weight:bold;cursor:pointer}
 </style>
 </head>
 <body>
 <main class="container">
-<h2>Cable TV Subscription</h2>
-<span class="status">COMING SOON</span>
-<p>TV subscription requests are not being accepted yet.</p>
-<div class="notice"><strong>Service unavailable:</strong> Package verification, Smartcard/IUC validation and secure payment are not connected. No subscription has been placed, no payment has been taken and no TV account will be credited.</div>
-<button type="button" onclick="location.href='tv.html'">Back to Cable TV</button>
+<header><a href="tv.html">← Back to Cable TV</a></header>
+<h1>Cable TV Subscription Summary</h1>
+<p>DStv, GOtv and StarTimes package requests are not being accepted yet.</p>
+<span class="status">PROVIDER INTEGRATION PENDING</span>
+<div class="notice"><strong>Service unavailable:</strong> Provider package catalogue, Smartcard/IUC validation and secure payment are not connected. Do not share your Smartcard/IUC details or pay anyone claiming to process a subscription through AILAT DATA. No order has been submitted, no payment has been taken and no service has been delivered.</div>
+<button type="button" onclick="location.href='tv.html'">Back to Service</button>
 </main>
 </body>
 </html>
