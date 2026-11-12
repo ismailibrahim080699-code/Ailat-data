@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4c1d95"><title>Transaction Security - AILAT DATA</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f3ff;color:#24134d}
+header{padding:24px 20px 30px;color:#fff;background:linear-gradient(135deg,#35106f,#5b21b6,#7c3aed);border-radius:0 0 26px 26px}
+header h1{font-size:22px;margin:0 0 7px}header p{font-size:12px;line-height:1.5;margin:0;opacity:.88}
+main{max-width:560px;margin:auto;padding:18px 16px 35px}.card{background:#fff;border:1px solid #eee7ff;border-radius:18px;padding:18px;margin:0 0 14px;box-shadow:0 5px 18px #35106f0b}
+.card-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}.symbol{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;background:#f0eaff;font-size:22px;flex-shrink:0}
+h2{font-size:15px;margin:0 0 5px}.sub{font-size:11px;color:#8b7aa8;line-height:1.5;margin:0}
+.status{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;background:#fff7ed;color:#9a5310;border-radius:20px;font-size:11px;font-weight:700;margin-top:10px}
+.status:before{content:"";width:7px;height:7px;background:#d97706;border-radius:50%}
+.action{width:100%;border:0;border-radius:11px;padding:13px 14px;margin-top:14px;font-size:13px;font-weight:700;background:#eee9f8;color:#766b8a}.action:disabled{opacity:1;cursor:not-allowed}
+.note{font-size:12px;line-height:1.65;color:#695b82;background:#f7f4ff;border-radius:12px;padding:13px;margin-top:12px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #f0ebf7}.row:last-child{border-bottom:0}
+.row strong{font-size:12px}.row span{font-size:11px;color:#8b7aa8;text-align:right}
+.back{display:block;text-align:center;text-decoration:none;background:#5b21b6;color:#fff;padding:14px;border-radius:12px;font-size:13px;font-weight:700;margin-top:18px}
+#deviceCheck{font-size:11px;color:#766b8a;line-height:1.5;margin-top:10px}footer{text-align:center;color:#988cad;font-size:10px;padding:10px 15px 24px}
+</style></head>
+<body>
+<header><h1>Transaction Security</h1><p>Review the security options planned for protecting your AILAT DATA account.</p></header>
+<main>
+<section class="card">
+<div class="card-head"><div class="symbol">🔢</div><div><h2>Transaction PIN</h2><p class="sub">A separate PIN security layer for account actions.</p></div></div>
+<div class="status">Secure setup not available yet</div>
+<button class="action" type="button" disabled>Create Transaction PIN — unavailable</button>
+<div class="note">PIN creation, confirmation, change and recovery are not connected to a verified secure server process yet. This page will not ask you to enter or save a PIN until that process is ready.</div>
+</section>
+<section class="card">
+<div class="card-head"><div class="symbol">🔐</div><div><h2>Fingerprint / Device Biometric</h2><p class="sub">Use your device's supported passkey security when enrollment is available.</p></div></div>
+<div class="status" id="bioStatus">Checking device support…</div>
+<p id="deviceCheck">Checking whether this browser can use a platform authenticator. No fingerprint or face data is being requested.</p>
+<button class="action" type="button" disabled>Enable Fingerprint — enrollment unavailable</button>
+<div class="note">AILAT DATA should receive only a cryptographic passkey response. Your fingerprint or face template must remain on your device; this website must never collect it.</div>
+</section>
+<section class="card"><h2>Security controls</h2>
+<div class="row"><strong>Change Transaction PIN</strong><span>Not available yet</span></div>
+<div class="row"><strong>Forgot PIN recovery</strong><span>Not available yet</span></div>
+<div class="row"><strong>Fingerprint preference</strong><span>Not enrolled</span></div>
+<div class="row"><strong>Transaction confirmation</strong><span>Not connected</span></div>
+</section>
+<a class="back" href="dashboard.html">Back to Dashboard</a>
+</main><footer>AILAT DATA © 2026 · Account Security</footer>
+<script type="module">
+import { app } from "./firebase.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
+const auth=getAuth(app);
+onAuthStateChanged(auth,async user=>{
+ if(!user){location.replace("login.html");return;}
+ try{await user.reload();if(!user.emailVerified){await signOut(auth);alert("Please verify your email before accessing account security.");location.replace("login.html");}}
+ catch(error){console.error("Security page account check failed:",error);}
+});
+(async()=>{
+ const status=document.getElementById("bioStatus"),detail=document.getElementById("deviceCheck");
+ if(!window.isSecureContext){status.textContent="Secure connection required";detail.textContent="Biometric passkeys require HTTPS. Open the official AILAT DATA website over a secure connection.";return;}
+ if(!window.PublicKeyCredential){status.textContent="Not supported in this browser";detail.textContent="This browser does not expose WebAuthn passkey support. No biometric data was accessed.";return;}
+ try{
+  const available=await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+  status.textContent=available?"Device authenticator detected":"No platform authenticator detected";
+  detail.textContent=available?"This device/browser reports a platform authenticator. It may support fingerprint or face verification, but no passkey has been enrolled.":"The browser did not detect a built-in platform authenticator. This check does not prove whether the device has a fingerprint sensor.";
+ }catch(error){status.textContent="Support could not be confirmed";detail.textContent="The browser could not complete its capability check. No biometric information was requested.";console.info("WebAuthn capability check:",error);}
+})();
+</script></body></html>
