@@ -402,6 +402,15 @@ function chooseNetwork(element,network){
  selectedNetwork=network;
  document.querySelectorAll(".network").forEach(item=>item.classList.remove("active"));
  element.classList.add("active");
+ const availableTypes=[...new Set(DATA_PLANS
+  .filter(item=>item.network.toLowerCase()===selectedNetwork.toLowerCase())
+  .map(item=>normalizedType(item.type)))];
+ if(!availableTypes.includes(selectedPurchaseType)){
+  selectedPurchaseType=["SME","GIFTING","CORPORATE"].find(type=>availableTypes.includes(type))||"SME";
+  document.querySelectorAll(".type-option").forEach(item=>{
+   item.classList.toggle("active",item.textContent.trim().toUpperCase().startsWith(selectedPurchaseType));
+  });
+ }
  clearSelectedPlan();
  renderPlans();
 }
