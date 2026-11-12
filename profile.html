@@ -124,6 +124,13 @@ onAuthStateChanged(auth, async (user) => {
  }
 
  try {
+  await user.reload();
+  if (!user.emailVerified) {
+   await signOut(auth);
+   alert("Please verify your email before accessing your profile.");
+   window.location.href = "login.html";
+   return;
+  }
 
   const userRef = doc(db, "users", user.uid);
   const userSnap = await getDoc(userRef);
@@ -145,7 +152,11 @@ onAuthStateChanged(auth, async (user) => {
     data.referralCode || "Not provided";
 
   } else {
-   alert("Profile information not found.");
+   document.getElementById("name").textContent = "Not available";
+   document.getElementById("email").textContent = user.email || "Not available";
+   document.getElementById("phone").textContent = "Not provided";
+   document.getElementById("referral").textContent = "Not provided";
+   alert("Profile information was not found. Please contact support.");
   }
 
  } catch(error) {
