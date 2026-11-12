@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#4c1d95">
+<title>Wallet Withdrawal | AILAT DATA</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f3ff;color:#24134d;font-family:Arial,sans-serif}
+header{padding:22px;background:linear-gradient(135deg,#35106f,#5b21b6,#7c3aed);color:#fff}
+header a{color:#fff;text-decoration:none;font-size:14px}
+main{max-width:480px;margin:25px auto;padding:0 16px}
+.card{background:#fff;border:1px solid #eee7ff;border-radius:20px;padding:22px;box-shadow:0 8px 24px #35106f10}
+h1{font-size:22px;margin:0 0 8px}p{font-size:13px;line-height:1.7;color:#75658f}
+.notice{margin-top:18px;padding:15px;border-radius:12px;background:#fff7ed;color:#92400e;font-size:13px;line-height:1.7}
+.status{margin-top:14px;font-size:13px;line-height:1.5;color:#6d28d9}
+.link{display:block;text-align:center;text-decoration:none;margin-top:16px;padding:14px;border-radius:11px;background:#6d28d9;color:#fff;font-weight:800;font-size:14px}
+</style>
+</head>
+<body>
+<header><a href="dashboard.html">← Back to Dashboard</a></header>
+<main><section class="card">
+<h1>Wallet Withdrawal</h1>
+<p>Withdrawal requests will be available after AILAT DATA has a verified payout provider, secure beneficiary checks, and an auditable approval process.</p>
+<div class="notice"><strong>Withdrawals are not enabled.</strong> This page does not collect bank details, create payout requests, or transfer money. Never share your PIN, password, OTP, or banking credentials here.</div>
+<div id="status" class="status" role="status">Withdrawal service is currently unavailable.</div>
+<a class="link" href="transaction_history.html">View Transaction History</a>
+<a class="link" href="dashboard.html">Return to Dashboard</a>
+</section></main>
+<script type="module">
+import { app } from "./firebase.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
+const auth = getAuth(app);
+onAuthStateChanged(auth, user => {
+ if (!user) { location.href = "login.html"; return; }
+ document.getElementById("status").textContent = user.emailVerified
+  ? "Signed in. Withdrawals are not enabled yet."
+  : "Please verify your email before accessing wallet pages.";
+ if (!user.emailVerified) location.href = "login.html";
+});
+</script>
+</body>
+</html>
