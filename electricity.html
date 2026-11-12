@@ -58,12 +58,12 @@ button{width:100%;padding:16px;border:0;border-radius:11px;background:linear-gra
 <option value="postpaid">Postpaid</option>
 </select>
 <label for="meterNumber">Meter Number</label>
-<input id="meterNumber" type="text" inputmode="numeric" autocomplete="off" maxlength="20" placeholder="Enter meter number" required>
+<input id="meterNumber" type="text" inputmode="numeric" autocomplete="off" maxlength="20" pattern="[0-9]{6,20}" placeholder="Enter 6–20 digit meter number" aria-describedby="meterHelp" required>
 <label for="amount">Amount (₦)</label>
 <input id="amount" type="number" inputmode="numeric" min="100" max="1000000" step="1" placeholder="Enter amount" required>
-<button id="continueButton" type="submit" disabled>Continue</button>
+<button id="continueButton" type="submit" disabled>Review Order Details</button>
 </form>
-<p class="note"><strong>Notice:</strong> This page collects and checks the details for the order summary only. Electricity payment is not activated and no money will be charged from this page.</p>
+<p class="note"><strong>Notice:</strong> This page only validates details and opens a review summary. Electricity payment is not activated: no provider is contacted, no money is charged and no token is issued.</p>
 </div>
 </div>
 </div>
@@ -71,13 +71,14 @@ button{width:100%;padding:16px;border:0;border-radius:11px;background:linear-gra
 const electricityForm=document.getElementById("electricityForm");
 const continueButton=document.getElementById("continueButton");
 const providerInput=document.getElementById("provider");
+const validDiscos=new Set(["1","2","3","4","5","6","7","8","9","10"]);
 const meterTypeInput=document.getElementById("meterType");
 const meterNumberInput=document.getElementById("meterNumber");
 const amountInput=document.getElementById("amount");
 function electricityDetailsValid(){
  const meter=meterNumberInput.value.trim();
  const amount=Number(amountInput.value);
- return !!providerInput.value && ["prepaid","postpaid"].includes(meterTypeInput.value) &&
+ return validDiscos.has(providerInput.value) && ["prepaid","postpaid"].includes(meterTypeInput.value) &&
   /^[0-9]{6,20}$/.test(meter) && amountInput.value.trim()!=="" &&
   Number.isSafeInteger(amount) && amount>=100 && amount<=1000000;
 }
