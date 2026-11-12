@@ -119,7 +119,7 @@ button.addEventListener("click", async()=>{
   const response = await fetch(SUPABASE_FUNCTION_URL,{
    method:"POST",
    headers:{"apikey":SUPABASE_PUBLISHABLE_KEY,"Authorization":"Bearer "+token,"Content-Type":"application/json"},
-   body:JSON.stringify({service_key:"data",idempotency_key:requestKey,customer_data:{network,internal_network_id:expectedNetworkId,provider_network_id:LEGITDATAWAY_NETWORK_IDS[network.toLowerCase()] ?? null,phone,bundle:selectedPlan.name+" ("+selectedPlan.validity+")",purchase_type:purchaseType,catalog_plan_id:selectedPlan.id}})
+   body:JSON.stringify({service_key:"data",idempotency_key:requestKey,customer_data:{network,internal_network_id:expectedNetworkId,phone,bundle:selectedPlan.name+" ("+selectedPlan.validity+")",purchase_type:purchaseType,catalog_plan_id:selectedPlan.id}})
   });
   const result = await response.json().catch(()=>({}));
   if(!response.ok || !result.success) throw new Error(result.error || "Could not save your request. Please try again.");
