@@ -119,7 +119,7 @@ function getSignedInUser(){
  });
 }
 
-button.addEventListener("click", async()=>{
+if(button) button.addEventListener("click", async()=>{
  if(requestSaved || !selectedPlan || !validNetworks.includes(network) || expectedNetworkId===null || suppliedNetworkId!==expectedNetworkId || !validPhone.test(phone) || normalizedType(selectedPlan.type)!==purchaseType) return;
  button.disabled = true;
  button.textContent = "Submitting request...";
