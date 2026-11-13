@@ -17,7 +17,12 @@ form.addEventListener("submit",e=>{
  if(!provider){error.textContent="Choose an examination body.";return;}
  if(account && account.length<5){error.textContent="Check the candidate or registration number.";document.getElementById("account").focus();return;}
  if(item.length<2){error.textContent="Enter the requested examination service.";return;}
- const params=new URLSearchParams({provider,account,item});
- window.location.href="exam_order_summary.html?"+params.toString();
+ try{
+  sessionStorage.setItem("ailat_exam_review",JSON.stringify({provider,account,item}));
+ }catch(error){
+  error.textContent="This browser cannot keep the review details in this tab. Please try again.";
+  return;
+ }
+ window.location.href="exam_order_summary.html";
 });
 </script></section></main></body></html>
