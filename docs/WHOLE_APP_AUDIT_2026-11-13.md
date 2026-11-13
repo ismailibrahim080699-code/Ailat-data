@@ -55,3 +55,18 @@ No production database schema, RLS policy, Edge Function deployment, payment set
 
 ### QA result
 Static source checks passed for the sampled pages and their local HTML links. This is not a complete 37-page browser test and is not a production-readiness sign-off. Remaining release gate: browser/device testing by the project owner or a responsible adult tester using test accounts and sandbox-only credentials, followed by independent security review.
+
+## Follow-up route and order-summary review — 2026-11-13
+
+### Additional source checks
+- Reviewed `transaction_history.html`, `referral.html`, `airtime_to_cash.html`, `tv.html`, `exam_result.html`, and `profile.html`.
+- Confirmed the inspected account pages check Firebase sign-in and email verification before showing account-specific content.
+- Airtime-to-Cash remains a preview-only flow and explicitly states that the conversion service is not active; no conversion partner is contacted.
+- Reviewed Data, Airtime, Cable TV, and Exam summary pages. Cable TV and Exam summaries use text-only DOM updates for query values and clearly state that no provider order/payment is submitted.
+- Data and Airtime summaries send authenticated requests to the shared request-recording endpoint only. Their UI responses explicitly state that no payment was taken and no service was delivered.
+- The Data and Airtime summary pages create an idempotency key in page memory. Reloading the page creates a new key; stable retry protection across reloads and server-side uniqueness/reconciliation remain required before production use.
+
+### QA boundary
+- These are source-level checks only. No submit buttons were activated, no customer request was created, and no wallet/payment/provider operation was run.
+- No browser rendering, device layout, Firebase live-session, or backend end-to-end test was performed in this pass.
+- No production payment, wallet, supplier, database, or security configuration was changed.
