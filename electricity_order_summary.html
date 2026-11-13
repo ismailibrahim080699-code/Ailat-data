@@ -66,7 +66,20 @@ const valid=Object.prototype.hasOwnProperty.call(providers,disco)&&
  ["prepaid","postpaid"].includes(type)&&/^[0-9]{6,20}$/.test(meter)&&
  /^\d{1,7}$/.test(amountRaw)&&Number.isSafeInteger(amount)&&amount>=100&&amount<=1000000;
 if(!valid){
- document.getElementById("summaryCard").innerHTML='<div class="error"><strong>Invalid order details.</strong><p>Please return to the electricity form and enter a valid provider, meter number, meter type and amount.</p><a class="cancel" href="electricity.html">← Back to Electricity</a></div>';
+ const summaryCard=document.getElementById("summaryCard");
+ const errorBox=document.createElement("div");
+ errorBox.className="error";
+ const heading=document.createElement("h3");
+ heading.textContent="Invalid order details.";
+ const message=document.createElement("p");
+ message.className="subtitle";
+ message.textContent="Please return to the electricity form and enter a valid provider, meter number, meter type and amount.";
+ const backLink=document.createElement("a");
+ backLink.className="cancel";
+ backLink.href="electricity.html";
+ backLink.textContent="← Back to Electricity";
+ errorBox.append(heading,message);
+ summaryCard.replaceChildren(errorBox,backLink);
 }else{
  document.getElementById("provider").textContent=providers[disco];
  document.getElementById("type").textContent=type==="prepaid"?"Prepaid":"Postpaid";
