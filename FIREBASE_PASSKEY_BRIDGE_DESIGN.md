@@ -71,3 +71,32 @@ Do not implement or enable until all are true:
 ## 6. Explicit exclusions
 
 This passkey bridge is for account sign-in only. It must not authorize wallet debits, top-ups, withdrawals, payments, transaction PINs, data purchases, or supplier API requests. Do not reuse an account-login assertion as transaction approval.
+
+## Supabase private-schema access audit (2026-11-13)
+
+Read-only inspection of project `bdogulpsybiggpgipdbt` confirmed:
+
+- The `private` schema grants neither `USAGE` nor `CREATE` to `anon` or `authenticated`; both are false. `service_role` and `postgres` have schema access.
+- For `private.data_plan_catalog`, `private.refund_requests`, and `private.refund_reviewers`, the inspected table grants showed only `postgres` and/or `service_role`; no `anon` or `authenticated` table grants were present.
+- No policies exist on those three tables and RLS is currently disabled.
+- The `private.create_refund_request` and `private.review_refund_request` routines are owned by `postgres`, are SECURITY DEFINER, and pin `search_path` to an empty value. Their definitions access the private refund tables.
+
+### Interpretation
+
+The generic security advisor flagged RLS-disabled tables. However, this inspection did **not** find direct schema usage or table grants for browser roles on these private-schema tables. The current boundary is therefore materially stronger than a public-schema table exposed to anon/authenticated. This is not a complete proof of API exposure configuration, and it does not replace periodic privilege review.
+
+### Safe remediation proposal — not applied
+
+Supabase's advisor explicitly says not to auto-apply the RLS remediation. The candidate statements are:
+
+```sql
+ALTER TABLE private.data_plan_catalog ENABLE ROW LEVEL SECURITY;
+ALTER TABLE private.refund_requests ENABLE ROW LEVEL SECURITY;
+ALTER TABLE private.refund_reviewers ENABLE ROW LEVEL SECURITY;
+```
+
+Do not add browser-facing policies. Before applying, verify that all legitimate access remains through the server-side `service_role` or tightly controlled SECURITY DEFINER functions, and verify function EXECUTE grants. Do not use FORCE ROW LEVEL SECURITY without a separate review because it changes owner behavior. This SQL has **not** been executed.
+
+### Passkey readiness conclusion
+
+The inspected project still has no confirmed Firebase Admin custom-token signing secret, no WebAuthn credential/challenge tables, and no WebAuthn Edge Function. No production schema or function was changed. The next implementation gate remains secure provisioning and review of the Firebase Admin credential, followed by a dedicated isolated WebAuthn endpoint and private storage—not modifications to existing wallet/order functions.
