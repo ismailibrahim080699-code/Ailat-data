@@ -4,7 +4,7 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#4c1d95">
 <link rel="icon" type="image/svg+xml" href="assets/ailat-mark.svg"><title>AILAT DATA | Account Preferences</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f5f3ff;color:#24134d;font-family:Arial,sans-serif}.top{padding:28px 20px 24px;text-align:center;background:linear-gradient(135deg,#35106f,#5b21b6,#7c3aed);color:#fff;border-radius:0 0 25px 25px}.top a{position:absolute;left:18px;top:25px;color:#fff;text-decoration:none;font-size:13px;font-weight:bold}.top h1{font-size:25px;margin:20px 0 5px}.top p{font-size:12px;opacity:.88;margin:0}.wrap{max-width:620px;margin:20px auto;padding:0 16px 35px}.panel{background:#fff;border:1px solid #eee7ff;border-radius:19px;padding:18px;margin-bottom:14px;box-shadow:0 5px 16px #35106f08}.eyebrow{display:inline-block;background:#f3efff;color:#6d28d9;border-radius:20px;padding:7px 11px;font-size:10px;font-weight:800;letter-spacing:.5px}.panel h2{font-size:17px;margin:13px 0 7px}.desc{font-size:12px;line-height:1.65;color:#766b86;margin:0 0 12px}.setting{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;border-top:1px solid #f0ebf7}.setting strong{display:block;font-size:14px}.setting small{display:block;color:#8b819b;font-size:11px;line-height:1.45;margin-top:4px}.switch{position:relative;flex:0 0 48px;width:48px;height:28px}.switch input{opacity:0;width:0;height:0}.track{position:absolute;inset:0;border-radius:30px;background:#d8d2e2;transition:.2s;cursor:pointer}.track:before{content:"";position:absolute;width:20px;height:20px;left:4px;top:4px;border-radius:50%;background:white;transition:.2s;box-shadow:0 1px 3px #0002}.switch input:checked+.track{background:#6d28d9}.switch input:checked+.track:before{transform:translateX(20px)}.switch input:focus-visible+.track{outline:3px solid #c4b5fd;outline-offset:2px}.status{font-size:11px;color:#16804a;margin-top:10px;min-height:15px}.note{background:#fff8e7;border:1px solid #f4dfaa;border-radius:13px;padding:12px;color:#76551a;font-size:11px;line-height:1.6;margin-top:13px}.row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid #f0ebf7;font-size:13px}.row span{color:#8b819b;text-align:right}.foot{text-align:center;color:#988cad;font-size:11px;padding:22px}
+*{box-sizing:border-box}body{margin:0;background:#f5f3ff;color:#24134d;font-family:Arial,sans-serif}.top{padding:28px 20px 24px;text-align:center;background:linear-gradient(135deg,#35106f,#5b21b6,#7c3aed);color:#fff;border-radius:0 0 25px 25px}.top a{position:absolute;left:18px;top:25px;color:#fff;text-decoration:none;font-size:13px;font-weight:bold}.top h1{font-size:25px;margin:20px 0 5px}.top p{font-size:12px;opacity:.88;margin:0}.wrap{max-width:620px;margin:20px auto;padding:0 16px 35px}.panel{background:#fff;border:1px solid #eee7ff;border-radius:19px;padding:18px;margin-bottom:14px;box-shadow:0 5px 16px #35106f08}.eyebrow{display:inline-block;background:#f3efff;color:#6d28d9;border-radius:20px;padding:7px 11px;font-size:10px;font-weight:800;letter-spacing:.5px}.panel h2{font-size:17px;margin:13px 0 7px}.desc{font-size:12px;line-height:1.65;color:#766b86;margin:0 0 12px}.setting{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;border-top:1px solid #f0ebf7}.setting strong{display:block;font-size:14px}.setting small{display:block;color:#8b819b;font-size:11px;line-height:1.45;margin-top:4px}.switch{position:relative;flex:0 0 48px;width:48px;height:28px}.switch input{opacity:0;width:0;height:0}.track{position:absolute;inset:0;border-radius:30px;background:#d8d2e2;transition:.2s;cursor:pointer}.track:before{content:"";position:absolute;width:20px;height:20px;left:4px;top:4px;border-radius:50%;background:white;transition:.2s;box-shadow:0 1px 3px #0002}.switch input:checked+.track{background:#6d28d9}.switch input:checked+.track:before{transform:translateX(20px)}.switch input:focus-visible+.track{outline:3px solid #c4b5fd;outline-offset:2px}.status{font-size:11px;color:#16804a;margin-top:10px;min-height:15px}.reset{margin-top:9px;border:1px solid #e5dcf4;background:#fff;color:#5b21b6;border-radius:10px;padding:10px 12px;font-size:11px;font-weight:700}.note{background:#fff8e7;border:1px solid #f4dfaa;border-radius:13px;padding:12px;color:#76551a;font-size:11px;line-height:1.6;margin-top:13px}.row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid #f0ebf7;font-size:13px}.row span{color:#8b819b;text-align:right}.foot{text-align:center;color:#988cad;font-size:11px;padding:22px}
 </style></head>
 <body>
 <header class="top"><a href="settings.html">← Settings</a><h1>Account Options</h1><p>Manage your app preferences</p></header>
@@ -16,7 +16,7 @@
 <div class="setting"><div><strong>Account and security</strong><small>Preference for important account and sign-in notices</small></div><label class="switch"><input type="checkbox" data-pref="security" aria-label="Account and security notices"><span class="track"></span></label></div>
 <div class="setting"><div><strong>Referral updates</strong><small>Preference for referral activity notices</small></div><label class="switch"><input type="checkbox" data-pref="referrals" aria-label="Referral updates"><span class="track"></span></label></div>
 <div class="setting"><div><strong>Product announcements</strong><small>Preference for new feature and service announcements</small></div><label class="switch"><input type="checkbox" data-pref="announcements" aria-label="Product announcements"><span class="track"></span></label></div>
-<div class="status" id="saveStatus" role="status" aria-live="polite">Preferences are stored on this device.</div>
+<div class="status" id="saveStatus" role="status" aria-live="polite">Loading your account preferences…</div><button class="reset" id="resetPreferences" type="button">Reset notification preferences</button>
 <div class="note"><strong>Important:</strong> These switches save your preferences on this device only. Push, email and SMS delivery have not been connected yet, so changing a switch does not send or guarantee a notification.</div>
 </section>
 <section class="panel" id="bank-account">
@@ -35,21 +35,49 @@ onAuthStateChanged(auth,async user=>{
  try{await user.reload();if(!user.emailVerified){await signOut(auth);alert("Please verify your email before accessing Settings.");location.replace("login.html");}}
  catch(error){console.error("Preferences access check failed:",error);location.replace("login.html");}
 });
-const storageKey="ailat_notification_preferences_v1";
 const controls=[...document.querySelectorAll("[data-pref]")];
-try{
- const saved=JSON.parse(localStorage.getItem(storageKey)||"{}");
- controls.forEach(input=>{input.checked=saved[input.dataset.pref]===true;});
-}catch(error){console.warn("Could not load local notification preferences.",error);}
-controls.forEach(input=>input.addEventListener("change",()=>{
+const status=document.getElementById("saveStatus");
+let storageKey=null;
+let preferencesReady=false;
+function readPreferences(){
+ try{
+  const saved=JSON.parse(localStorage.getItem(storageKey)||"{}");
+  controls.forEach(input=>{input.checked=saved[input.dataset.pref]===true;});
+  preferencesReady=true;
+  status.textContent="Preferences loaded for this account on this device.";
+ }catch(error){
+  status.textContent="Could not load saved preferences on this device.";
+  console.warn("Could not load local notification preferences.",error);
+ }
+}
+function savePreferences(input){
+ if(!preferencesReady||!storageKey)return;
  try{
   const current=JSON.parse(localStorage.getItem(storageKey)||"{}");
   current[input.dataset.pref]=input.checked;
   localStorage.setItem(storageKey,JSON.stringify(current));
-  document.getElementById("saveStatus").textContent="Saved on this device.";
+  status.textContent="Saved on this device for this account.";
  }catch(error){
-  document.getElementById("saveStatus").textContent="Could not save. Check device storage settings.";
+  status.textContent="Could not save. Check device storage settings.";
   input.checked=!input.checked;
  }
-}));
+}
+controls.forEach(input=>input.addEventListener("change",()=>savePreferences(input)));
+document.getElementById("resetPreferences").addEventListener("click",()=>{
+ if(!preferencesReady||!storageKey)return;
+ try{
+  localStorage.removeItem(storageKey);
+  controls.forEach(input=>{input.checked=false;});
+  status.textContent="Notification preferences reset for this account on this device.";
+ }catch(error){status.textContent="Could not reset preferences on this device.";}
+});
+onAuthStateChanged(auth,async user=>{
+ if(!user){location.replace("login.html");return;}
+ try{
+  await user.reload();
+  if(!user.emailVerified){await signOut(auth);alert("Please verify your email before accessing Settings.");location.replace("login.html");return;}
+  storageKey="ailat_notification_preferences_v1_"+user.uid;
+  readPreferences();
+ }catch(error){console.error("Preferences access check failed:",error);location.replace("login.html");}
+});
 </script></body></html>
