@@ -39,6 +39,7 @@ form.addEventListener("submit",event=>{
   const el=document.getElementById(id); const value=el.value.trim();
   if(el.required && !value){errorBox.textContent="Please complete: "+label;el.focus();return;}
   if(el.type==="number" && value && (!Number.isSafeInteger(Number(value)) || Number(value)<1)){errorBox.textContent=label+" must be a whole number greater than zero.";el.focus();return;}
+  if(["phone","sender","recipient"].includes(id) && value && !/^0[789][01]\\d{8}$/.test(value)){errorBox.textContent=label+" must be a valid 11-digit Nigerian mobile number.";el.focus();return;}
   values.push(label+": "+(value||"Not provided"));
  }
  if(document.getElementById("sender") && document.getElementById("recipients")){
