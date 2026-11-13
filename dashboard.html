@@ -489,7 +489,12 @@ async function loadWalletFromBackend(user){
    throw new Error(result.error || "Wallet connection failed.");
   }
 
-  showWalletBalance(result.wallet?.balance ?? 0);
+  // Never invent a zero balance when the backend omits the wallet value.
+  if(!result.wallet || !Object.prototype.hasOwnProperty.call(result.wallet,"balance")){
+   throw new Error("Wallet balance is missing from the backend response.");
+  }
+
+  showWalletBalance(result.wallet.balance);
   return result;
 
  }catch(error){
