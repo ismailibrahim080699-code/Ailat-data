@@ -7,11 +7,12 @@
 <div class="item"><span class="label">Requested service</span><span class="value" id="v2">—</span></div>
 </section><div class="notice">Official product availability, eligibility, final pricing and secure provider integration are not connected. This is a local review only; no PIN has been issued and no result has been checked.</div><button type="button" onclick="location.href='exam_result.html'">Back to Service</button></main>
 <script>
-const params=new URLSearchParams(location.search);
+let reviewData={};
+try{reviewData=JSON.parse(sessionStorage.getItem("ailat_exam_review")||"{}");}catch(error){}
 const allowed=["WAEC","NECO","NABTEB","JAMB"];
 const keys=["provider","account","item"];
 const labels=["Exam body","Candidate / registration number","Requested service"];
-const values=keys.map(k=>(params.get(k)||"").trim());
+const values=keys.map(k=>String(reviewData[k]||"").trim());
 const valid=allowed.includes(values[0]) && values[2].length>=2 && (values[1]==="" || values[1].length>=5);
 if(!valid){
  const box=document.createElement("div");box.className="error";
