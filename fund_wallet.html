@@ -52,7 +52,7 @@ onAuthStateChanged(auth, async user => {
    return;
   }
 
-  status.textContent = "Signed in. Funding are not enabled yet.";
+  status.textContent = "Signed in. Wallet funding is not enabled yet.";
  } catch (error) {
   console.error("Wallet page account check failed:", error);
   status.textContent = "Unable to verify your account right now. Please sign in again.";
