@@ -188,13 +188,22 @@ const container = document.getElementById("transactions");
 const refreshBtn = document.getElementById("refreshBtn");
 
 function showMessage(icon,title,message,isError=false){
- container.innerHTML = `
-  <div class="message">
-   <div class="message-icon">${icon}</div>
-   <h3 class="${isError ? "error" : ""}">${title}</h3>
-   <p>${message}</p>
-  </div>
- `;
+ const wrapper = document.createElement("div");
+ wrapper.className = "message";
+
+ const iconElement = document.createElement("div");
+ iconElement.className = "message-icon";
+ iconElement.textContent = String(icon ?? "");
+
+ const titleElement = document.createElement("h3");
+ if(isError) titleElement.className = "error";
+ titleElement.textContent = String(title ?? "");
+
+ const messageElement = document.createElement("p");
+ messageElement.textContent = String(message ?? "");
+
+ wrapper.append(iconElement,titleElement,messageElement);
+ container.replaceChildren(wrapper);
 }
 
 function safe(value){
