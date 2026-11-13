@@ -57,3 +57,14 @@ Neither summary page calls the shared endpoint. The shared endpoint rejects thes
 ## Conclusion
 
 The Data and Airtime request-recording paths have matching high-level frontend/backend contracts, with an Airtime server-side integer-validation gap and a retry-key lifetime limitation. Electricity is separate and locked; Cable TV and Exam are not backend-integrated. These are static findings, not a production security sign-off.
+
+
+## Follow-up fix — Airtime integer validation
+
+On 2026-11-13, the Airtime server-side amount guard was tightened from a finite/range check to `Number.isSafeInteger(amount)` plus the existing ₦50–₦100,000 bounds. This rejects decimal, non-finite, unsafe-integer, below-minimum and above-maximum values.
+
+Supabase Edge Function `ailat-order-requests` was deployed as version 21. A subsequent source retrieval confirmed the function is ACTIVE at version 21 and contains the new integer guard; the old finite-only guard is absent.
+
+Local boundary checks passed for 50 and 100000 (accepted), and 49, 100001, 50.5, 0 and NaN (rejected). These were local predicate checks only, not live authenticated endpoint or database integration tests.
+
+The function's existing custom Firebase JWT verification and `verify_jwt=false` platform setting were preserved. Supabase's current documentation explains that disabling the platform check leaves authentication to the function handler, so that custom verification remains a critical security boundary: <https://supabase.com/docs/guides/functions/auth> and <https://supabase.com/docs/guides/functions/auth-headers>.
