@@ -59,6 +59,7 @@ button{width:100%;padding:16px;border:0;border-radius:11px;background:linear-gra
 </select>
 <label for="meterNumber">Meter Number</label>
 <input id="meterNumber" type="text" inputmode="numeric" autocomplete="off" maxlength="20" pattern="[0-9]{6,20}" placeholder="Enter 6–20 digit meter number" aria-describedby="meterHelp" required>
+<p id="meterHelp" class="note">Enter the digits printed on your electricity meter. Use 6–20 digits.</p>
 <label for="amount">Amount (₦)</label>
 <input id="amount" type="number" inputmode="numeric" min="100" max="1000000" step="1" placeholder="Enter amount" required>
 <button id="continueButton" type="submit" disabled>Review Order Details</button>
