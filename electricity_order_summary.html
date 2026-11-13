@@ -44,7 +44,9 @@ button{width:100%;padding:16px;border:0;border-radius:11px;background:#e7e0ef;co
 </main>
 </div>
 <script>
-const params=new URLSearchParams(location.search);
+let reviewData={};
+try{reviewData=JSON.parse(sessionStorage.getItem("ailat_electricity_review")||"{}");}catch(error){}
+const params=new URLSearchParams();
 const providers={
  "8":"Abuja Electricity",
  "10":"Benin Electricity",
@@ -57,10 +59,10 @@ const providers={
  "4":"Port Harcourt Electricity",
  "9":"Yola Electricity"
 };
-const disco=params.get("disco")||"";
-const type=params.get("type")||"";
-const meter=params.get("meter")||"";
-const amountRaw=params.get("amount")||"";
+const disco=String(reviewData.disco||"");
+const type=String(reviewData.type||"");
+const meter=String(reviewData.meter||"");
+const amountRaw=String(reviewData.amount||"");
 const amount=Number(amountRaw);
 const valid=Object.prototype.hasOwnProperty.call(providers,disco)&&
  ["prepaid","postpaid"].includes(type)&&/^[0-9]{6,20}$/.test(meter)&&
