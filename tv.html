@@ -5,11 +5,18 @@
 <label for="provider">TV Provider</label><select id="provider" required><option value="">Choose provider</option><option>DStv</option><option>GOtv</option><option>StarTimes</option></select>
 <label for="account">Smartcard / IUC number</label><input id="account" maxlength="40" placeholder="Enter the decoder number" required>
 <label for="item">Requested package</label><input id="item" maxlength="100" placeholder="Enter the package name" required>
-<div class="error" id="error" role="alert"></div><button type="submit">Preview Request</button><button type="reset" class="secondary">Clear Form</button>
+<div class="error" id="error" role="alert"></div><button type="submit">Review Details</button><button type="reset" class="secondary">Clear Form</button>
 </form><section class="preview" id="preview" aria-live="polite"><strong>Local request preview</strong><pre id="previewText"></pre></section>
 <div class="notice"><strong>Provider connection pending:</strong> This form validates and previews your details only. Package catalogue, decoder validation, pricing and provider integration must be confirmed before a subscription can be submitted. This preview is not submitted or sent to any provider.</div></section></main><footer>AILAT DATA © 2026 · All Rights Reserved</footer>
 <script>
-const form=document.getElementById("serviceForm"),error=document.getElementById("error"),preview=document.getElementById("preview"),previewText=document.getElementById("previewText");
-form.addEventListener("submit",e=>{e.preventDefault();error.textContent="";const provider=document.getElementById("provider").value,account=document.getElementById("account").value.trim(),item=document.getElementById("item").value.trim();if(!provider){error.textContent="Choose a provider.";return;}if(account.length<5){error.textContent="Enter a valid account or candidate number.";return;}if(item.length<2){error.textContent="Enter the requested package or service.";return;}previewText.textContent="Provider: "+provider+"\nAccount/reference: "+account+"\nRequested item: "+item+"\nStatus: Prepared locally — not submitted.";preview.style.display="block";});
-form.addEventListener("reset",()=>{error.textContent="";preview.style.display="none";previewText.textContent="";});
+const form=document.getElementById("serviceForm"),error=document.getElementById("error");
+form.addEventListener("submit",e=>{
+ e.preventDefault();error.textContent="";
+ const provider=document.getElementById("provider").value,account=document.getElementById("account").value.trim(),item=document.getElementById("item").value.trim();
+ if(!provider){error.textContent="Choose a provider.";return;}
+ if(!/^[0-9]{6,20}$/.test(account)){error.textContent="Enter a valid 6–20 digit Smartcard/IUC number.";document.getElementById("account").focus();return;}
+ if(item.length<2){error.textContent="Enter the requested package.";document.getElementById("item").focus();return;}
+ const params=new URLSearchParams({provider,account,item});
+ window.location.href="tv_order_summary.html?"+params.toString();
+});
 </script></section></main></body></html>
