@@ -98,14 +98,16 @@ electricityForm.addEventListener("submit",function(event){
  const type=meterTypeInput.value;
  const meter=meterNumberInput.value.trim();
  const amount=Number(amountInput.value);
- const params=new URLSearchParams({
-  provider:provider.options[provider.selectedIndex].text,
-  disco:provider.value,
-  type:type,
-  meter:meter,
-  amount:String(amount)
- });
- window.location.href="electricity_order_summary.html?"+params.toString();
+ try{
+  sessionStorage.setItem("ailat_electricity_review",JSON.stringify({
+   provider:provider.options[provider.selectedIndex].text,
+   disco:provider.value,type,meter,amount:String(amount)
+  }));
+ }catch(error){
+  alert("This browser cannot keep the review details in this tab. Please try again.");
+  return;
+ }
+ window.location.href="electricity_order_summary.html";
 });
 </script>
 <script type="module">
