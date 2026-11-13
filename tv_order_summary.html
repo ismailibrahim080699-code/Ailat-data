@@ -1,30 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#4c1d95">
-<title>Cable TV Subscription - AILAT DATA</title>
-<style>
-*{box-sizing:border-box;font-family:Arial,sans-serif}
-body{margin:0;min-height:100vh;background:#f5f3ff;color:#24134d;padding:20px}
-.container{max-width:480px;margin:35px auto;background:white;padding:25px;border-radius:20px;box-shadow:0 8px 25px #24134d18}
-header a{color:#6425c5;text-decoration:none;font-size:14px;font-weight:bold}
-h1{font-size:22px;color:#5425a8;margin:24px 0 10px}
-.status{display:inline-block;background:#fff0c2;color:#795600;padding:8px 13px;border-radius:20px;font-size:12px;font-weight:bold;margin:10px 0}
-p{font-size:14px;line-height:1.7;color:#686078}
-.notice{background:#fff7e5;color:#795600;padding:14px;border-radius:12px;font-size:13px;line-height:1.7;margin:20px 0}
-button{width:100%;padding:15px;border:0;border-radius:12px;background:linear-gradient(135deg,#702bd1,#4520a0);color:white;font-size:15px;font-weight:bold;cursor:pointer}
-</style>
-</head>
-<body>
-<main class="container">
-<header><a href="tv.html">← Back to Cable TV</a></header>
-<h1>Cable TV Subscription Summary</h1>
-<p>DStv, GOtv and StarTimes package requests are not being accepted yet.</p>
-<span class="status">PROVIDER INTEGRATION PENDING</span>
-<div class="notice"><strong>Service unavailable:</strong> Provider package catalogue, Smartcard/IUC validation and secure payment are not connected. Do not share your Smartcard/IUC details or pay anyone claiming to process a subscription through AILAT DATA. No order has been submitted, no payment has been taken and no service has been delivered.</div>
-<button type="button" onclick="location.href='tv.html'">Back to Service</button>
-</main>
-</body>
-</html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#4c1d95"><link rel="icon" type="image/svg+xml" href="assets/ailat-mark.svg"><title>AILAT DATA | Cable TV Subscription Summary</title>
+<style>*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Arial,sans-serif;background:#f5f3ff;color:#24134d;padding:18px}.container{width:min(100%,520px);margin:28px auto;background:#fff;padding:24px;border-radius:20px;box-shadow:0 8px 25px #24134d18}header a{color:#6425c5;text-decoration:none;font-size:14px;font-weight:bold}h1{font-size:22px;color:#5425a8;margin:24px 0 10px}.status{display:inline-block;background:#fff0c2;color:#795600;padding:8px 13px;border-radius:20px;font-size:12px;font-weight:bold;margin:10px 0}p{font-size:14px;line-height:1.7;color:#686078}.details{margin:18px 0;padding:16px;background:#faf8ff;border:1px solid #eee7ff;border-radius:14px}.item{padding:10px 0;border-bottom:1px solid #eee7ff}.item:last-child{border-bottom:0}.label{display:block;font-size:12px;color:#796b91;margin-bottom:5px}.value{font-size:14px;font-weight:bold;overflow-wrap:anywhere}.notice{background:#f3efff;color:#5b21b6;padding:14px;border-radius:12px;font-size:12px;line-height:1.7;margin:18px 0}button{width:100%;padding:14px;border:0;border-radius:12px;background:linear-gradient(135deg,#702bd1,#4520a0);color:white;font-size:15px;font-weight:bold;cursor:pointer}.error{padding:15px;background:#fff1f0;color:#912018;border-radius:12px;line-height:1.6}</style></head><body>
+<main class="container"><header><a href="tv.html">← Back to Service</a></header><h1>Cable TV Subscription Summary</h1><span class="status">LOCAL REVIEW · API NOT CONNECTED</span><p>Please check the information below. This screen does not submit an order.</p>
+<section class="details" id="details">
+<div class="item"><span class="label">Provider</span><span class="value" id="v0">—</span></div>
+<div class="item"><span class="label">Smartcard / IUC number</span><span class="value" id="v1">—</span></div>
+<div class="item"><span class="label">Package</span><span class="value" id="v2">—</span></div>
+</section><div class="notice">Provider catalogue, decoder validation, final pricing and secure checkout are not connected. This is a local review only; no subscription has been requested or paid for.</div><button type="button" onclick="location.href='tv.html'">Back to Service</button></main>
+<script>
+const params=new URLSearchParams(location.search);
+const allowed=["DStv","GOtv","StarTimes"];
+const keys=["provider","account","item"];
+const labels=["Provider","Smartcard / IUC number","Package"];
+const values=keys.map(k=>(params.get(k)||"").trim());
+const valid=allowed.includes(values[0]) && values[2].length>=2 && (values[1]==="" || values[1].length>=5);
+if(!valid){
+ const box=document.createElement("div");box.className="error";
+ const title=document.createElement("strong");title.textContent="Invalid or incomplete request details.";
+ const msg=document.createElement("p");msg.textContent="Return to the service page and enter valid details again.";
+ box.append(title,msg);document.getElementById("details").replaceChildren(box);
+}else{
+ values.forEach((value,i)=>document.getElementById("v"+i).textContent=value||"Not provided");
+}
+</script>
+<script type="module">
+import { app } from "./firebase.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
+const auth=getAuth(app);
+onAuthStateChanged(auth,async user=>{
+ if(!user){location.replace("login.html");return;}
+ try{await user.reload();if(!user.emailVerified){await signOut(auth);alert("Please verify your email before using this service.");location.replace("login.html");}}
+ catch(error){console.error("Access check failed:",error);location.replace("login.html");}
+});
+</script></body></html>
