@@ -12,7 +12,7 @@ const allowed=["DStv","GOtv","StarTimes"];
 const keys=["provider","account","item"];
 const labels=["Provider","Smartcard / IUC number","Package"];
 const values=keys.map(k=>(params.get(k)||"").trim());
-const valid=allowed.includes(values[0]) && values[2].length>=2 && (values[1]==="" || values[1].length>=5);
+const valid=allowed.includes(values[0]) && /^[0-9]{6,20}$/.test(values[1]) && values[2].length>=2;
 if(!valid){
  const box=document.createElement("div");box.className="error";
  const title=document.createElement("strong");title.textContent="Invalid or incomplete request details.";
