@@ -77,19 +77,26 @@ try {
  console.error("Buy Data plan loading error:",error);
 }
 const auth = getAuth(app);
-const params = new URLSearchParams(window.location.search);
-const network = params.get("network") || "";
-const purchaseType = (params.get("type") || "SME").toUpperCase();
+let orderDraft = null;
+try{
+ const rawDraft = sessionStorage.getItem("ailat_data_order_draft");
+ if(rawDraft) orderDraft = JSON.parse(rawDraft);
+}catch(error){
+ console.warn("Buy Data order draft could not be read.");
+}
+const network = typeof orderDraft?.network === "string" ? orderDraft.network : "";
+const purchaseType = (typeof orderDraft?.type === "string" ? orderDraft.type : "SME").toUpperCase();
 const validPurchaseTypes = ["SME","GIFTING","CORPORATE"];
-const phone = params.get("phone") || "";
-const planId = params.get("plan_id") || params.get("plan") || "";
+const phone = typeof orderDraft?.phone === "string" ? orderDraft.phone : "";
+const planId = typeof orderDraft?.plan_id === "string" ? orderDraft.plan_id : "";
+
 const validNetworks = ["MTN","Airtel","Glo","9mobile","Vitel"];
 // AILAT DATA identifiers are separate from LegitDataWay identifiers.
 const AILAT_NETWORK_IDS = Object.freeze({mtn:1,airtel:2,glo:3,"9mobile":4,vitel:5});
 // LegitDataWay network IDs documented by the supplier. Vitel is intentionally unmapped.
 const LEGITDATAWAY_NETWORK_IDS = Object.freeze({mtn:1,airtel:2,glo:3,"9mobile":4,vitel:null});
 const expectedNetworkId = AILAT_NETWORK_IDS[network.toLowerCase()] ?? null;
-const suppliedNetworkId = Number(params.get("internal_network_id") || params.get("network_id"));
+const suppliedNetworkId = Number(orderDraft?.internal_network_id);
 const validPhone = /^0[789][01]\d{8}$/;
 const selectedPlan = DATA_PLANS.find(item => String(item.id)===String(planId) && item.network.toLowerCase()===network.toLowerCase() && Number(item.internal_network_id)===expectedNetworkId);
 const normalizedType = type => { const v=String(type||"").toUpperCase(); return v==="COOPERATE GIFTING" || v==="CORPORATE" ? "CORPORATE" : v; };
