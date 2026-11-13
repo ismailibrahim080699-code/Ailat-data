@@ -59,7 +59,20 @@ const validNetworks=["MTN","Airtel","Glo","9mobile"];
 const validPhone=/^0[789][01]\d{8}$/;
 const validAmount=Number.isSafeInteger(amount)&&amount>=100&&amount<=1000000;
 if(!validNetworks.includes(network)||!validPhone.test(phone)||!validAmount){
- document.getElementById("summaryCard").innerHTML='<div class="error"><h3>Invalid Order Details</h3><p class="subtitle">The details are incomplete or invalid. Please return and enter them again.</p></div><a class="cancel" href="airtime_to_cash.html">← Back to Airtime to Cash</a>';
+ const summaryCard=document.getElementById("summaryCard");
+ const errorBox=document.createElement("div");
+ errorBox.className="error";
+ const heading=document.createElement("h3");
+ heading.textContent="Invalid Order Details";
+ const message=document.createElement("p");
+ message.className="subtitle";
+ message.textContent="The details are incomplete or invalid. Please return and enter them again.";
+ const backLink=document.createElement("a");
+ backLink.className="cancel";
+ backLink.href="airtime_to_cash.html";
+ backLink.textContent="← Back to Airtime to Cash";
+ errorBox.append(heading,message);
+ summaryCard.replaceChildren(errorBox,backLink);
 }else{
  document.getElementById("network").textContent=network;
  document.getElementById("phone").textContent=phone;
