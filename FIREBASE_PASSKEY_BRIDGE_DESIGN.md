@@ -112,3 +112,12 @@ References:
 - Supabase Edge Functions runtime: https://supabase.com/docs/guides/functions
 - SimpleWebAuthn server / Deno compatibility: https://simplewebauthn.dev/docs/packages/server/
 - Firebase custom tokens and service-account signing: https://firebase.google.com/docs/auth/admin/create-custom-tokens
+
+## Latest read-only project inspection (2026-11-13)
+
+- Supabase project ref: `bdogulpsybiggpgipdbt`.
+- The live Edge Function inventory contains `ailat-backend` v7, `ailat-order-requests` v20, `ailat-referral` v5, `ailat-electricity-orders` v8, and `ailat-paystack-test` v2. No dedicated WebAuthn/passkey function is present.
+- The inspected `private` schema table inventory contains no `passkey_credentials` or `passkey_challenges` tables.
+- No production database DDL or Edge Function deployment was performed in this inspection.
+- The Supabase function inventory does not expose the deployed Deno/Edge Runtime version. Compatibility must therefore be tested in a controlled non-production function before selecting and pinning a WebAuthn dependency.
+- Do not change existing login or deploy a partially working passkey endpoint. The next safe engineering step is a separately isolated test implementation after a qualified project administrator has provisioned the required signing configuration and reviewed the security design.
