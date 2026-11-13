@@ -16,7 +16,12 @@ form.addEventListener("submit",e=>{
  if(!provider){error.textContent="Choose a provider.";return;}
  if(!/^[0-9]{6,20}$/.test(account)){error.textContent="Enter a valid 6–20 digit Smartcard/IUC number.";document.getElementById("account").focus();return;}
  if(item.length<2){error.textContent="Enter the requested package.";document.getElementById("item").focus();return;}
- const params=new URLSearchParams({provider,account,item});
- window.location.href="tv_order_summary.html?"+params.toString();
+ try{
+  sessionStorage.setItem("ailat_tv_review",JSON.stringify({provider,account,item}));
+ }catch(error){
+  error.textContent="This browser cannot keep the review details in this tab. Please try again.";
+  return;
+ }
+ window.location.href="tv_order_summary.html";
 });
 </script></section></main></body></html>
