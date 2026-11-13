@@ -100,3 +100,15 @@ Do not add browser-facing policies. Before applying, verify that all legitimate 
 ### Passkey readiness conclusion
 
 The inspected project still has no confirmed Firebase Admin custom-token signing secret, no WebAuthn credential/challenge tables, and no WebAuthn Edge Function. No production schema or function was changed. The next implementation gate remains secure provisioning and review of the Firebase Admin credential, followed by a dedicated isolated WebAuthn endpoint and private storage—not modifications to existing wallet/order functions.
+
+## Runtime compatibility research (2026-11-13)
+
+- Supabase Edge Functions use a Deno-compatible TypeScript runtime.
+- SimpleWebAuthn server documentation currently lists Deno 2.4.x+ support for the v14 line. Do not pin or deploy this dependency until the actual Supabase Edge Runtime version is confirmed to satisfy that requirement and the package API is reviewed against the selected version.
+- Firebase custom-token documentation confirms the server must mint a signed custom token for the exact Firebase UID. It documents service-account key files and Google-managed signing via a service-account ID/IAM permissions as distinct approaches. Do not assume the IAM approach works from Supabase without establishing a supported workload identity and the required signing permission.
+- No production code, secret, database schema, or Edge Function was changed during this research.
+
+References:
+- Supabase Edge Functions runtime: https://supabase.com/docs/guides/functions
+- SimpleWebAuthn server / Deno compatibility: https://simplewebauthn.dev/docs/packages/server/
+- Firebase custom tokens and service-account signing: https://firebase.google.com/docs/auth/admin/create-custom-tokens
