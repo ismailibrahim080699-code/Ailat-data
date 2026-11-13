@@ -87,3 +87,17 @@ Additional observations:
 - A matching numeric plan ID and matching network ID are useful consistency signals, but they do not independently prove the current provider price or the plan's live availability.
 
 Conclusion: do not bulk-change mapping statuses or activate additional plans based on ID matches alone. The missing source amount field must be corrected from an authoritative supplier catalogue export/API response before the plan-price comparison can be considered complete. Existing Glo verified status should also be reviewed against the current authoritative source data before any live use.
+
+
+## Import provenance diagnosis (read-only, 2026-11-13)
+
+The 170 source-catalogue rows all share the same import timestamp (2026-11-12 15:09:18.233779+00). All 170 are marked source_verified=true, but 160/170 have amount IS NULL; the remaining 10 priced rows are Glo SME plans. All 40 Vitel rows also have a NULL provider network ID. This shows the verification flag is not sufficient evidence of a complete provider catalogue record.
+
+Breakdown of missing prices by provider group:
+- 9mobile: 11/11 missing
+- Airtel: 39/39 missing
+- Glo: 24/34 missing (the 10 Glo SME rows with prices are the only priced source rows)
+- MTN: 46/46 missing
+- Vitel: 40/40 missing
+
+The identical import timestamp across all rows indicates they were loaded in one batch; it does not prove whether the missing amounts came from an API response, a parser/field-name mismatch, or an incomplete import. The next engineering step is to inspect the original importer/parser or the original supplier response format and map the actual price property correctly. Do not fabricate prices, flip verification flags, or change live catalogue rows based on this audit. The source data is currently insufficient to verify the affected plans.
