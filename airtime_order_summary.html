@@ -24,6 +24,7 @@ header .subtitle{color:#eee}
 .notice{background:#fff8e7;color:#805600;padding:14px;border-radius:11px;margin-top:20px;font-size:12px;line-height:1.6}
 button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;color:white;font-size:15px;font-weight:bold;margin-top:20px;cursor:pointer}
 button:disabled{opacity:.65;cursor:wait}
+.new-request{background:#eee7ff;color:#4c1d95;margin-top:10px}
 .cancel{display:block;text-align:center;margin-top:18px;color:#6425c5;text-decoration:none;font-size:14px}
 #requestStatus{font-size:13px;line-height:1.6;margin-top:15px;overflow-wrap:anywhere}
 .error{color:#b42318;background:#fff0ef;padding:15px;border-radius:10px;line-height:1.6}
@@ -47,6 +48,7 @@ button:disabled{opacity:.65;cursor:wait}
 <strong>Supplier integration pending:</strong> This is the airtime value you requested, not a confirmed final charge or service fee. This step only records your request. No payment will be taken, no wallet balance will be deducted, and no airtime will be sent.
 </div>
 <button id="confirmButton" type="button">Submit Airtime Request</button>
+<button id="newRequestButton" class="new-request" type="button" hidden>Start a New Request</button>
 <p id="requestStatus" role="status" aria-live="polite"></p>
 <a href="airtime.html" class="cancel">← Go Back and Edit</a>
 </div>
@@ -68,8 +70,31 @@ const validPhone = /^0[789][01]\d{8}$/;
 const validAmount = Number.isSafeInteger(amount) && amount >= 50 && amount <= 100000;
 const button = document.getElementById("confirmButton");
 const statusBox = document.getElementById("requestStatus");
-let requestKey = crypto.randomUUID();
+// Keep the same request identifier across refreshes for this exact draft.
+// This prevents a refresh/retry from creating a second request record.
+const orderFingerprint = [network.toLowerCase(), phone, String(amount)].join("|");
+const requestStorageKey = "ailat_airtime_request:" + encodeURIComponent(orderFingerprint);
+function getOrCreateRequestKey(){
+ try{
+  const existing = sessionStorage.getItem(requestStorageKey);
+  if(existing && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(existing)) return existing;
+  const created = crypto.randomUUID();
+  sessionStorage.setItem(requestStorageKey,created);
+  return created;
+ }catch(error){ return crypto.randomUUID(); }
+}
+let requestKey = getOrCreateRequestKey();
 let requestSaved = false;
+const newRequestButton = document.getElementById("newRequestButton");
+newRequestButton.addEventListener("click",()=>{
+ requestKey = crypto.randomUUID();
+ try{ sessionStorage.setItem(requestStorageKey,requestKey); }catch(error){}
+ requestSaved = false;
+ button.disabled = false;
+ button.textContent = "Submit Airtime Request";
+ newRequestButton.hidden = true;
+ statusBox.textContent = "A new request has been prepared. Review the details before submitting.";
+});
 
 if(!validNetworks.includes(network) || !validPhone.test(phone) || !validAmount){
  document.getElementById("orderCard").innerHTML =
@@ -117,6 +142,7 @@ button.addEventListener("click",async()=>{
   if(!response.ok || !result.success) throw new Error(result.error || "Could not save your request. Please try again.");
   requestSaved = true;
   button.textContent = "Request Recorded";
+  newRequestButton.hidden = false;
   const savedRequest = result.order_request || {};
   const referenceText = savedRequest.reference ? " Reference: " + savedRequest.reference + "." : "";
   const statusText = savedRequest.status ? " Status: " + savedRequest.status + "." : "";
