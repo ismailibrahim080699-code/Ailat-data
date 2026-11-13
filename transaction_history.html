@@ -117,6 +117,10 @@ header p{margin:8px 0 0;font-size:14px;opacity:.9}
  background:#fef3c7;
  color:#92400e;
 }
+.status.request-recorded{
+ background:#f3e8ff;
+ color:#6d28d9;
+}
 .status.rejected,.status.failed,.status.cancelled{
  background:#fee2e2;
  color:#991b1b;
@@ -273,7 +277,7 @@ function renderTransactions(items){
    customer.amount !== undefined ? `<div>Airtime Amount: ${formatAmount(customer.amount)}</div>` : ""
   ].join("");
   const statusClass = ["completed","success","received","pending","processing","failed","rejected","cancelled"].includes(rawStatus)
-   ? (rawStatus === "received" ? "pending" : rawStatus)
+   ? (rawStatus === "received" ? "request-recorded" : rawStatus)
    : "unknown";
   const statusLabel = ({
    received:"Request Recorded",
@@ -368,9 +372,19 @@ async function loadTransactions(user){
   }));
 
   const transactionRows = Array.isArray(transactions) ? transactions : [];
-  const combined = [...transactionRows, ...requests].sort((a,b) =>
-   new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()
-  );
+  // Merge both history sources without showing the same reference twice.
+  const seenReferences = new Set();
+  const combined = [...transactionRows, ...requests].filter(item => {
+   const reference = String(item.reference || "").trim();
+   if(!reference) return true;
+   if(seenReferences.has(reference)) return false;
+   seenReferences.add(reference);
+   return true;
+  }).sort((a,b) => {
+   const aTime = new Date(a.created_at || 0).getTime();
+   const bTime = new Date(b.created_at || 0).getTime();
+   return (Number.isFinite(bTime) ? bTime : 0) - (Number.isFinite(aTime) ? aTime : 0);
+  });
 
   renderTransactions(combined);
   if(!transactionResult.ok || !requestResult.ok){
