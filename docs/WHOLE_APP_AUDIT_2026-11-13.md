@@ -70,3 +70,24 @@ Static source checks passed for the sampled pages and their local HTML links. Th
 - These are source-level checks only. No submit buttons were activated, no customer request was created, and no wallet/payment/provider operation was run.
 - No browser rendering, device layout, Firebase live-session, or backend end-to-end test was performed in this pass.
 - No production payment, wallet, supplier, database, or security configuration was changed.
+
+
+## Legitdataway Data API mapping review — 2026-11-13
+
+### Live backend source inspection
+- Re-read deployed Supabase Edge Function `ailat-order-requests`: it is ACTIVE at version 21.
+- The function validates Firebase ID tokens itself, checks verified email, resolves Data prices from the server-side `data_plan_catalog`, and rejects plans without verified supplier mappings.
+- The function constructs a Legitdataway-format request preview for Data, but explicitly does not send an outbound HTTP request. New Data records are marked `disabled_safe_mode`; no supplier fulfilment occurs.
+- The inspected source does not read a Legitdataway API token/secret. A secret existing in Supabase project settings would not by itself activate integration; the function must explicitly read it at runtime.
+
+### Read-only catalogue QA
+- Grouped the current `public.data_plan_catalog` rows by network and purchase type. Counts: 9mobile 11; Airtel 39; Glo 34; MTN 46; Vitel 40 (170 total).
+- Only 10 Glo SME rows are marked verified and have both supplier IDs populated. The remaining 160 rows are not marked verified; all 40 Vitel rows also have a null supplier network ID.
+- A read-only consistency query found no duplicate supplier plan IDs within the same network/type and no verified mapping whose supplier network ID conflicts with the expected ID mapping used in the query (MTN 1, Airtel 2, Glo 3, 9mobile 4, Vitel 5).
+- Note: the deployed order function currently hardcodes Vitel provider network mapping as null and rejects Vitel Data orders. The earlier mapping assumption of Vitel ID 5 must be reconciled against the provider's complete official network table before any code change.
+- The pasted Legitdataway documentation excerpt included only part of the 170-plan table and showed a sample request with `data_plan: 1`, while the visible catalogue examples use IDs such as 220–273. Exact full catalogue mapping and request semantics must be confirmed from the provider's full official documentation/dashboard before marking additional rows verified.
+
+### Safety and release boundary
+- This pass used read-only SQL and source inspection only. No catalogue rows, secrets, Edge Functions, wallet balances, payment settings, or supplier settings were changed.
+- No provider HTTP request or real data purchase was sent. Do not infer that the supplier token is configured or valid from the presence of a dashboard secret alone.
+- Before any production supplier fulfilment, the responsible adult business owner and provider must verify the official account, credentials, exact plan/network mapping, idempotency and reconciliation behavior, pricing, failure/refund process, and sandbox tests. Keep the live dispatch disabled until those gates pass.
