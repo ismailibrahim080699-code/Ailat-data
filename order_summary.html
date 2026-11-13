@@ -93,7 +93,24 @@ const selectedPlan = DATA_PLANS.find(item => String(item.id)===String(planId) &&
 const normalizedType = type => { const v=String(type||"").toUpperCase(); return v==="COOPERATE GIFTING" || v==="CORPORATE" ? "CORPORATE" : v; };
 const button = document.getElementById("confirmButton");
 const statusBox = document.getElementById("requestStatus");
-let requestKey = crypto.randomUUID();
+// Reuse the same idempotency key after refresh for the same order draft.
+// This stores only a random request identifier and a fingerprint of non-secret
+// order details; Firebase tokens and supplier credentials are never stored here.
+const orderFingerprint = [network.toLowerCase(), purchaseType, phone, String(planId)].join("|");
+const requestStorageKey = "ailat_data_order_request:" + encodeURIComponent(orderFingerprint);
+function getOrCreateRequestKey(){
+ try {
+  const existing = sessionStorage.getItem(requestStorageKey);
+  if (existing && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(existing)) return existing;
+  const created = crypto.randomUUID();
+  sessionStorage.setItem(requestStorageKey, created);
+  return created;
+ } catch (error) {
+  // If session storage is unavailable, retain per-page protection.
+  return crypto.randomUUID();
+ }
+}
+let requestKey = getOrCreateRequestKey();
 let requestSaved = false;
 
 if(!validNetworks.includes(network) || expectedNetworkId===null || suppliedNetworkId!==expectedNetworkId || !validPurchaseTypes.includes(purchaseType) || !validPhone.test(phone) || !selectedPlan || normalizedType(selectedPlan.type)!==purchaseType){
@@ -150,6 +167,7 @@ if(button) button.addEventListener("click", async()=>{
   const result = await response.json().catch(()=>({}));
   if(!response.ok || !result.success) throw new Error(result.error || "Could not save your request. Please try again.");
   requestSaved = true;
+  try { sessionStorage.removeItem(requestStorageKey); } catch (_) {}
   button.textContent = "Request Recorded";
   statusBox.textContent = "Your request has been recorded. Reference: "+result.order_request.reference+". Status: "+result.order_request.status+". No payment was taken and no data was delivered.";
  }catch(error){
