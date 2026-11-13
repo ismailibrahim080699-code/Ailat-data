@@ -1,55 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#4c1d95">
-<meta name="description" content="AILAT DATA Cable TV Subscription service setup.">
-<link rel="icon" type="image/svg+xml" href="assets/ailat-mark.svg">
-<title>Cable TV Subscription - AILAT DATA</title>
-<style>
-*{box-sizing:border-box;font-family:Arial,sans-serif}
-body{margin:0;background:#f5f3ff;color:#24134d}
-.container{max-width:500px;min-height:100vh;margin:auto;display:flex;flex-direction:column}
-header{background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;padding:22px 20px;border-radius:0 0 20px 20px;display:flex;align-items:center;gap:14px}
-.back{color:white;text-decoration:none;font-size:27px}
-header h2{font-size:18px;margin:0}
-.content{padding:22px 18px;flex:1}
-.card{background:white;border:1px solid #eee7ff;border-radius:18px;padding:24px 20px;margin-top:8px;box-shadow:0 5px 20px #24134d10}
-.hero{text-align:center}
-.icon{font-size:46px;margin:5px 0 16px}
-h1{font-size:23px;margin:0 0 9px;color:#5425a8}
-p{font-size:14px;line-height:1.7;color:#686078}
-.status{display:inline-block;background:#fff0c2;color:#795600;padding:8px 13px;border-radius:20px;font-size:12px;font-weight:bold;margin:10px 0 14px}
-.panel{background:#faf8ff;border:1px solid #eee7ff;border-radius:13px;padding:16px;margin-top:17px}
-.panel h3{font-size:14px;color:#5425a8;margin:0 0 9px}
-ul{padding-left:19px;margin:0;color:#686078;font-size:13px;line-height:1.9}
-.notice{background:#fff7e5;color:#795600;padding:14px;border-radius:12px;font-size:12px;line-height:1.7;margin-top:17px}
-button{width:100%;padding:15px;border:0;border-radius:12px;background:linear-gradient(135deg,#702bd1,#4520a0);color:white;font-size:15px;font-weight:bold;margin-top:20px;cursor:pointer}
-footer{text-align:center;padding:20px;color:#9589ac;font-size:11px}
-</style>
-</head>
-<body>
-<div class="container">
-<header><a href="dashboard.html" class="back" aria-label="Back to dashboard">‹</a><h2>Cable TV Subscription</h2></header>
-<main class="content">
-<section class="card">
-<div class="hero">
-<div class="icon" aria-hidden="true">📺</div>
-<h1>Cable TV Subscription</h1>
-<p>DStv, GOtv and StarTimes</p>
-<span class="status">PROVIDER INTEGRATION PENDING</span>
-<p>Cable TV subscription page is prepared for provider catalogue integration.</p>
-</div>
-<div class="panel">
-<h3>Remaining setup</h3>
-<ul><li>Confirm the TV provider and supported bouquets</li><li>Load official package identifiers and current prices</li><li>Confirm Smartcard/IUC validation and customer-name lookup</li><li>Connect order recording and verified subscription delivery</li></ul>
-</div>
-<div class="notice"><strong>Important:</strong> Do not submit a Smartcard/IUC number or make payment through this page yet. No subscription will be processed.</div>
-<button type="button" onclick="location.href='dashboard.html'">Back to Dashboard</button>
-</section>
-</main>
-<footer>AILAT DATA © 2026 · All Rights Reserved</footer>
-</div>
-</body>
-</html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#4c1d95"><link rel="icon" type="image/svg+xml" href="assets/ailat-mark.svg"><title>AILAT DATA | Cable TV Subscription</title>
+<style>*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Arial,sans-serif;background:#f5f3ff;color:#24134d}header{padding:19px;background:linear-gradient(135deg,#35106f,#5b21b6,#7c3aed)}header a{color:white;text-decoration:none;font-weight:bold}main{width:min(92%,540px);margin:28px auto}.card{background:#fff;padding:25px 22px;border-radius:20px;box-shadow:0 10px 28px #35106f12}.intro{text-align:center}h1{font-size:23px;margin:5px 0 8px;color:#4c1d95}p{font-size:14px;line-height:1.7;color:#75658f}.status{display:inline-block;padding:8px 13px;border-radius:20px;background:#fff4d6;color:#875500;font-size:12px;font-weight:bold}form{margin-top:20px;padding:18px;background:#faf8ff;border:1px solid #eee7ff;border-radius:15px}label{display:block;margin:14px 0 7px;font-size:13px;font-weight:bold}input,select{width:100%;padding:13px;border:1px solid #e4deef;border-radius:10px;background:white;color:#24134d;font:14px Arial}button{width:100%;padding:14px;border:0;border-radius:11px;background:linear-gradient(135deg,#5b21b6,#7c3aed);color:white;font-weight:bold;margin-top:16px}.secondary{background:#eee7ff;color:#4c1d95}.error{color:#b42318;font-size:12px;min-height:17px}.preview{display:none;margin-top:15px;padding:14px;border:1px solid #ddd1fa;border-radius:12px}.preview pre{white-space:pre-wrap;font:13px/1.6 Arial;color:#51446b}.notice{margin-top:16px;padding:14px;background:#f3efff;color:#5b21b6;border-radius:12px;font-size:12px;line-height:1.7}footer{text-align:center;color:#9589ac;font-size:11px;padding:20px}</style></head><body>
+<header><a href="dashboard.html">← Back to Dashboard</a></header><main><section class="card"><div class="intro"><h1>Cable TV Subscription</h1><p>Prepare a cable subscription request</p><span class="status">PRE-API SETUP</span></div>
+<form id="serviceForm" novalidate>
+<label for="provider">TV Provider</label><select id="provider" required><option value="">Choose provider</option><option>DStv</option><option>GOtv</option><option>StarTimes</option></select>
+<label for="account">Smartcard / IUC number</label><input id="account" maxlength="40" placeholder="Enter the decoder number" required>
+<label for="item">Requested package</label><input id="item" maxlength="100" placeholder="Enter the package name" required>
+<div class="error" id="error" role="alert"></div><button type="submit">Preview Request</button><button type="reset" class="secondary">Clear Form</button>
+</form><section class="preview" id="preview" aria-live="polite"><strong>Local request preview</strong><pre id="previewText"></pre></section>
+<div class="notice"><strong>Provider connection pending:</strong> This form validates and previews your details only. Package catalogue, decoder validation, pricing and provider integration must be confirmed before a subscription can be submitted. This preview is not submitted or sent to any provider.</div></section></main><footer>AILAT DATA © 2026 · All Rights Reserved</footer>
+<script>
+const form=document.getElementById("serviceForm"),error=document.getElementById("error"),preview=document.getElementById("preview"),previewText=document.getElementById("previewText");
+form.addEventListener("submit",e=>{e.preventDefault();error.textContent="";const provider=document.getElementById("provider").value,account=document.getElementById("account").value.trim(),item=document.getElementById("item").value.trim();if(!provider){error.textContent="Choose a provider.";return;}if(account.length<5){error.textContent="Enter a valid account or candidate number.";return;}if(item.length<2){error.textContent="Enter the requested package or service.";return;}previewText.textContent="Provider: "+provider+"\nAccount/reference: "+account+"\nRequested item: "+item+"\nStatus: Prepared locally — not submitted.";preview.style.display="block";});
+form.addEventListener("reset",()=>{error.textContent="";preview.style.display="none";previewText.textContent="";});
+</script></section></main></body></html>
