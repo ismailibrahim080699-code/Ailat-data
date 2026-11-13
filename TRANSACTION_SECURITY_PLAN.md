@@ -44,3 +44,20 @@ This plan does not implement a transaction PIN, wallet debit approval, payment a
 - `register.html` creates Firebase email/password accounts, sends an email-verification message, and saves the user profile. It does not register a passkey.
 - No WebAuthn credential registration or assertion flow is present in the reviewed login or registration pages.
 - Therefore, do not show a passkey button as active and do not describe device-authenticator detection as sign-in authentication. A real passkey sign-in feature needs server-generated one-time challenges and server-side signature verification before the UI can be enabled.
+
+## Passkey compatibility decision (2026-11-13)
+
+Current official Supabase documentation describes built-in passkeys as an **experimental Supabase Auth feature**, requiring `@supabase/supabase-js` v2.105.0 or later, explicit client opt-in, and enabling/configuring passkeys plus a stable WebAuthn RP ID and allowed origins in the Supabase project.
+
+**This cannot be switched on directly for the existing AILAT DATA accounts.** The reviewed registration and login pages use Firebase Authentication as the identity provider. Supabase Auth passkeys authenticate a Supabase Auth user; simply adding that client feature would create a separate identity/session and would not automatically prove or map ownership of the existing Firebase account.
+
+### Required decision before implementation
+
+- Keep Firebase as the sole identity provider and design a server-verified WebAuthn-to-Firebase sign-in bridge, with the Firebase Admin credential kept only in a protected server secret; or
+- Plan a controlled migration of account identity to Supabase Auth, including account linking, verified-email handling, recovery, and rollback.
+
+Do not mix the two providers in the browser or create a second account silently. Do not enable a passkey button until the selected identity architecture and production origin/RP ID have been configured and tested. The current GitHub Pages origin is `https://ismailibrahim080699-code.github.io`; keep the RP ID stable once credentials are registered.
+
+### Current implementation status
+
+No production authentication configuration, database schema, Edge Function, Firebase account, or login UI was changed as part of this review. The existing password-and-email-verification flow remains the active sign-in method. This is intentional: enabling Supabase's experimental passkey feature before resolving identity ownership could lock users into a second, disconnected sign-in system.
