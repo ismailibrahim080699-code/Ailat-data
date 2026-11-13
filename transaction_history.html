@@ -311,7 +311,13 @@ function renderTransactions(items){
  }).join("");
 }
 
+let isLoadingTransactions = false;
+
 async function loadTransactions(user){
+ if(isLoadingTransactions) return;
+ isLoadingTransactions = true;
+ refreshBtn.disabled = true;
+ refreshBtn.textContent = "Loading…";
  try{
   showMessage("⏳","Loading...","Please wait while we load your transactions.");
 
@@ -384,12 +390,16 @@ async function loadTransactions(user){
    error.message || "Please check your internet connection and try again.",
    true
   );
+ }finally{
+  isLoadingTransactions = false;
+  refreshBtn.disabled = false;
+  refreshBtn.textContent = "Refresh";
  }
 }
 
 let currentUser = null;
 
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, async user => {
  currentUser = user;
 
  if(!user){
@@ -398,15 +408,31 @@ onAuthStateChanged(auth, user => {
    "Login Required",
    "Please login to view your transaction history."
   );
-
-  setTimeout(()=>{
-   window.location.href = "login.html";
-  },1500);
-
+  window.location.replace("login.html");
   return;
  }
 
- loadTransactions(user);
+ try{
+  await user.reload();
+  if(!user.emailVerified){
+   showMessage(
+    "🔒",
+    "Email Verification Required",
+    "Please verify your email address before viewing transaction history."
+   );
+   window.location.replace("login.html");
+   return;
+  }
+  await loadTransactions(user);
+ }catch(error){
+  console.error("Account verification error:",error);
+  showMessage(
+   "⚠️",
+   "Unable to Verify Account",
+   "Please refresh the page or sign in again.",
+   true
+  );
+ }
 });
 
 refreshBtn.addEventListener("click",()=>{
