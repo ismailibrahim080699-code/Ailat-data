@@ -271,14 +271,16 @@ form.addEventListener("submit", async function(event){
 
   if(!user.emailVerified){
 
-   await sendEmailVerification(user);
-   await signOut(auth);
-
-   alert(
-    "Your email is not verified yet. A verification link has been sent to your email. Please check your inbox or spam folder."
-   );
-
-   resendBtn.style.display = "block";
+   try {
+    await sendEmailVerification(user);
+    alert(
+     "Your email is not verified yet. A verification link has been sent to your email. Please check your inbox or spam folder."
+    );
+    resendBtn.style.display = "block";
+   } finally {
+    // Never leave an unverified account signed in if email delivery fails.
+    await signOut(auth);
+   }
 
    return;
   }
@@ -297,8 +299,13 @@ form.addEventListener("submit", async function(event){
    alert("Invalid email address.");
   }else if(error.code === "auth/too-many-requests"){
    alert("Too many attempts. Please try again later.");
+  }else if(error.code === "auth/network-request-failed"){
+   alert("Network connection failed. Check your internet and try again.");
+  }else if(error.code === "auth/user-disabled"){
+   alert("This account is disabled. Please contact support.");
   }else{
-   alert("Login failed: " + error.message);
+   // Keep raw Firebase details out of the customer-facing message.
+   alert("Login could not be completed. Please check your details and try again.");
   }
 
  } finally {
