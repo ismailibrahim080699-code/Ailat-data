@@ -36,3 +36,11 @@ This plan does not implement a transaction PIN, wallet debit approval, payment a
 - [ ] Confirm rate limits and security-event logging.
 - [ ] Confirm no secrets or biometric data are written to localStorage, sessionStorage, or logs.
 - [ ] Test only with non-financial account sign-in scenarios before release.
+
+## Existing sign-in flow review (2026-11-12)
+
+- `login.html` currently signs users in with Firebase email and password using `signInWithEmailAndPassword`.
+- The login page checks `emailVerified` and blocks unverified accounts; it also handles Firebase's too-many-requests response.
+- `register.html` creates Firebase email/password accounts, sends an email-verification message, and saves the user profile. It does not register a passkey.
+- No WebAuthn credential registration or assertion flow is present in the reviewed login or registration pages.
+- Therefore, do not show a passkey button as active and do not describe device-authenticator detection as sign-in authentication. A real passkey sign-in feature needs server-generated one-time challenges and server-side signature verification before the UI can be enabled.
