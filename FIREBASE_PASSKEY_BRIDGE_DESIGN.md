@@ -1,0 +1,73 @@
+# AILAT DATA — Firebase Passkey Bridge Design
+
+**Status:** Architecture specification only; not deployed or enabled.
+**Scope:** Optional passwordless sign-in to an existing Firebase account. Not transaction approval, wallet access approval, payment authorization, or supplier fulfilment.
+
+## 1. Decision
+
+Keep Firebase Authentication as the single identity provider. Do not enable Supabase Auth passkeys as a parallel sign-in system for current users.
+
+A future WebAuthn bridge may authenticate an existing Firebase user only after the server verifies the WebAuthn assertion and securely mints a Firebase custom token for the exact Firebase UID bound at credential enrollment.
+
+## 2. Required ceremony
+
+### Enrollment (user already signed in)
+
+1. Require a current Firebase ID token and verified email; re-check the account server-side.
+2. Server issues a short-lived, cryptographically random, one-time WebAuthn registration challenge.
+3. Browser invokes WebAuthn registration in a secure HTTPS context.
+4. Server verifies challenge, origin, RP ID, user-verification requirement, attestation policy, and credential uniqueness.
+5. Store only the credential public key, credential ID, supported counter/backup metadata, Firebase UID, timestamps, and minimal authenticator metadata in a private server-side table.
+6. Notify the account owner. Do not store biometric data, device PIN, private key, or raw authenticator response beyond what verification requires.
+
+### Sign-in (no Firebase session yet)
+
+1. Browser requests a discoverable-credential authentication challenge.
+2. Server returns short-lived request options and stores the challenge server-side.
+3. Browser invokes WebAuthn authentication.
+4. Server verifies the assertion against the stored public key and checks challenge, origin, RP ID, signature, user-verification flag, credential status, and replay/counter rules.
+5. Server resolves the exact Firebase UID from the verified credential record and mints a Firebase custom token for that UID using a Firebase Admin service account held only in protected server secrets.
+6. Browser exchanges that custom token with Firebase Authentication using `signInWithCustomToken`.
+7. Existing Firebase email-verification and account-state checks remain in force. A passkey must never silently create a new Firebase account.
+
+## 3. Server requirements
+
+- Use a maintained WebAuthn server library compatible with the selected Deno/Supabase Edge Runtime. Confirm current version and API before implementation.
+- Generate challenges with a cryptographically secure random generator; store only a hash if practical.
+- Challenges expire quickly (for example, 3–5 minutes), are bound to a ceremony and account where applicable, and are consumed atomically once.
+- Enforce the exact production origin: `https://ismailibrahim080699-code.github.io`.
+- Candidate RP ID is `ismailibrahim080699-code.github.io`; confirm browser/WebAuthn RP-ID compatibility and deployment constraints before enabling. RP ID must remain stable after credentials are enrolled.
+- Require user verification; do not claim this means fingerprint specifically. Device may use its configured screen lock, biometric, PIN, or security key.
+- Apply per-IP and per-account rate limits, request-size limits, generic sign-in errors, and security event logging without secrets.
+- Credential records and challenges belong in a private schema/table inaccessible to browser roles. No public RLS policies.
+- Firebase Admin service-account credentials must be stored as Supabase Edge Function secrets, never in GitHub, frontend code, Firestore documents, or logs.
+- The bridge must verify Firebase account status and email verification at enrollment. At sign-in, define how disabled/deleted/revoked accounts are checked before issuing a custom token.
+- Provide account recovery, lost-device removal, credential revocation, and notifications before launch.
+
+## 4. Existing AILAT DATA constraints found during review
+
+- Frontend account identity currently comes from Firebase Authentication (`firebase.js`, `login.html`, `register.html`).
+- Existing Supabase Edge Functions independently verify Firebase ID tokens; they do not currently implement WebAuthn.
+- Existing Edge Functions use `verify_jwt=false`, so any new endpoint must perform its own strict authentication/ceremony validation.
+- No passkey bridge endpoint or private credential store was identified in the reviewed project.
+- No Firebase Admin custom-token signing secret was verified as configured. Do not assume one exists.
+- The Supabase Auth passkey feature is experimental and authenticates Supabase Auth users, not the current Firebase identities. It is not the selected integration path.
+
+## 5. Rollout gates
+
+Do not implement or enable until all are true:
+
+- [ ] Confirm current Supabase Edge Runtime and compatible WebAuthn library/API.
+- [ ] Confirm exact RP ID and allowed HTTPS origin on the actual production hostname.
+- [ ] Confirm Firebase Admin service-account credential is provisioned securely as a server secret.
+- [ ] Create private credential/challenge storage with strict privileges and verified atomic one-time challenge consumption.
+- [ ] Implement registration and assertion verification with negative tests for wrong origin, wrong RP ID, expired/replayed challenge, wrong UID, invalid signature, disabled credential, and missing user verification.
+- [ ] Implement Firebase custom-token exchange without creating accounts.
+- [ ] Implement recovery, revocation, rate limits, notifications, and monitoring.
+- [ ] Test only with a dedicated non-production test account first.
+- [ ] Keep password/email login available as a recovery route.
+- [ ] Complete a security review before any production release.
+
+## 6. Explicit exclusions
+
+This passkey bridge is for account sign-in only. It must not authorize wallet debits, top-ups, withdrawals, payments, transaction PINs, data purchases, or supplier API requests. Do not reuse an account-login assertion as transaction approval.
