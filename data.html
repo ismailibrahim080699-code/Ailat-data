@@ -480,8 +480,20 @@ function continuePurchase(){
   alert("Please enter a valid 11-digit Nigerian phone number."); return;
  }
  if(!selected){ alert("Please select a data bundle."); return; }
- const params=new URLSearchParams({network:selectedNetwork,internal_network_id:String(getInternalNetworkId(selectedNetwork)),phone,plan_id:String(selected.id),type:selectedPurchaseType});
- window.location.href="order_summary.html?"+params.toString();
+ const orderDraft={
+  network:selectedNetwork,
+  internal_network_id:getInternalNetworkId(selectedNetwork),
+  phone,
+  plan_id:String(selected.id),
+  type:selectedPurchaseType
+ };
+ try{
+  sessionStorage.setItem("ailat_data_order_draft",JSON.stringify(orderDraft));
+ }catch(error){
+  alert("Your browser could not securely keep this order draft. Please enable site storage and try again.");
+  return;
+ }
+ window.location.href="order_summary.html";
 }
 window.choosePurchaseType=choosePurchaseType;
 window.chooseNetwork=chooseNetwork;
