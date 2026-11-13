@@ -24,6 +24,7 @@ header .subtitle{color:#eee}
 .notice{background:#fff8e7;color:#805600;padding:14px;border-radius:11px;margin-top:20px;font-size:12px;line-height:1.6}
 button{width:100%;padding:16px;border:0;border-radius:11px;background:#6425c5;color:white;font-size:15px;font-weight:bold;margin-top:20px;cursor:pointer}
 button:disabled{opacity:.65;cursor:wait}
+.new-request{background:#eee7ff;color:#4c1d95;margin-top:10px}
 .cancel{display:block;text-align:center;margin-top:18px;color:#6425c5;text-decoration:none;font-size:14px}
 .error{color:#b42318;background:#fff0ef;padding:15px;border-radius:10px;line-height:1.6}
 #requestStatus{font-size:13px;line-height:1.6;margin-top:15px;overflow-wrap:anywhere}
@@ -49,6 +50,7 @@ button:disabled{opacity:.65;cursor:wait}
 <strong>Price information:</strong> The displayed amount is AILAT DATA’s selling price. This step only records a request; no payment is taken, no wallet balance is deducted, and no data is delivered.
 </div>
 <button id="confirmButton" type="button">Submit Order Request</button>
+<button id="newRequestButton" class="new-request" type="button" hidden>Start a New Request</button>
 <p id="requestStatus" role="status" aria-live="polite"></p>
 <a href="data.html" class="cancel">← Go Back and Edit</a>
 </div>
@@ -112,6 +114,16 @@ function getOrCreateRequestKey(){
 }
 let requestKey = getOrCreateRequestKey();
 let requestSaved = false;
+const newRequestButton = document.getElementById("newRequestButton");
+newRequestButton.addEventListener("click",()=>{
+ requestKey = crypto.randomUUID();
+ try{ sessionStorage.setItem(requestStorageKey,requestKey); }catch(error){}
+ requestSaved = false;
+ button.disabled = false;
+ button.textContent = "Submit Order Request";
+ newRequestButton.hidden = true;
+ statusBox.textContent = "A new request has been prepared. Review the details before submitting.";
+});
 
 if(!validNetworks.includes(network) || expectedNetworkId===null || suppliedNetworkId!==expectedNetworkId || !validPurchaseTypes.includes(purchaseType) || !validPhone.test(phone) || !selectedPlan || normalizedType(selectedPlan.type)!==purchaseType){
  const invalidMessage = plansLoadError
@@ -167,9 +179,10 @@ if(button) button.addEventListener("click", async()=>{
   const result = await response.json().catch(()=>({}));
   if(!response.ok || !result.success) throw new Error(result.error || "Could not save your request. Please try again.");
   requestSaved = true;
-  // Keep the idempotency key for this tab session so a refresh after a
-  // successful response replays the same request instead of creating another.
+  // Keep the idempotency key after success so a refresh cannot create a duplicate.
   button.textContent = "Request Recorded";
+  button.disabled = true;
+  newRequestButton.hidden = false;
   statusBox.textContent = "Your request has been recorded. Reference: "+result.order_request.reference+". Status: "+result.order_request.status+". No payment was taken and no data was delivered.";
  }catch(error){
   button.disabled = false;
