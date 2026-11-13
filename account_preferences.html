@@ -30,11 +30,6 @@
 import {app} from "./firebase.js";
 import {getAuth,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
 const auth=getAuth(app);
-onAuthStateChanged(auth,async user=>{
- if(!user){location.replace("login.html");return;}
- try{await user.reload();if(!user.emailVerified){await signOut(auth);alert("Please verify your email before accessing Settings.");location.replace("login.html");}}
- catch(error){console.error("Preferences access check failed:",error);location.replace("login.html");}
-});
 const controls=[...document.querySelectorAll("[data-pref]")];
 const status=document.getElementById("saveStatus");
 let storageKey=null;
@@ -42,7 +37,8 @@ let preferencesReady=false;
 function readPreferences(){
  try{
   const saved=JSON.parse(localStorage.getItem(storageKey)||"{}");
-  controls.forEach(input=>{input.checked=saved[input.dataset.pref]===true;});
+  const safeSaved=saved&&typeof saved==="object"&&!Array.isArray(saved)?saved:{};
+  controls.forEach(input=>{input.checked=safeSaved[input.dataset.pref]===true;});
   preferencesReady=true;
   status.textContent="Preferences loaded for this account on this device.";
  }catch(error){
@@ -53,7 +49,8 @@ function readPreferences(){
 function savePreferences(input){
  if(!preferencesReady||!storageKey)return;
  try{
-  const current=JSON.parse(localStorage.getItem(storageKey)||"{}");
+  const parsed=JSON.parse(localStorage.getItem(storageKey)||"{}");
+  const current=parsed&&typeof parsed==="object"&&!Array.isArray(parsed)?parsed:{};
   current[input.dataset.pref]=input.checked;
   localStorage.setItem(storageKey,JSON.stringify(current));
   status.textContent="Saved on this device for this account.";
