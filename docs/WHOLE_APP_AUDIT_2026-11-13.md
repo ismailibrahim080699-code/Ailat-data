@@ -37,3 +37,21 @@ Do not enable live API fulfilment until provider documentation, exact network/pl
 ## Changes made during this audit
 
 No production database schema, RLS policy, Edge Function deployment, payment setting, or supplier setting was changed during this audit. This report is documentation only.
+
+
+## Follow-up general QA pass — 2026-11-13
+
+### Checks completed from repository source
+- Reviewed 18 high-priority HTML pages: landing, login, registration, dashboard, Data, Airtime, Electricity, Cable TV, Exam, order summaries, wallet pages, transaction history, settings, profile and referral.
+- Checked local `.html` references on those 18 pages against the repository tree: no missing local HTML target was found in that sample.
+- Inspected dynamic `innerHTML` use on Registration, Dashboard, Airtime summary, Transaction History and Referral. The Registration/Dashboard occurrences replace fixed UI icons; the Transaction History and Referral renderers use escaping helpers for dynamic text; the Airtime summary writes a fixed error template.
+- Confirmed Supabase Edge Function inventory at time of check: `ailat-backend` v7, `ailat-order-requests` v21, `ailat-referral` v5, `ailat-electricity-orders` v8, and `ailat-paystack-test` v2, all reporting ACTIVE.
+- Confirmed `ailat-order-requests` v21 contains the Airtime safe-integer amount guard.
+
+### Checks not completed
+- A live browser request to the GitHub Pages URL could not be completed in this test environment. Therefore HTTP status, page rendering, mobile layout, JavaScript runtime errors, and real Firebase sign-in flows remain unverified.
+- No authenticated end-to-end request was sent; no test user session or database test fixture was used.
+- No supplier dispatch, wallet debit/credit, Paystack payment, or real customer data was used.
+
+### QA result
+Static source checks passed for the sampled pages and their local HTML links. This is not a complete 37-page browser test and is not a production-readiness sign-off. Remaining release gate: browser/device testing by the project owner or a responsible adult tester using test accounts and sandbox-only credentials, followed by independent security review.
