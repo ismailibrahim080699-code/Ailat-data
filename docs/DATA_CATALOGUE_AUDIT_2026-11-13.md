@@ -65,3 +65,25 @@ These are calculation checks only, not purchase tests.
 4. Continue frontend tests with mocked responses only.
 
 Live dispatch, payment collection, wallet debits, and fulfilment are intentionally outside this audit.
+
+
+## Follow-up source-catalogue join audit (read-only)
+
+A second read-only comparison joined active app catalogue rows to `public.legitdataway_data_plan_catalog` by supplier plan ID, then compared provider network IDs and source price fields.
+
+| Network | Active plans | Exactly one source row marked verified | Network ID agrees | Source amount missing | App rows already marked verified |
+|---|---:|---:|---:|---:|---:|
+| 9mobile | 11 | 11 | 11 | 11 | 0 |
+| Airtel | 38 | 38 | 38 | 38 | 0 |
+| Glo | 34 | 34 | 34 | 24 | 10 |
+| MTN | 46 | 46 | 46 | 46 | 0 |
+| Vitel | 40 | 40 | 0 | 40 | 0 |
+
+Additional observations:
+- Each active app plan found exactly one source-catalogue row with the same supplier plan ID; no duplicate source-ID matches were found in this join.
+- For 9mobile, Airtel, Glo, and MTN, the supplier network ID stored in the app row agrees with the matched source row.
+- Vitel's source rows have no provider network ID, and the app catalogue rows also lack one. Vitel remains unmapped.
+- The source catalogue's `amount` field is NULL for every matched row in this audit. Therefore the source table cannot currently confirm supplier prices, even when `source_verified=true`.
+- A matching numeric plan ID and matching network ID are useful consistency signals, but they do not independently prove the current provider price or the plan's live availability.
+
+Conclusion: do not bulk-change mapping statuses or activate additional plans based on ID matches alone. The missing source amount field must be corrected from an authoritative supplier catalogue export/API response before the plan-price comparison can be considered complete. Existing Glo verified status should also be reviewed against the current authoritative source data before any live use.
