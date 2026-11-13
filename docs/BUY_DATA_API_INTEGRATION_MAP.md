@@ -98,3 +98,11 @@ Never place provider secrets, Supabase service-role keys, or Firebase Admin cred
 ## 7. Scope boundary
 
 This document does not enable supplier dispatch, payment collection, wallet debit/credit, withdrawals, or live fulfilment. Existing request-only behavior remains unchanged.
+
+
+## 8. Follow-up audit: current frontend handoff and source import gap (2026-11-13)
+
+- The current Buy Data frontend handoff uses tab-scoped sessionStorage for the selected order details; the earlier query-parameter description in section 1 is historical and should not be used as the current implementation description. The order summary should fail closed when the session payload is missing or invalid.
+- A recursive inspection of the repository's default-branch file tree found no supplier-catalogue importer, scheduled sync job, or source import script. The root `data-plans.js` file contains public plan metadata only; it explicitly does not contain supplier prices.
+- The `public.legitdataway_data_plan_catalog` source rows were imported in one batch timestamp. 160 of 170 rows have NULL `amount`; all 170 are flagged `source_verified=true`. Therefore that flag alone cannot be treated as price verification.
+- No importer was modified and no catalogue rows were changed. The next safe step is to obtain the exact official supplier catalogue response/export or the original import payload, then identify the actual price field and validate the parser against that source before any database changes.
