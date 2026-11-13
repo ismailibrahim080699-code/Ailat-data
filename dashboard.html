@@ -11,7 +11,7 @@
 *{box-sizing:border-box}
 body{
  margin:0;font-family:Arial,sans-serif;
- background:#f5f3ff;color:#24134d;padding-bottom:112px;
+ background:#f5f3ff;color:#24134d;
 }
 button,a{-webkit-tap-highlight-color:transparent}
 header{
@@ -191,12 +191,6 @@ footer{
  font-size:14px;font-weight:bold;
 }
 .logout svg{width:18px;height:18px}
-.bottom-nav{position:fixed;z-index:20;left:0;right:0;bottom:0;padding:10px 10px calc(12px + env(safe-area-inset-bottom));background:#ffffffed;backdrop-filter:blur(18px);border-top:1px solid #e7d9ff;box-shadow:0 -8px 25px #35106f12;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
-.nav-item{min-height:86px;border-radius:23px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-decoration:none;color:#57338d;font-size:13px;font-weight:800;position:relative}
-.nav-item i{width:29px;height:29px;stroke-width:2.6}
-.nav-item.active{color:#4b08a6;background:linear-gradient(145deg,#f0e4ff,#e7d5ff)}
-.nav-item.active:before{content:"";position:absolute;top:0;width:58px;height:5px;border-radius:0 0 6px 6px;background:#6d12d6}
-@media(max-width:370px){.nav-item{min-height:80px;font-size:11px}.nav-item i{width:26px;height:26px}}
 @media(max-width:360px){
  .services{gap:9px}
  .service{min-height:105px;padding:13px 3px}
@@ -263,7 +257,7 @@ footer{
   <span>Choose a service</span>
  </div>
 
- <div class="services" id="services">
+ <div class="services">
   <a class="service" href="data.html">
    <div class="icon"><i data-lucide="wifi"></i></div>
    <p>Buy Data</p>
@@ -354,13 +348,6 @@ footer{
  </section>
 </div>
 
-<nav class="bottom-nav" aria-label="Main navigation">
- <a class="nav-item active" href="dashboard.html" aria-current="page"><i data-lucide="house"></i><span>Home</span></a>
- <a class="nav-item" href="dashboard.html#services"><i data-lucide="zap"></i><span>Services</span></a>
- <a class="nav-item" href="transaction_history.html"><i data-lucide="history"></i><span>History</span></a>
- <a class="nav-item" href="referral.html"><i data-lucide="gift"></i><span>Rewards</span></a>
- <a class="nav-item" href="settings.html"><i data-lucide="settings"></i><span>Settings</span></a>
-</nav>
 <footer>
  AILAT DATA © 2026<br>
  All Rights Reserved
