@@ -7,11 +7,12 @@
 <div class="item"><span class="label">Package</span><span class="value" id="v2">—</span></div>
 </section><div class="notice">Provider catalogue, decoder validation, final pricing and secure checkout are not connected. This is a local review only; no subscription has been requested or paid for.</div><button type="button" onclick="location.href='tv.html'">Back to Service</button></main>
 <script>
-const params=new URLSearchParams(location.search);
+let reviewData={};
+try{reviewData=JSON.parse(sessionStorage.getItem("ailat_tv_review")||"{}");}catch(error){}
 const allowed=["DStv","GOtv","StarTimes"];
 const keys=["provider","account","item"];
 const labels=["Provider","Smartcard / IUC number","Package"];
-const values=keys.map(k=>(params.get(k)||"").trim());
+const values=keys.map(k=>String(reviewData[k]||"").trim());
 const valid=allowed.includes(values[0]) && /^[0-9]{6,20}$/.test(values[1]) && values[2].length>=2;
 if(!valid){
  const box=document.createElement("div");box.className="error";
