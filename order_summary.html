@@ -100,7 +100,20 @@ if(!validNetworks.includes(network) || expectedNetworkId===null || suppliedNetwo
  const invalidMessage = plansLoadError
   ? "Data plan details could not be loaded. Please return to Buy Data and try again when your connection is available."
   : "Your order information is incomplete or incorrect. Please return and select your network, phone number and data plan again.";
- document.getElementById("orderCard").innerHTML = `<div class="error"><h3>Invalid Order Details</h3><p class="subtitle">${invalidMessage}</p></div><a href="data.html" class="cancel">← Back to Buy Data</a>`;
+ const orderCard = document.getElementById("orderCard");
+ const errorBox = document.createElement("div");
+ errorBox.className = "error";
+ const heading = document.createElement("h3");
+ heading.textContent = "Invalid Order Details";
+ const message = document.createElement("p");
+ message.className = "subtitle";
+ message.textContent = invalidMessage;
+ const backLink = document.createElement("a");
+ backLink.href = "data.html";
+ backLink.className = "cancel";
+ backLink.textContent = "← Back to Buy Data";
+ errorBox.append(heading, message);
+ orderCard.replaceChildren(errorBox, backLink);
 }else{
  document.getElementById("network").textContent = network;
  document.getElementById("purchaseType").textContent = purchaseType;
