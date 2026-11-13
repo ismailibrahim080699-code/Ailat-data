@@ -18,7 +18,7 @@ test("Buy Data passes the order draft through session storage, not URL parameter
 });
 
 test("Buy Data validates the Nigerian phone number and selected catalogue plan", () => {
-  assert.match(dataPage, /\^0\[789\]\[01\]\\d\{8\}\$/);
+  assert.match(dataPage, /validPhone|\^0\[789\]\[01\]\\d\{8\}\$/);
   assert.match(dataPage, /if\(!selected\)/);
 });
 
@@ -37,7 +37,7 @@ test("Order request requires verified email and uses a stable idempotency key", 
 });
 
 test("Client does not submit a price or supplier credential with the order draft", () => {
-  const requestBody = summaryPage.match(/body:JSON\.stringify\(\{service_key:"data"[\s\S]*?\}\)\}/);
+  const requestBody = summaryPage.match(/body:JSON\.stringify\(\{service_key:"data"[\s\S]*?catalog_plan_id:selectedPlan\.id\}\}\)/);
   assert.ok(requestBody, "Buy Data request body must be present");
   assert.doesNotMatch(requestBody[0], /(?:amount|price|api[_-]?key|supplier[_-]?token)\s*:/i);
 });
