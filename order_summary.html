@@ -167,7 +167,8 @@ if(button) button.addEventListener("click", async()=>{
   const result = await response.json().catch(()=>({}));
   if(!response.ok || !result.success) throw new Error(result.error || "Could not save your request. Please try again.");
   requestSaved = true;
-  try { sessionStorage.removeItem(requestStorageKey); } catch (_) {}
+  // Keep the idempotency key for this tab session so a refresh after a
+  // successful response replays the same request instead of creating another.
   button.textContent = "Request Recorded";
   statusBox.textContent = "Your request has been recorded. Reference: "+result.order_request.reference+". Status: "+result.order_request.status+". No payment was taken and no data was delivered.";
  }catch(error){
