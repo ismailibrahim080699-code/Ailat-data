@@ -11,10 +11,10 @@
   "theme_color": "#07152f",
   "icons": [
     {
-      "src": "/assets/ailat-mark.svg?v=20261129",
-      "sizes": "any",
+      "src": "/assets/ailat-mark.svg?v=20261130",
+      "sizes": "512x512",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
