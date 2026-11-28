@@ -1,5 +1,5 @@
-const CACHE_NAME="ailat-data-sub-shell-v3";
-const APP_SHELL=["/","/index.html","/login.html","/register.html","/dashboard.html","/manifest.webmanifest","/assets/ailat-mark.svg","/assets/ailat-logo.svg","/assets/ailat-theme.css?v=4"];
+const CACHE_NAME="ailat-data-sub-shell-v4";
+const APP_SHELL=["/","/index.html","/login.html","/register.html","/dashboard.html","/manifest.webmanifest","/assets/ailat-mark.svg?v=20261128","/assets/ailat-logo.svg?v=20261128","/assets/ailat-theme.css?v=5"];
 self.addEventListener("install",event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)).then(()=>self.skipWaiting()));});
 self.addEventListener("activate",event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE_NAME).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});
 self.addEventListener("fetch",event=>{
