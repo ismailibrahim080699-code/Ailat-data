@@ -1,7 +1,7 @@
 {
   "id": "/",
   "name": "AILAT DATA SUB",
-  "short_name": "AILAT DATA",
+  "short_name": "AILAT DATA SUB",
   "description": "Your trusted digital services platform",
   "start_url": "/login.html?source=pwa",
   "scope": "/",
@@ -11,7 +11,7 @@
   "theme_color": "#07152f",
   "icons": [
     {
-      "src": "/assets/ailat-mark.svg",
+      "src": "/assets/ailat-mark.svg?v=20261128",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
